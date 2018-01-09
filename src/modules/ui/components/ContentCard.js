@@ -52,9 +52,13 @@ export default class ContentCard extends React.Component {
                         throw new Error('Unexpected data type')
                 }
             case 'tab':
-                var bundles = this.props.data.bundles || []
-                var w = bundles.length === 1 ? 'Bundle' : 'Bundles'
-                var badge = bundles.length === 0 ? <Badge color="warning">No Content</Badge> : <Badge color="secondary">{bundles.length} {w}</Badge>
+                var bundles = this.props.data.bundles || {}
+                var count = 0
+                // eslint-disable-next-line
+                for (var _ in bundles)
+                    count++
+                var w = count === 1 ? 'Bundle' : 'Bundles'
+                var badge = count === 0 ? <Badge color="warning">No Content</Badge> : <Badge color="secondary">{count} {w}</Badge>
                 return <Card className="Content-card">
                     <CardBody>
                         <CardTitle>{this.props.data.title} {badge}</CardTitle>
