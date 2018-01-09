@@ -1,0 +1,82 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.Center-progress {
+  position: absolute;
+  width: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  text-align: center;
+}
+
+.Label-title {
+  font-size: 1.5rem;
+  color: black;
+}
+
+.Label-description {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.Content-card-toolbar {
+  margin-top: 0.625rem;
+}
+
+.Content-card {
+  margin-bottom: 0.5rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.Content-card:hover {
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.35);
+  transform: scale(1.0025);
+}
+
+.Auth-card {
+  position: absolute;
+  width: 25%;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  text-align: center;
+  border: none !important;
+  box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 720px) {
+  .Auth-card {
+    position: absolute;
+    left: 0%;
+    top: 50%;
+    transform: translateX(0%) translateY(-50%);
+    width: 100%;
+    text-align: center;
+  }
+}
