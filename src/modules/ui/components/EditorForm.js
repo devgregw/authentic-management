@@ -9,6 +9,7 @@ import {
 import ContentLoader from './ContentLoader'
 import Path from '../../classes/Path.js'
 import ButtonConfiguration from './ButtonConfiguration.js'
+import ImageUploader from './ImageUploader'
 
 export default class EditorForm extends React.Component {
     constructor(props) {
@@ -43,12 +44,15 @@ export default class EditorForm extends React.Component {
         </FormGroup>
     }
 
-    supplementalValidators = {
-        bundles: collection => !collection.image && !collection.title && !collection.text && !collection._buttonInfo ? ['A bundle must have an image, a title, text, a button, or any combination of the properties.'] : false
-    }
-
     fields = {
-        bundles: [
+        elements_image: [
+            {
+                title: "Type",
+                property: "type",
+                description: "",
+                render: value => <p>Image</p>,
+                get: () => 'image'
+            },
             {
                 title: "ID",
                 property: "id",
@@ -68,28 +72,40 @@ export default class EditorForm extends React.Component {
                     .value
             },
             {
-                title: 'Index',
-                property: 'index',
-                description: 'This is a number which must be greater than or equal to 0.  Tabs will be sorted in ascending order according to this number.  If two or more tabs have the same index, they will be sorted by their ID.',
-                render: value => <Input type="number" id="index" defaultValue={value || "0"} min="0" step="1"/>,
-                get: () => parseInt(document.getElementById('index').value, 10),
-                validate: value => {
-                    if (isNaN(value))
-                        return 'The index must be an integer'
-                    if (value < 0)
-                        return 'The index must be greater than or equal to 0'
-                    return false
-                }
-            },
-            {
                 title: "Image",
                 property: "image",
+                description: "Click Clear to remove the image or click Reset to restore the original value.",
+                render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
+                get: () => `imageElement_${this.getEditorInfo().parent}_${document.getElementById('id').value}` + this.imageUploader.getExtension(),
+                validate: () => this.imageUploader.hasValue() ? false : 'An image must be specified.',
+                finalize: () => this.imageUploader.saveImage(`imageElement_${this.getEditorInfo().parent}_${document.getElementById('id').value}`)
+            }
+        ],
+        elements_title: [
+            {
+                title: "Type",
+                property: "type",
                 description: "",
-                render: value => <Input id="image" defaultValue={value}/>,
+                render: value => <p>Title Text</p>,
+                get: () => 'title'
+            },
+            {
+                title: "ID",
+                property: "id",
+                description: "This is a unique identifier.  It cannot be changed.",
+                render: value => <Input id="id" defaultValue={value || this.createId()} readOnly/>,
                 get: () => document
-                    .getElementById('image')
-                    .value,
-                    validate: () => false
+                    .getElementById('id')
+                    .value
+            },
+            {
+                title: "Parent ID",
+                property: "parent",
+                description: "",
+                render: value => <Input id="parent" defaultValue={this.getEditorInfo().parent} readOnly/>,
+                get: () => document
+                    .getElementById('parent')
+                    .value
             },
             {
                 title: "Title",
@@ -99,7 +115,36 @@ export default class EditorForm extends React.Component {
                 get: () => document
                     .getElementById('title')
                     .value,
-                    validate: () => false
+                    validate: () => document
+                    .getElementById('title')
+                    .value ? false : 'No title specified.'
+            }
+        ],
+        elements_text: [
+            {
+                title: "Type",
+                property: "type",
+                description: "",
+                render: value => <p>Basic Text</p>,
+                get: () => 'text'
+            },
+            {
+                title: "ID",
+                property: "id",
+                description: "This is a unique identifier.  It cannot be changed.",
+                render: value => <Input id="id" defaultValue={value || this.createId()} readOnly/>,
+                get: () => document
+                    .getElementById('id')
+                    .value
+            },
+            {
+                title: "Parent ID",
+                property: "parent",
+                description: "",
+                render: value => <Input id="parent" defaultValue={this.getEditorInfo().parent} readOnly/>,
+                get: () => document
+                    .getElementById('parent')
+                    .value
             },
             {
                 title: "Text",
@@ -109,7 +154,36 @@ export default class EditorForm extends React.Component {
                 get: () => document
                     .getElementById('text')
                     .value,
-                    validate: () => false
+                    validate: () => document
+                    .getElementById('text')
+                    .value ? false : 'No text specified.'
+            }
+        ],
+        elements_button: [
+            {
+                title: "Type",
+                property: "type",
+                description: "",
+                render: value => <p>Button</p>,
+                get: () => 'button'
+            },
+            {
+                title: "ID",
+                property: "id",
+                description: "This is a unique identifier.  It cannot be changed.",
+                render: value => <Input id="id" defaultValue={value || this.createId()} readOnly/>,
+                get: () => document
+                    .getElementById('id')
+                    .value
+            },
+            {
+                title: "Parent ID",
+                property: "parent",
+                description: "",
+                render: value => <Input id="parent" defaultValue={this.getEditorInfo().parent} readOnly/>,
+                get: () => document
+                    .getElementById('parent')
+                    .value
             },
             {
                 title: "Button",
@@ -152,16 +226,39 @@ export default class EditorForm extends React.Component {
                 get: () => document
                     .getElementById('title')
                     .value
-            }, {
-                title: "Header",
+            },
+            {
+                title: "Header Image",
                 property: "header",
-                description: "The tab's background image",
-                render: value => <Input id="header" defaultValue={value}/>,
-                get: () => document
-                    .getElementById('header')
-                    .value
+                description: "Specify a header image for this tab.  Click Clear to remove the image or click Reset to restore the original value.",
+                render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
+                get: () => `header_${document.getElementById('id').value}` + this.imageUploader.getExtension(),
+                validate: () => this.imageUploader.hasValue() ? false : 'A header image must be specified.',
+                finalize: () => this.imageUploader.saveImage(`header_${document.getElementById('id').value}`)
+            },
+            {
+                title: 'Header Visibility',
+                property: 'hideHeader',
+                description: 'Check this box to hide the header image on this tab\'s content page.',
+                render: value => <FormGroup check="check">
+                    <Label check="check">
+                            <Input id="hideHeader" type="checkbox" defaultChecked={value || false}/>{' '}
+                            Hide header
+                        </Label>
+                    </FormGroup>,
+                get: () => document.getElementById('hideHeader').checked,
+                validate: () => false
             }
         ]
+    }
+
+    finalize() {
+        var promises = []
+        this.fields[this.getEditorInfo().category].forEach(f => {
+            if (f.finalize)
+                promises.push(f.finalize())
+        })
+        return Promise.all(promises)
     }
 
     collect() {
@@ -213,9 +310,6 @@ export default class EditorForm extends React.Component {
                 if (!f.get())
                     errors.push(`No ${f.title.toLowerCase()} specified`)
         })
-        if (!errors.length)
-            if (this.supplementalValidators[info.category])
-                errors = this.supplementalValidators[info.category](this.collect())
         return errors
     }
 

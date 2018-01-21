@@ -49,6 +49,10 @@
   margin-top: 0.625rem;
 }
 
+.Cap-first::first-letter {
+  text-transform: capitalize;
+}
+
 .Content-card {
   margin-bottom: 0.5rem;
   transition: box-shadow 0.2s, transform 0.2s;

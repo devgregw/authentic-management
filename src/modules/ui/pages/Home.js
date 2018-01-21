@@ -1,5 +1,5 @@
 import React from 'react'
-import {Breadcrumb, BreadcrumbItem, Badge} from 'reactstrap'
+import {Button, Breadcrumb, BreadcrumbItem, Badge} from 'reactstrap'
 import HomeToolbar from '../components/HomeToolbar.js'
 import Path from '../../classes/Path.js'
 import ContentLoader from '../components/ContentLoader.js'
@@ -21,8 +21,23 @@ export default class Home extends React.Component {
             case 'tabs':
             return [
                 {
-                    category: 'bundles',
-                    name: 'Bundle',
+                    category: 'elements_image',
+                    name: 'Image',
+                    parent: last
+                },
+                {
+                    category: 'elements_title',
+                    name: 'Title Text',
+                    parent: last
+                },
+                {
+                    category: 'elements_text',
+                    name: 'Basic Text',
+                    parent: last
+                },
+                {
+                    category: 'elements_button',
+                    name: 'Button',
                     parent: last
                 }
             ]
@@ -57,17 +72,12 @@ export default class Home extends React.Component {
         var type = this.state.path.get(this.state.path.count() - 2)
         switch (type) {
             case 'tabs':
-                var bundleCards = <p>There are no bundles to display.<br/>To create a bundle, click New.</p>
-                if (val.bundles) {
-                    var sorted = []
-                    for (var id in val.bundles)
-                        sorted.push(val.bundles[id])
-                    sorted.sort((a, b) => a.index - b.index)
-                    bundleCards = sorted.map(b => <ContentCard type="bundle" data={b} extras={{tab: val}} refresh={() => this.forceUpdate()}/>)
-                }
+                var cards = <p>This tab does not contain any content.  <Badge color="warning" pill>Empty tabs will be hidden from the app.</Badge><br/>To add an element, click New.</p>
+                if (val.elements)
+                    cards = val.elements.map(e => <ContentCard type="element" index={val.elements.indexOf(e)} data={e} extras={{tab: val}} refresh={() => this.forceUpdate()}/>)
                 return <div>
-                    <h2>{val.title} <Badge color="secondary">Bundles</Badge></h2>
-                    {bundleCards}
+                    <h2>{val.title} <Badge color="secondary">Elements</Badge> <Button onClick={() => Utils.openReorder(val.id)} color="primary" disabled={!val.elements}>Reorder</Button></h2>
+                    {cards}
                     </div>
             default:
             return <p style={{
@@ -80,18 +90,20 @@ export default class Home extends React.Component {
         }
     }
 
+    categories = ['tabs','blog','events','meta']
+
     transform(val) {
         var content
         switch (this.state.path.last()) {
             case '':
-                content = <ContentCard type="category" data={{
-                        type: 'tabs'
-                    }} push={p => this.setState({
-                        path: this
-                            .state
-                            .path
-                            .append(p)
-                    })}/>
+                content = this.categories.map(c => <ContentCard type="category" data={{
+                    type: c
+                }} push={p => this.setState({
+                    path: this
+                        .state
+                        .path
+                        .append(p)
+                })}/>)
                 break
             case 'tabs':
                 var cards = []

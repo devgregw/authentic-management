@@ -1,3 +1,6 @@
+import OpenTabAction from '../ui/components/actionFields/OpenTabAction'
+import React from 'react'
+
 export default class Utils {
     static openPopup(url, w, h) {
         var dualScreenLeft = window.screenLeft !== undefined
@@ -42,6 +45,10 @@ export default class Utils {
         Utils.openPopup(`${Utils.getBaseUrl()}/editor?action=edit&category=${info.category}&path=${info.path}${info.parent ? `&parent=${info.parent}` : ''}`, 1000, 600)
     }
 
+    static openReorder(tabId) {
+        Utils.openPopup(`${Utils.getBaseUrl()}/editor/reorder?tabId=${tabId}`, 1000, 600)
+    }
+
     static isLocalhost() {
         return window.location.hostname === 'localhost' ||
         window.location.hostname === '[::1]' ||
@@ -50,5 +57,33 @@ export default class Utils {
 
     static getBaseUrl() {
         return Utils.isLocalhost() ? 'http://localhost' : 'https://accams.devgregw.com'
+    }
+
+    static actionClasses = {
+        OpenTabAction: OpenTabAction
+    }
+
+    static get actionClassesIndexed() {
+        var l = []
+        for (var name in Utils.actionClasses)
+            l.push(this.actionClasses[name])
+        return l
+    }
+
+    static getActionSummary(a) {
+        return Utils.actionClasses[a.type].getSummary(a)
+    }
+
+    static getElementSummary(e) {
+        switch (e.type) {
+            case 'image':
+                return `Source: ${e.image}`
+            case 'title':
+                return `Text: ${e.title}`
+            case 'text':
+                return `Text: ${e.text}`
+            case 'button':
+                return <p>{`Label: ${e._buttonInfo.label}`}<br/>{`Action: ${Utils.getActionSummary(e._buttonInfo.action)}`}</p>
+        }
     }
 }

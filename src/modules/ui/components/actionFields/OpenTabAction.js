@@ -49,6 +49,10 @@ export default class OpenTabAction extends React.Component {
         return 'OpenTabAction'
     }
 
+    static getSummary(a) {
+        return `Open Tab: /tabs/${a.tabId}`
+    }
+
     validate() {
         if (!this.getSelect()) 
             return {}

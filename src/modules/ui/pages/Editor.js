@@ -2,7 +2,7 @@ import React from 'react'
 import BasicModal from '../components/BasicModal.js'
 import * as firebase from 'firebase'
 import * as queryString from 'query-string'
-import IndeterminateModal from '../components/IndeterminateModal.js'
+import ProgressModal from '../components/ProgressModal.js'
 import EditorToolbar from '../components/EditorToolbar.js'
 import EditorForm from '../components/EditorForm.js'
 
@@ -49,9 +49,9 @@ export default class Editor extends React.Component {
             var info = this.getEditorInfo()
             this.setState({savingModal: true})
             // eslint-disable-next-line
-            if (info.category !== 'bundles') {
+            if (info.category.indexOf('elements') === -1) {
                 setTimeout(() => {
-                    firebase.database().ref(`/${info.category}/${x.id}/`)[info.path ? 'update' : 'set'](x, null).then(() => {
+                    Promise.all([firebase.database().ref(`/${info.category}/${x.id}/`)[info.path ? 'update' : 'set'](x, null), this.form.finalize()]).then(() => {
                         this.closeEditor(true)
                     }, e => {
                         alert(e)
@@ -63,10 +63,10 @@ export default class Editor extends React.Component {
                     firebase.database().ref(`/tabs/${info.parent}/`).once('value').then(snap => {
                         setTimeout(() => {
                             var tab = snap.val()
-                            if (!tab.bundles)
-                                tab.bundles = {}
-                            tab.bundles[x.id] = x
-                            firebase.database().ref(`/tabs/${info.parent}/`).update(tab).then(() => {
+                            if (!tab.elements)
+                                tab.elements = []
+                            tab.elements.push(x)
+                            Promise.all([firebase.database().ref(`/tabs/${info.parent}/`).update(tab), this.form.finalize()]).then(() => {
                                 this.closeEditor(true)
                             }, e => {
                                 alert(e)
@@ -99,10 +99,7 @@ export default class Editor extends React.Component {
                 <BasicModal toggle={() => this.setState({
                         cancelModal: !this.state.cancelModal
                     })} isOpen={this.state.cancelModal} header="Unsaved Changes" body={<p>If you close this window, your changes will not be saved.<br/>Are you sure you want to continue?</p>} primary="Discard Changes" primaryColor="danger" secondary="Go Back" onPrimary={this.closeEditor.bind(this, false)}/>
-                    <IndeterminateModal style={{
-                                    top: '50%',
-                                    transform: 'translateY(-50%)'
-                                }} isOpen={this.state.savingModal} progressColor="primary" progressText="Processing..."/>
+                    <ProgressModal isOpen={this.state.savingModal} progressColor="primary" progressText="Processing..."/>
                 <BasicModal toggle={() => this.setState({errorModal: false, errors: []})} isOpen={this.state.errorModal} header="Validation Error" body={<div><p>Please resolve the following errors:<br/></p><ul>{(this.state.errors || []).map(e => <li key={e}>{e}</li>)}</ul></div>} primary="Dismiss" primaryColor="primary"/>
             </div>
     }
