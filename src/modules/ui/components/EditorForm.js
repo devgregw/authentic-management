@@ -194,6 +194,88 @@ export default class EditorForm extends React.Component {
                 validate: value => this.buttonConfiguration.validate()
             }
         ],
+        elements_separator: [
+            {
+                title: "Type",
+                property: "type",
+                description: "",
+                render: value => <p>Separator</p>,
+                get: () => 'separator'
+            },
+            {
+                title: "ID",
+                property: "id",
+                description: "This is a unique identifier.  It cannot be changed.",
+                render: value => <Input id="id" defaultValue={value || this.createId()} readOnly/>,
+                get: () => document
+                    .getElementById('id')
+                    .value
+            },
+            {
+                title: "Parent ID",
+                property: "parent",
+                description: "",
+                render: value => <Input id="parent" defaultValue={this.getEditorInfo().parent} readOnly/>,
+                get: () => document
+                    .getElementById('parent')
+                    .value
+            },
+            {
+                title: 'Visible',
+                property: 'visible',
+                description: 'If this box is checked, the separator will appear as a horizontal line.',
+                render: value => <FormGroup check="check">
+                        <Label check="check">
+                            <Input id="visible" defaultChecked={value || true} type="checkbox"/>{' '}
+                            Visible
+                        </Label>
+                    </FormGroup>,
+                get: () => document.getElementById('visible').checked,
+                validate: () => false
+            }
+        ],
+        elements_video: [
+            {
+                title: "Type",
+                property: "type",
+                description: "",
+                render: value => <p>Video</p>,
+                get: () => 'video'
+            },
+            {
+                title: "ID",
+                property: "id",
+                description: "This is a unique identifier.  It cannot be changed.",
+                render: value => <Input id="id" defaultValue={value || this.createId()} readOnly/>,
+                get: () => document
+                    .getElementById('id')
+                    .value
+            },
+            {
+                title: "Parent ID",
+                property: "parent",
+                description: "",
+                render: value => <Input id="parent" defaultValue={this.getEditorInfo().parent} readOnly/>,
+                get: () => document
+                    .getElementById('parent')
+                    .value
+            },
+            {
+                title: 'Video Provider',
+                property: 'provider',
+                description: 'Select the service that is hosting the video.',
+                render: value => <Input type="select" id="provider" defaultValue={value || 'YouTube'}><option>YouTube</option><option>Vimeo</option></Input>,
+                get: () => document.getElementById('provider').value
+            },
+            {
+                title: 'Video ID',
+                property: 'videoId',
+                description: 'Specify the video\'s ID.',
+                render: value => <Input id="videoId" defaultValue={value}/>,
+                get: () => document.getElementById('videoId').value,
+                validate: () => !document.getElementById('videoId').value ? 'No video ID specified.' : false
+            }
+        ],
         tabs: [
             {
                 title: "ID",

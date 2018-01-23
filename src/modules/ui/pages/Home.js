@@ -26,6 +26,11 @@ export default class Home extends React.Component {
                     parent: last
                 },
                 {
+                    category: 'elements_video',
+                    name: 'Video',
+                    parent: last
+                },
+                {
                     category: 'elements_title',
                     name: 'Title Text',
                     parent: last
@@ -38,6 +43,11 @@ export default class Home extends React.Component {
                 {
                     category: 'elements_button',
                     name: 'Button',
+                    parent: last
+                },
+                {
+                    category: 'elements_separator',
+                    name: 'Separator',
                     parent: last
                 }
             ]
@@ -76,7 +86,7 @@ export default class Home extends React.Component {
                 if (val.elements)
                     cards = val.elements.map(e => <ContentCard type="element" index={val.elements.indexOf(e)} data={e} extras={{tab: val}} refresh={() => this.forceUpdate()}/>)
                 return <div>
-                    <h2>{val.title} <Badge color="secondary">Elements</Badge> <Button onClick={() => Utils.openReorder(val.id)} color="primary" disabled={!val.elements}>Reorder</Button></h2>
+                    <h2>{val.title} <Badge color="secondary">Elements</Badge> <Button onClick={() => Utils.openReorder(val.id)} color="primary" disabled={!val.elements || (val.elements || []).length <= 1}>Reorder</Button></h2>
                     {cards}
                     </div>
             default:
