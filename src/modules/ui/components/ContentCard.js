@@ -56,7 +56,7 @@ export default class ContentCard extends React.Component {
                         return <BasicCard title="Upcoming Events"><h2><Badge color="warning" pill>Under Construction</Badge></h2></BasicCard>
                     case 'meta':
                         return <BasicCard title="Resources">
-                            <p>Because the <span id="ACCAMS" style={{borderBottom: '1px dotted black'}}>ACCAMS</span> is <Badge color="warning" pill>Under Construction</Badge>, some features may be broken or unavailable.<br/>
+                            <p>Because the <span id="ACCAMS" style={{borderBottom: '1px dotted black', cursor: 'help'}}>ACCAMS</span> is <Badge color="warning" pill>Under Construction</Badge>, some features may be broken or unavailable.<br/>
                             To track development progress, check out the Trello Roadmap.<br/>To report an issue or make a suggestion, click Contact.</p>
                             <UncontrolledTooltip placement="auto" target="ACCAMS">Authentic City Church App Management System</UncontrolledTooltip>
                             <Button color="link" size="lg" onClick={() => window.open('https://trello.com/b/QUgekVh6/app-roadmap', '_blank')}>Trello Roadmap →</Button><br/>

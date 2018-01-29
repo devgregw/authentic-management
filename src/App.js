@@ -9,7 +9,7 @@ import Editor from './modules/ui/pages/Editor.js'
 import Reorder from './modules/ui/pages/Reorder.js'
 import StorageViewer from './modules/ui/pages/StorageViewer'
 
-import ImageUploader from './modules/ui/components/ImageUploader'
+import VisibilityRulesField from './modules/ui/components/VisibilityRulesField'
 
 export default class App extends Component {
     render() {
@@ -23,8 +23,7 @@ export default class App extends Component {
                         <Route path="/account/auth/:action" component={Authentication}/>
                         <Route path="/account/meta/changename" render={({match}) => <RequireAuth path={match.path} render={() => <ChangeDisplayName/>}/>}/>
                         <Route exact path="/meta/storage/:name" render={({match}) => <StorageViewer fileName={match.params.name}/>}/>
-                        <Route exact path="/demo/:val" render={({match}) => <ImageUploader value={match.params.val}/>}/>
-                        <Route exact path="/demo" render={({match}) => <ImageUploader/>}/>
+                        <Route exact path="/demo" render={({match}) => <VisibilityRulesField/>}/>
                         <Redirect from="/meta" to="/"/>
                         <Redirect from="/account/meta" to="/"/>
                         <Redirect from="/account/auth" to="/"/>

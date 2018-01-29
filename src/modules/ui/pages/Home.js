@@ -122,7 +122,7 @@ export default class Home extends React.Component {
                     items.push(val[id])
                 items.sort((a, b) => a.index - b.index)
                 items.forEach(i => cards.push(<ContentCard key={i.id} push={p => this.setState({path: this.state.path.append(p)})} type="tab" data={i} refresh={() => this.forceUpdate()}/>))
-                content = cards
+                content = items.length > 0 ? cards : <p>No tabs have been created.  Click New to add a tab.</p>
                 break
             default:
                 content = this.transformSecondary(val)

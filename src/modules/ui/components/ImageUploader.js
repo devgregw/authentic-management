@@ -63,7 +63,7 @@ export default class ImageUploader extends React.Component {
     }
 
     getExtension() {
-        var name = this.props.value || this.state.file.name
+        var name = this.props.value || (this.state.file ? this.state.file.name : '.undefined')
         return name.substr(name.lastIndexOf('.'))
     }
 
