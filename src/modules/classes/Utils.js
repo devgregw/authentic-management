@@ -1,4 +1,7 @@
 import OpenTabAction from '../ui/components/actionFields/OpenTabAction'
+import OpenURLAction from '../ui/components/actionFields/OpenURLAction'
+import GetDirectionsAction from '../ui/components/actionFields/GetDirectionsAction'
+import EmailAction from '../ui/components/actionFields/EmailAction'
 import React from 'react'
 
 export default class Utils {
@@ -60,7 +63,10 @@ export default class Utils {
     }
 
     static actionClasses = {
-        OpenTabAction: OpenTabAction
+        OpenTabAction: OpenTabAction,
+        OpenURLAction: OpenURLAction,
+        GetDirectionsAction: GetDirectionsAction,
+        EmailAction: EmailAction
     }
 
     static get actionClassesIndexed() {
