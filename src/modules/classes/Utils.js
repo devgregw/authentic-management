@@ -94,6 +94,8 @@ export default class Utils {
                 return `Visible: ${e.visible ? 'Yes' : 'No'}`
             case 'video':
                 return `Provider: ${e.provider}, ID: ${e.videoId}`
+            default:
+                return 'Invalid element type'
         }
     }
 }

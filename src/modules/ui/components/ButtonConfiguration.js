@@ -1,5 +1,5 @@
 import React from 'react'
-import {Input, Label, Form, FormGroup} from 'reactstrap'
+import {Input, Label, Form} from 'reactstrap'
 import ActionInput from './ActionInput.js'
 
 export default class ButtonConfiguration extends React.Component {

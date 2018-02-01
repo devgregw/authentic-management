@@ -1,6 +1,5 @@
 import React from 'react'
 import * as firebase from 'firebase'
-import {Redirect} from 'react-router-dom'
 
 export default class StorageViewer extends React.Component {
     constructor(props) {

@@ -19,7 +19,7 @@ export default class GetDirectionsAction extends React.Component {
                 <Button size="sm" color="secondary" onClick={() => document.getElementById('action_gda_0_preview').src = `https://maps.googleapis.com/maps/api/staticmap?size=500x500&center=${encodeURIComponent(document.getElementById('action_gda_0_addr').value).replace(/%20/g, '+')}`}>Preview</Button>
                 <br/>
                 <br/>
-                <img id="action_gda_0_preview" style={{width: '500px', height: '500px'}}/>
+                <img alt="Preview" id="action_gda_0_preview" style={{width: '500px', height: '500px'}}/>
             </div>
     }
 
