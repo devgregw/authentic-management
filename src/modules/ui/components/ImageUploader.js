@@ -25,8 +25,10 @@ export default class ImageUploader extends React.Component {
         var placeholder = "https://placeholdit.imgix.net/~text?txtsize=50&txt=None&w=200&h=200&txtfont=sans-serif"
         if (!img)
             return
-        if (this.state.location === 'none')
+        if (this.state.location === 'none') {
             img.src = placeholder
+            return
+        }
         switch (this.state.location) {
             case 'storage':
             img.src = 'https://placeholdit.imgix.net/~text?txtsize=40&txt=Loading&w=200&h=200&txtfont=sans-serif'
