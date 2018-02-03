@@ -5,7 +5,6 @@ export default class EmailAction extends React.Component {
     constructor(props) {
         super(props)
         this.validate = this.validate.bind(this)
-        this.getSummary = this.getSummary.bind(this)
         this.getValue = this.getValue.bind(this)
     }
     
@@ -46,7 +45,7 @@ export default class EmailAction extends React.Component {
         return 'EmailAction'
     }
 
-    getSummary(action) {
+    static getSummary(action) {
         return `Email: ${action.emailAddress}`
     }
 }

@@ -4,7 +4,6 @@ import {Label,Input,Badge} from 'reactstrap'
 export default class OpenURLAction extends React.Component {
     constructor(props) {
         super(props)
-        this.getSummary = this.getSummary.bind(this)
         this.validate = this.validate.bind(this)
         this.getValue = this.getValue.bind(this)
     }
@@ -47,7 +46,7 @@ export default class OpenURLAction extends React.Component {
         return 'OpenURLAction'
     }
 
-    getSummary(action) {
+    static getSummary(action) {
         return `Open URL: ${action.url}`
     }
 }

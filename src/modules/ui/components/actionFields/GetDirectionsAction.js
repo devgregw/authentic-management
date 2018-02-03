@@ -4,7 +4,6 @@ import {Input,Label,Button} from 'reactstrap'
 export default class GetDirectionsAction extends React.Component {
     constructor(props) {
         super(props)
-        this.getSummary = this.getSummary.bind(this)
         this.validate = this.validate.bind(this)
         this.getValue = this.getValue.bind(this)
     }
@@ -49,7 +48,7 @@ export default class GetDirectionsAction extends React.Component {
         return 'GetDirectionsAction'
     }
 
-    getSummary(action) {
+    static getSummary(action) {
         return `Get Directions: ${action.address}`
     }
 }
