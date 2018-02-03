@@ -17,6 +17,7 @@ export default class ImageUploader extends React.Component {
         this.saveImage = this.saveImage.bind(this)
         this.hasValue = this.hasValue.bind(this)
         this.getExtension = this.getExtension.bind(this)
+        this.random = Math.random() * 1000
     }
 
     getData(img) {
@@ -92,7 +93,7 @@ export default class ImageUploader extends React.Component {
             </ButtonGroup>
             <ProgressModal isOpen={this.state.totalBytes > 0} progressColor="primary" value={(this.state.bytesTransferred / (this.state.totalBytes || 1)) * 100} progressText={Math.round((this.state.bytesTransferred / (this.state.totalBytes || 1)) * 100) + '%'}/>
             <p>Download URL: {this.state.location.startsWith('storage') ? <a href={url} target="_blank">{url}</a> : 'none'}</p>
-            <img alt="Preview" ref={i => this.getData(i || document.getElementById('imagePreview'))} id="imagePreview" style={{width: '200px', height: 'auto', border: '1px solid black'}}/>
+            <img alt="Preview" ref={i => this.getData(i || document.getElementById(`imagePreview${this.random}`))} id={`imagePreview${this.random}`} style={{width: '200px', height: 'auto', border: '1px solid black'}}/>
             </div>
     }
 }

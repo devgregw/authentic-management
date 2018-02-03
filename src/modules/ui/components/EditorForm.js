@@ -1,6 +1,6 @@
 import React from 'react'
 import * as queryString from 'query-string'
-import {FormGroup, Label, Input, Form} from 'reactstrap'
+import {FormGroup, Label, Input, Form, Badge} from 'reactstrap'
 import ContentLoader from './ContentLoader'
 import Path from '../../classes/Path.js'
 import ButtonConfiguration from './ButtonConfiguration.js'
@@ -44,20 +44,20 @@ export default class EditorForm extends React.Component {
         this.fieldPresets = {
                 idField: id,
                 idPairFields: idp,
-                elementBaseFields: [
+                getElementBaseFields: type => [
                     {
                         title: "Type",
                         property: "type",
                         description: "",
-                        render: value => <p>Image</p>,
-                        get: () => 'image'
+                        render: value => <p style={{textTransform: 'capitalize'}}>{type}</p>,
+                        get: () => type
                     },
                     ...idp
                 ]
             }
         this.fields = {
             elements_image: [
-                ...this.fieldPresets.elementBaseFields, {
+                ...this.fieldPresets.getElementBaseFields('image'), {
                     title: "Image",
                     property: "image",
                     description: "Click Clear to remove the image or click Reset to restore the original value.",
@@ -81,7 +81,7 @@ export default class EditorForm extends React.Component {
                 }
             ],
             elements_title: [
-                ...this.fieldPresets.elementBaseFields, {
+                ...this.fieldPresets.getElementBaseFields('title'), {
                     title: "Title",
                     property: "title",
                     description: "",
@@ -97,7 +97,7 @@ export default class EditorForm extends React.Component {
                 }
             ],
             elements_text: [
-                ...this.fieldPresets.elementBaseFields, {
+                ...this.fieldPresets.getElementBaseFields('text'), {
                     title: "Text",
                     property: "text",
                     description: "",
@@ -113,7 +113,7 @@ export default class EditorForm extends React.Component {
                 }
             ],
             elements_button: [
-                ...this.fieldPresets.elementBaseFields, {
+                ...this.fieldPresets.getElementBaseFields('button'), {
                     title: "Button",
                     property: "_buttonInfo",
                     description: "",
@@ -127,7 +127,7 @@ export default class EditorForm extends React.Component {
                 }
             ],
             elements_separator: [
-                ...this.fieldPresets.elementBaseFields, {
+                ...this.fieldPresets.getElementBaseFields('separator'), {
                     title: 'Visible',
                     property: 'visible',
                     description: 'If this box is checked, the separator will appear as a horizontal line.',
@@ -144,7 +144,7 @@ export default class EditorForm extends React.Component {
                 }
             ],
             elements_video: [
-                ...this.fieldPresets.elementBaseFields, {
+                ...this.fieldPresets.getElementBaseFields('video'), {
                     title: 'Video Provider',
                     property: 'provider',
                     description: 'Select the service that is hosting the video.',
@@ -194,6 +194,20 @@ export default class EditorForm extends React.Component {
                     get: () => document
                         .getElementById('title')
                         .value
+                }, {
+                    title: 'Title Visibility',
+                    property: 'hideTitle',
+                    description: 'Check this box to hide the title on the tab\'s card on the home screen.  This is useful when the header image already contains the title.',
+                    render: value => <FormGroup check="check">
+                        <Label check="check">
+                            <Input id="hideTitle" type="checkbox" defaultChecked={value || false}/>{' '}
+                            Hide title
+                        </Label>
+                    </FormGroup>,
+                    get: () => document
+                        .getElementById('hideTitle')
+                        .checked,
+                    validate: () => false
                 }, {
                     title: "Header Image",
                     property: "header",
@@ -263,7 +277,7 @@ export default class EditorForm extends React.Component {
         data
     ) {
         return <FormGroup>
-            <Label className="Label-title" for={field.property}>{field.title}</Label>
+            <Label className="Label-title" for={field.property}>{field.title} {field.optional ? <Badge pill color="primary">Optional</Badge> : null}</Label>
             {
                 field.description
                     ? <div>

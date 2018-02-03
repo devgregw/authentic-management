@@ -13,9 +13,9 @@ import {
 import BasicModal from './BasicModal.js'
 import PropTypes from 'prop-types'
 import ProgressModal from './ProgressModal.js'
-import * as firebase from 'firebase'
 import Utils from '../../classes/Utils.js'
 import BasicCard from './BasicCard'
+import Delete from '../../classes/Delete'
 
 export default class ContentCard extends React.Component {
     static propTypes = {
@@ -88,16 +88,12 @@ export default class ContentCard extends React.Component {
                                 //{`Are you sure you want to delete this tab?<br><br>${this.props.data.title}<br>/tabs/${this.props.data.id}`}
                                 primary="Delete" primaryColor="danger" secondary="Cancel" onPrimary={() => {
                                     this.setState({ProgressModal: true})
-                                    firebase
-                                        .database()
-                                        .ref(`/tabs/${this.props.data.id}/`)
-                                        .remove()
-                                        .then(() => {
+                                    Delete.tab(this.props.data).then(() => {
                                             this.setState({deleteModal: false, ProgressModal: false})
                                             this
                                                 .props
                                                 .refresh()
-                                        })
+                                        })                                        
                                 }}/>
                             <ProgressModal isOpen={this.state.ProgressModal} progressColor="danger" progressText="Deleting..."/>
                         </ButtonGroup>
@@ -123,13 +119,7 @@ export default class ContentCard extends React.Component {
                                 .bind(this)} header="Delete Confirmation" body={<p>Are you sure you want to delete this element?<br/><br/>{path}</p>}
                             primary="Delete" primaryColor="danger" secondary="Cancel" onPrimary={() => {
                                 this.setState({ProgressModal: true})
-                                var updated = this.props.extras.tab
-                                updated.elements[this.props.index] = null
-                                firebase
-                                    .database()
-                                    .ref(`/tabs/${this.props.extras.tab.id}/`)
-                                    .update(updated)
-                                    .then(() => {
+                                Delete.element(this.props.data, this.props.index, this.props.extras.tab).then(() => {
                                         this.setState({deleteModal: false, ProgressModal: false})
                                         this
                                             .props
