@@ -27,9 +27,9 @@ export default class EmailAction extends React.Component {
 
     getValue() {
         return {
-            type: 'EmailAddress',
+            type: 'EmailAction',
             group: 0,
-            emailAddress: document.getElementById('action_ea_0_addr')
+            emailAddress: document.getElementById('action_ea_0_addr').value
         }
     }
 
