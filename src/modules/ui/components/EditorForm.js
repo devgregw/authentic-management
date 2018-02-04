@@ -53,7 +53,21 @@ export default class EditorForm extends React.Component {
                         get: () => type
                     },
                     ...idp
-                ]
+                ],
+                textAlignmentField: {
+                    title: "Alignment",
+                    property: "alignment",
+                    description: "",
+                    render: value => <Input type="select" id="alignment" defaultValue={value || 'left'}>
+                        <option value="left">Left</option>
+                        <option value="center">Center</option>
+                        <option value="right">Right</option>
+                    </Input>,
+                    get: () => document
+                        .getElementById('alignment')
+                        .value,
+                    validate: () => false
+                }
             }
         this.fields = {
             elements_image: [
@@ -94,7 +108,7 @@ export default class EditorForm extends React.Component {
                         .value
                             ? false
                             : 'No title specified.'
-                }
+                }, this.fieldPresets.textAlignmentField
             ],
             elements_text: [
                 ...this.fieldPresets.getElementBaseFields('text'), {
@@ -110,7 +124,7 @@ export default class EditorForm extends React.Component {
                         .value
                             ? false
                             : 'No text specified.'
-                }
+                }, this.fieldPresets.textAlignmentField
             ],
             elements_button: [
                 ...this.fieldPresets.getElementBaseFields('button'), {
