@@ -65,7 +65,12 @@ export default class Editor extends React.Component {
                             var tab = snap.val()
                             if (!tab.elements)
                                 tab.elements = []
-                            tab.elements.push(x)
+                            var i;
+                            // eslint-disable-next-line
+                            if ((i = tab.elements.map(v => v.id).indexOf(x.id)) === -1)
+                                tab.elements.push(x)
+                            else
+                                tab.elements[i] = x
                             Promise.all([firebase.database().ref(`/tabs/${info.parent}/`).update(tab), this.form.finalize()]).then(() => {
                                 this.closeEditor(true)
                             }, e => {
