@@ -1,11 +1,13 @@
 import React from 'react'
 import * as queryString from 'query-string'
-import {FormGroup, Label, Input, Form, Badge} from 'reactstrap'
+import {FormGroup, Label, Input, Form, Badge, InputGroup, InputGroupAddon} from 'reactstrap'
 import ContentLoader from './ContentLoader'
 import Path from '../../classes/Path.js'
 import ButtonConfiguration from './ButtonConfiguration.js'
 import ImageUploader from './ImageUploader'
 import VisibilityRulesField from './VisibilityRulesField'
+import DateRangeField from './DateRangeField'
+import RecurrenceField from './RecurrenceField'
 
 export default class EditorForm extends React.Component {
     constructor(props) {
@@ -44,6 +46,35 @@ export default class EditorForm extends React.Component {
         this.fieldPresets = {
                 idField: id,
                 idPairFields: idp,
+                titleField: {
+                    title: "Title",
+                    property: "title",
+                    description: "",
+                    render: value => <Input id="title" defaultValue={value}/>,
+                    get: () => document
+                        .getElementById('title')
+                        .value
+                },
+                headerImageField: {
+                    title: "Header Image",
+                    property: "header",
+                    description: "Specify a header image.  Click Clear to remove the image or click Reset to restore the original value.",
+                    render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
+                    get: () => `header_${document
+                        .getElementById('id')
+                        .value}` +
+                                this
+                        .imageUploader
+                        .getExtension(),
+                    validate: () => this
+                        .imageUploader
+                        .hasValue()
+                            ? false
+                            : 'A header image must be specified.',
+                    finalize: () => this
+                        .imageUploader
+                        .saveImage(`header_${document.getElementById('id').value}`)
+                },
                 getElementBaseFields: type => [
                     {
                         title: "Type",
@@ -200,15 +231,7 @@ export default class EditorForm extends React.Component {
                             return 'The index must be greater than or equal to 0'
                         return false
                     }
-                }, {
-                    title: "Title",
-                    property: "title",
-                    description: "",
-                    render: value => <Input id="title" defaultValue={value}/>,
-                    get: () => document
-                        .getElementById('title')
-                        .value
-                }, {
+                }, this.fieldPresets.titleField, {
                     title: 'Title Visibility',
                     property: 'hideTitle',
                     description: 'Check this box to hide the title on the tab\'s card on the home screen.  This is useful when the header image already contains the title.',
@@ -222,26 +245,7 @@ export default class EditorForm extends React.Component {
                         .getElementById('hideTitle')
                         .checked,
                     validate: () => false
-                }, {
-                    title: "Header Image",
-                    property: "header",
-                    description: "Specify a header image for this tab.  Click Clear to remove the image or click Reset to restore the original value.",
-                    render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
-                    get: () => `header_${document
-                        .getElementById('id')
-                        .value}` +
-                                this
-                        .imageUploader
-                        .getExtension(),
-                    validate: () => this
-                        .imageUploader
-                        .hasValue()
-                            ? false
-                            : 'A header image must be specified.',
-                    finalize: () => this
-                        .imageUploader
-                        .saveImage(`header_${document.getElementById('id').value}`)
-                }, {
+                }, this.fieldPresets.headerImageField, {
                     title: 'Header Visibility',
                     property: 'hideHeader',
                     description: 'Check this box to hide the header image on this tab\'s content page.',
@@ -266,6 +270,59 @@ export default class EditorForm extends React.Component {
                     validate: () => this
                         .visibilityRules
                         .validate()
+                }
+            ],
+            events: [
+                this.fieldPresets.idField,
+                this.fieldPresets.titleField,
+                {
+                    title: 'Description',
+                    property: 'description',
+                    render: value => <Input type="textarea" defaultValue={value || ''} id="description"/>,
+                    get: () => document.getElementById('description').value,
+                    validate: () => document.getElementById('description').value ? false : 'No description specified.'
+                },
+                this.fieldPresets.headerImageField,
+                {
+                    title: 'Date',
+                    property: 'date',
+                    render: value => <DateRangeField ref={f => this.dateRangeField = f} startValue={value ? value.start : null} endValue={value ? value.end : null}/>,
+                    get: () => this.dateRangeField.getValue(),
+                    validate: () => this.dateRangeField.validate()
+                },
+                {
+                    title: 'Recurrence',
+                    property: 'recurrence',
+                    render: value => <RecurrenceField ref={rf => this.rf = rf} value={value}/>,
+                    get: () => this.rf.getValue(),
+                    validate: () => this.rf.validate()
+                },
+                {
+                    title: 'Location',
+                    property: 'location',
+                    render: value => <Input type="text" id="location" defaultValue={value}/>,
+                    get: () => document.getElementById('location').value,
+                    validate: () => document.getElementById('location').value ? false : 'No location specified.'
+                },
+                {
+                    title: 'Address',
+                    description: 'To allow users to instantly get directions to this event, provide an address.',
+                    property: 'address',
+                    optional: true,
+                    render: value => <Input type="address" id="address" defaultValue={value}/>,
+                    get: () => document.getElementById('address').value,
+                    validate: () => false
+                },
+                {
+                    title: 'Price',
+                    description: 'Set to 0 if the event is free.',
+                    property: 'price',
+                    render: value => <InputGroup>
+                    <InputGroupAddon addonType="prepend">USD</InputGroupAddon>
+                        <Input type="number" id="price" defaultValue={value || 0} min="0" step="0.01"/>
+                    </InputGroup>,
+                    get: () => parseFloat(document.getElementById('price').value),
+                    validate: () => isNaN(parseFloat(document.getElementById('price').value)) ? 'An invalid price was specified.' : false
                 }
             ]
         }
