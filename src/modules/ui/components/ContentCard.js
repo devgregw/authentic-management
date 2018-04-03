@@ -102,7 +102,7 @@ export default class ContentCard extends React.Component {
                     </CardBody>
                 </Card>
                 case 'event':
-                var badge = moment(this.props.data.dateTime.end, moment.ISO_8601).isBefore(moment()) ? <Badge color="warning">Outdated</Badge> : null
+                badge = moment(this.props.data.dateTime.end, moment.ISO_8601).isBefore(moment()) ? <Badge color="warning">Outdated</Badge> : null
                 return <Card className="Content-card">
                     <CardBody>
                         <CardTitle>{this.props.data.title} {badge}</CardTitle>

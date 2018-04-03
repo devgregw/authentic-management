@@ -1,6 +1,6 @@
 import React from 'react'
 import * as queryString from 'query-string'
-import {FormGroup, Label, Input, Form, Badge, InputGroup, InputGroupAddon} from 'reactstrap'
+import {FormGroup, Label, Input, Form, Badge} from 'reactstrap'
 import ContentLoader from './ContentLoader'
 import Path from '../../classes/Path.js'
 import ButtonConfiguration from './ButtonConfiguration.js'

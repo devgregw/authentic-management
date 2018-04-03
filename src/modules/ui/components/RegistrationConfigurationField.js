@@ -1,6 +1,5 @@
 import React from 'react'
 import { Input, FormGroup, Label, Button, Progress, InputGroup, InputGroupAddon } from 'reactstrap'
-import ContentLoader from './ContentLoader'
 import * as firebase from 'firebase'
 import Utils from '../../classes/Utils'
 
@@ -120,7 +119,7 @@ export default class RegistrationConfigurationField extends React.Component {
           <FormGroup check>
             <Label check>
               <Input defaultChecked={this.state.breeze} innerRef={f => { if (f) f.onchange = () => this.setState({breeze: f.checked}) }} type="radio" name="radio1" />{' '}
-              Configure with <a href="https://authenticcity.breezechms.com/" rel="noopener noreferrer" target="_blank"><span><img src={`${Utils.getBaseUrl()}/breeze.png`}/></span> Breeze ChMS</a>
+              Configure with <a href="https://authenticcity.breezechms.com/" rel="noopener noreferrer" target="_blank"><span><img alt="" src={`${Utils.getBaseUrl()}/breeze.png`}/></span> Breeze ChMS</a>
             </Label>
           </FormGroup>
           <FormGroup check>

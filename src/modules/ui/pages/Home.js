@@ -144,9 +144,9 @@ export default class Home extends React.Component {
                 content = items.length > 0 ? cards : <p>No tabs have been created.  Click New to add a tab.</p>
                 break
             case 'events':
-                var cards = []
-                var items = []
-                for (var id in val)
+                cards = []
+                items = []
+                for (id in val)
                     items.push(val[id])
                 items.sort((a, b) => a.index - b.index)
                 items.forEach(i => cards.push(<ContentCard key={i.id} type="event" data={i} refresh={() => this.forceUpdate()}/>))
