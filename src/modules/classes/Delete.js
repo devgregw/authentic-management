@@ -20,6 +20,20 @@ export default class Delete {
         return Promise.all(promises)
     }
 
+    static event(data) {
+        var promises = [
+            firebase
+                .database()
+                .ref(`/events/${data.id}/`)
+                .remove(),
+            firebase
+                .storage()
+                .ref(data.header)
+                .delete()
+        ]
+        return Promise.all(promises)
+    }
+
     static element(data, index, parent) {
         var updated = parent
         updated.elements[index] = null

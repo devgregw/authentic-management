@@ -16,6 +16,7 @@ import ProgressModal from './ProgressModal.js'
 import Utils from '../../classes/Utils.js'
 import BasicCard from './BasicCard'
 import Delete from '../../classes/Delete'
+import * as moment from 'moment'
 
 export default class ContentCard extends React.Component {
     static propTypes = {
@@ -53,7 +54,7 @@ export default class ContentCard extends React.Component {
                     case 'blog':
                         return <BasicCard title="Blog"><h2><Badge color="warning" pill>Under Construction</Badge></h2></BasicCard>
                     case 'events':
-                        return <BasicCard title="Upcoming Events"><h2><Badge color="warning" pill>Under Construction</Badge></h2></BasicCard>
+                        return <BasicCard title="Upcoming Events"><Button onClick={() => this.props.push('events')} size="lg" outline color="primary">Manage</Button></BasicCard>/*<BasicCard title="Upcoming Events"><h2><Badge color="warning" pill>Under Construction</Badge></h2></BasicCard>*/
                     case 'meta':
                         return <BasicCard title="Resources">
                             <p>Because the <span id="ACCAMS" style={{borderBottom: '1px dotted black', cursor: 'help'}}>ACCAMS</span> is <Badge color="warning" pill>Under Construction</Badge>, some features may be broken or unavailable.<br/>
@@ -89,6 +90,37 @@ export default class ContentCard extends React.Component {
                                 primary="Delete" primaryColor="danger" secondary="Cancel" onPrimary={() => {
                                     this.setState({ProgressModal: true})
                                     Delete.tab(this.props.data).then(() => {
+                                            this.setState({deleteModal: false, ProgressModal: false})
+                                            this
+                                                .props
+                                                .refresh()
+                                        })                                        
+                                }}/>
+                            <ProgressModal isOpen={this.state.ProgressModal} progressColor="danger" progressText="Deleting..."/>
+                        </ButtonGroup>
+                        </ButtonToolbar>
+                    </CardBody>
+                </Card>
+                case 'event':
+                var badge = moment(this.props.data.dateTime.end, moment.ISO_8601).isBefore(moment()) ? <Badge color="warning">Outdated</Badge> : null
+                return <Card className="Content-card">
+                    <CardBody>
+                        <CardTitle>{this.props.data.title} {badge}</CardTitle>
+                        <CardSubtitle>/events/{this.props.data.id}/</CardSubtitle>
+                        <ButtonToolbar className="Content-card-toolbar">
+                        <ButtonGroup>
+                            <Button outline color="dark" onClick={() => Utils.openEditor({category: 'events', path: `/events/${this.props.data.id}/`})}>Edit</Button>
+                            <Button outline color="danger" onClick={this
+                                    .toggleDeleteModal
+                                    .bind(this)}>Delete</Button>
+                            <BasicModal isOpen={this.state.deleteModal} toggle={this
+                                    .toggleDeleteModal
+                                    .bind(this)} header="Delete Confirmation" body={<p>Are you sure you want to delete this event?<br/><br/>
+                                        {this.props.data.title}<br/>/events/{this.props.data.id} / </p>}
+                                //{`Are you sure you want to delete this tab?<br><br>${this.props.data.title}<br>/tabs/${this.props.data.id}`}
+                                primary="Delete" primaryColor="danger" secondary="Cancel" onPrimary={() => {
+                                    this.setState({ProgressModal: true})
+                                    Delete.event(this.props.data).then(() => {
                                             this.setState({deleteModal: false, ProgressModal: false})
                                             this
                                                 .props

@@ -8,6 +8,7 @@ import ImageUploader from './ImageUploader'
 import VisibilityRulesField from './VisibilityRulesField'
 import DateRangeField from './DateRangeField'
 import RecurrenceField from './RecurrenceField'
+import RegistrationConfigurationField from './RegistrationConfigurationField'
 
 export default class EditorForm extends React.Component {
     constructor(props) {
@@ -28,7 +29,8 @@ export default class EditorForm extends React.Component {
             render: value => <Input id="id" defaultValue={value || this.createId()} readOnly="readOnly"/>,
             get: () => document
                 .getElementById('id')
-                .value
+                .value,
+            validate: () => document.getElementById('id').value ? false : '!!!NO ID!!!'
         }
         var idp = [
             id, {
@@ -38,9 +40,10 @@ export default class EditorForm extends React.Component {
                 render: value => <Input id="parent" defaultValue={this
                         .getEditorInfo()
                         .parent} readOnly="readOnly"/>,
-                get: () => document
-                    .getElementById('parent')
-                    .value
+                get: () => this
+                .getEditorInfo()
+                .parent,
+                validate: () => false
             }
         ]
         this.fieldPresets = {
@@ -53,7 +56,23 @@ export default class EditorForm extends React.Component {
                     render: value => <Input id="title" defaultValue={value}/>,
                     get: () => document
                         .getElementById('title')
-                        .value
+                        .value,
+                    validate: () => document.getElementById('title').value ? false : 'No title specified.'
+                },
+                titleVisibilityField: {
+                    title: 'Title Visibility',
+                    property: 'hideTitle',
+                    description: 'Check this box to hide the card\'s title on the home screen.  This is useful when the header image already contains the title.',
+                    render: value => <FormGroup check="check">
+                        <Label check="check">
+                            <Input id="hideTitle" type="checkbox" defaultChecked={value || false}/>{' '}
+                            Hide title
+                        </Label>
+                    </FormGroup>,
+                    get: () => document
+                        .getElementById('hideTitle')
+                        .checked,
+                    validate: () => false
                 },
                 headerImageField: {
                     title: "Header Image",
@@ -166,7 +185,7 @@ export default class EditorForm extends React.Component {
                     get: () => this
                         .buttonConfiguration
                         .getValue(),
-                    validate: value => this
+                    validate: () => this
                         .buttonConfiguration
                         .validate()
                 }
@@ -221,31 +240,17 @@ export default class EditorForm extends React.Component {
                     property: 'index',
                     description: 'This is a number which must be greater than or equal to 0.  Tabs will be sorted in ascending order according to this number.  If two or more tabs have the same index, they will be sorted by their ID.',
                     render: value => <Input type="number" id="index" defaultValue={value || "0"} min="0" step="1"/>,
-                    get: () => parseInt(document.getElementById('index').value,
-                        10
-                    ),
-                    validate: value => {
-                        if (isNaN(value)) 
+                    get: () => parseInt(document.getElementById('index').value, 10),
+                    validate: () => {
+                        if (isNaN(parseInt(document.getElementById('index').value, 10))) 
                             return 'The index must be an integer'
-                        if (value < 0) 
+                        if (parseInt(document.getElementById('index').value, 10) < 0) 
                             return 'The index must be greater than or equal to 0'
                         return false
                     }
-                }, this.fieldPresets.titleField, {
-                    title: 'Title Visibility',
-                    property: 'hideTitle',
-                    description: 'Check this box to hide the title on the tab\'s card on the home screen.  This is useful when the header image already contains the title.',
-                    render: value => <FormGroup check="check">
-                        <Label check="check">
-                            <Input id="hideTitle" type="checkbox" defaultChecked={value || false}/>{' '}
-                            Hide title
-                        </Label>
-                    </FormGroup>,
-                    get: () => document
-                        .getElementById('hideTitle')
-                        .checked,
-                    validate: () => false
-                }, this.fieldPresets.headerImageField, {
+                }, this.fieldPresets.titleField,
+                this.fieldPresets.titleVisibilityField,
+                this.fieldPresets.headerImageField, {
                     title: 'Header Visibility',
                     property: 'hideHeader',
                     description: 'Check this box to hide the header image on this tab\'s content page.',
@@ -275,17 +280,20 @@ export default class EditorForm extends React.Component {
             events: [
                 this.fieldPresets.idField,
                 this.fieldPresets.titleField,
+                this.fieldPresets.titleVisibilityField,
                 {
                     title: 'Description',
                     property: 'description',
-                    render: value => <Input type="textarea" defaultValue={value || ''} id="description"/>,
+                    description: 'Give a thourough description of this event.  Avoid stating the dates and times, location, price, and registration details because you will supply that information and it will be presented to the user.',
+                    render: value => <Input id="description" type="textarea" defaultValue={value}/>,
                     get: () => document.getElementById('description').value,
                     validate: () => document.getElementById('description').value ? false : 'No description specified.'
                 },
                 this.fieldPresets.headerImageField,
                 {
-                    title: 'Date',
-                    property: 'date',
+                    title: 'Date and Time',
+                    property: 'dateTime',
+                    description: '',
                     render: value => <DateRangeField ref={f => this.dateRangeField = f} startValue={value ? value.start : null} endValue={value ? value.end : null}/>,
                     get: () => this.dateRangeField.getValue(),
                     validate: () => this.dateRangeField.validate()
@@ -293,36 +301,37 @@ export default class EditorForm extends React.Component {
                 {
                     title: 'Recurrence',
                     property: 'recurrence',
-                    render: value => <RecurrenceField ref={rf => this.rf = rf} value={value}/>,
-                    get: () => this.rf.getValue(),
-                    validate: () => this.rf.validate()
+                    optional: true,
+                    description: 'If this events repeats on a regular basis, confiugure that here.',
+                    render: value => <RecurrenceField ref={f => this.recurrenceField = f} value={value}/>,
+                    get: () => this.recurrenceField.getValue(),
+                    validate: () => this.recurrenceField.validate()
                 },
                 {
                     title: 'Location',
                     property: 'location',
-                    render: value => <Input type="text" id="location" defaultValue={value}/>,
+                    description: 'Specify the name of the place where this event will be held, such as "Veterans Park" or "Youth World".',
+                    render: value => <Input id="location" defaultValue={value}/>,
                     get: () => document.getElementById('location').value,
                     validate: () => document.getElementById('location').value ? false : 'No location specified.'
                 },
                 {
                     title: 'Address',
-                    description: 'To allow users to instantly get directions to this event, provide an address.',
                     property: 'address',
                     optional: true,
-                    render: value => <Input type="address" id="address" defaultValue={value}/>,
+                    description: 'If necessary, specify the address of the place where this event will be held.  If you do, users will be able to get directions directly from the app.',
+                    render: value => <Input id="address" defaultValue={value}/>,
                     get: () => document.getElementById('address').value,
                     validate: () => false
                 },
                 {
-                    title: 'Price',
-                    description: 'Set to 0 if the event is free.',
-                    property: 'price',
-                    render: value => <InputGroup>
-                    <InputGroupAddon addonType="prepend">USD</InputGroupAddon>
-                        <Input type="number" id="price" defaultValue={value || 0} min="0" step="0.01"/>
-                    </InputGroup>,
-                    get: () => parseFloat(document.getElementById('price').value),
-                    validate: () => isNaN(parseFloat(document.getElementById('price').value)) ? 'An invalid price was specified.' : false
+                    title: 'Registration',
+                    property: 'registration',
+                    optional: true,
+                    description: 'If users need to RSVP and/or pay for this event, specify those details here.',
+                    render: value => <RegistrationConfigurationField ref={f => this.registrationConfigurationField = f} value={value}/>,
+                    get: () => this.registrationConfigurationField.getValue(),
+                    validate: () => this.registrationConfigurationField.validate()
                 }
             ]
         }
@@ -413,17 +422,14 @@ export default class EditorForm extends React.Component {
         this
             .fields[info.category]
             .forEach(f => {
-                if (f.validate) {
-                    var r;
-                    // eslint-disable-next-line
-                    if (r = f.validate(f.get())) {
-                        if (Array.isArray(r)) 
-                            errors.push(...r)
-                        else 
-                            errors.push(r)
-                    }
-                } else if (!f.get()) 
-                    errors.push(`No ${f.title.toLowerCase()} specified`)
+                var r;
+                // eslint-disable-next-line
+                if (r = f.validate()) {
+                    if (Array.isArray(r)) 
+                        errors.push(...r)
+                    else 
+                        errors.push(r)
+                }
             })
         return errors
     }
