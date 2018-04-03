@@ -14,6 +14,9 @@ export default class Home extends React.Component {
             path: new Path((queryString.parse(window.location.search).path || '').split('/').filter(p => !!p) || [])
         }
         this.transformSecondary = this.transformSecondary.bind(this)
+        this.push = this.push.bind(this)
+        this.pop = this.pop.bind(this)
+        this.goHome = this.goHome.bind(this)
     }
 
     getItemsSecondary(last, type) {
@@ -69,14 +72,35 @@ export default class Home extends React.Component {
                         name: 'Tab'
                     }
                 ]
+            case 'events':
+                return [
+                    {
+                        category: 'events',
+                        name: 'Event'
+                    }
+                ]
             default:
                 return this.getItemsSecondary(last, type)
         }
     }
 
-    componentDidUpdate(prevProps, prevState) {
-            window.history.pushState({}, '', `/?path=${this.state.path.toString()}`)
+    componentDidMount() {
+        window.addEventListener('popstate', e => {
+            this.pop()
+            //e.preventDefault()
+        })
     }
+
+    componentWillUpdate(nextProps, nextState) {
+        return this.state.path.toString() !== (nextState.path ? nextState.path.toString() : '')
+    }
+
+    /*componentDidUpdate(prevProps, prevState) {
+        if (this.permit) {
+            window.history.pushState({}, '', `/?path=${this.state.path.toString()}`)
+            this.permit = false
+        }
+    }*/
 
     transformSecondary(val) {
         var type = this.state.path.get(this.state.path.count() - 2)
@@ -108,12 +132,7 @@ export default class Home extends React.Component {
             case '':
                 content = this.categories.map(c => <ContentCard type="category" data={{
                     type: c
-                }} push={p => this.setState({
-                    path: this
-                        .state
-                        .path
-                        .append(p)
-                })}/>)
+                }} push={this.push}/>)
                 break
             case 'tabs':
                 var cards = []
@@ -121,8 +140,17 @@ export default class Home extends React.Component {
                 for (var id in val)
                     items.push(val[id])
                 items.sort((a, b) => a.index - b.index)
-                items.forEach(i => cards.push(<ContentCard key={i.id} push={p => this.setState({path: this.state.path.append(p)})} type="tab" data={i} refresh={() => this.forceUpdate()}/>))
+                items.forEach(i => cards.push(<ContentCard key={i.id} push={this.push} type="tab" data={i} refresh={() => this.forceUpdate()}/>))
                 content = items.length > 0 ? cards : <p>No tabs have been created.  Click New to add a tab.</p>
+                break
+            case 'events':
+                var cards = []
+                var items = []
+                for (var id in val)
+                    items.push(val[id])
+                items.sort((a, b) => a.index - b.index)
+                items.forEach(i => cards.push(<ContentCard key={i.id} type="event" data={i} refresh={() => this.forceUpdate()}/>))
+                content = items.length > 0 ? cards : <p>No events have been created.  Click New to add an event.</p>
                 break
             default:
                 content = this.transformSecondary(val)
@@ -136,9 +164,26 @@ export default class Home extends React.Component {
         switch (key) {
             case 'tabs':
                 return 'Tabs'
+            case 'events':
+                return 'Upcoming Events'
             default:
                 return key
         }
+    }
+
+    goHome() {
+        this.permit = true
+        this.setState({path: new Path()})
+    }
+
+    push(p) {
+        //this.permit = true
+        this.setState({path: this.state.path.append(p)})
+    }
+
+    pop() {
+        this.back = true
+        this.setState({path: this.state.path.pop()})
     }
 
     breadcrumbPop(index) {
@@ -149,13 +194,10 @@ export default class Home extends React.Component {
     }
 
     render() {
+        window.history[!this.back ? 'pushState' : 'replaceState']({}, '', `/?path=${this.state.path.toString()}`)
+        this.back = false
         return (
-            <div><HomeToolbar items={this.getItems()} onNew={info => Utils.openNewEditor(info)} onHome={() => this.setState({path: new Path()})} onBack={() => this.setState({
-                    path: this
-                        .state
-                        .path
-                        .pop()
-                })} onRefresh={() => this.forceUpdate()}/>
+            <div><HomeToolbar items={this.getItems()} onNew={info => Utils.openNewEditor(info)} onHome={this.goHome} onBack={this.pop} onRefresh={() => this.forceUpdate()}/>
                 <Breadcrumb tag="nav" style={{
                         margin: '1rem'
                     }}>
