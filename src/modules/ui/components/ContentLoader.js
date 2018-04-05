@@ -51,7 +51,7 @@ export default class ContentLoader extends React.Component {
             : (
                 <Progress style={{
                         margin: '0 1rem'
-                    }} animated="animated" color="primary" value={100}>Loading...</Progress>
+                    }} animated color="primary" value={100}>Loading...</Progress>
             )
     }
 }

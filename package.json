@@ -8,6 +8,7 @@
     "moment": "^2.20.1",
     "query-string": "^5.0.1",
     "react": "^16.1.1",
+    "react-datetime": "^2.14.0",
     "react-dom": "^16.1.1",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",

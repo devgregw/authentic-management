@@ -77,9 +77,9 @@ export default class MainToolbar extends React.Component {
                     <NavbarToggler onClick={this
                             .toggleNav
                             .bind(this)}/>
-                    <Collapse isOpen={this.state.navToggle} navbar="navbar">
-                        <Nav className="ml-auto" navbar="navbar">
-                            <NavItem active="active">
+                    <Collapse isOpen={this.state.navToggle} navbar>
+                        <Nav className="ml-auto" navbar>
+                            <NavItem active>
                                 <Button color="light" style={{
                                         margin: '1.5px'
                                     }} onClick={this
@@ -88,7 +88,7 @@ export default class MainToolbar extends React.Component {
                                             this.props.onHome
                                         )}>Home</Button>
                             </NavItem>
-                            <NavItem active="active">
+                            <NavItem active>
                                 <Button color="light" style={{
                                         margin: '1.5px'
                                     }} onClick={this
@@ -97,7 +97,7 @@ export default class MainToolbar extends React.Component {
                                             this.props.onBack
                                         )}>Back</Button>
                             </NavItem>
-                            <NavItem active="active">
+                            <NavItem active>
                                 <Button color="light" style={{
                                         margin: '1.5px'
                                     }} onClick={this
@@ -110,20 +110,19 @@ export default class MainToolbar extends React.Component {
                                 <UncontrolledButtonDropdown>
                                     <DropdownToggle style={{
                                             margin: '1.5px'
-                                        }} color="light" caret="caret">New</DropdownToggle>
+                                        }} color="light" caret>New</DropdownToggle>
                                     <DropdownMenu>
                                         {
                                             this
                                                 .props
                                                 .items
-                                                .map(i => (
-                                                    <DropdownItem key={i.key} onClick={this
+                                                .map(i => <DropdownItem key={i.key} onClick={this
                                                             .on
                                                             .bind(this,
                                                                 this.props.onNew,
                                                                 i
                                                             )}>{i.name}</DropdownItem>
-                                                ))
+                                                )
                                         }
                                     </DropdownMenu>
                                 </UncontrolledButtonDropdown>
@@ -132,7 +131,7 @@ export default class MainToolbar extends React.Component {
                                 <UncontrolledButtonDropdown>
                                     <DropdownToggle style={{
                                             margin: '1.5px'
-                                        }} color="light" caret="caret">{
+                                        }} color="light" caret>{
                                             firebase
                                                 .auth()
                                                 .currentUser

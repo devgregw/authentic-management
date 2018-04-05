@@ -100,8 +100,8 @@ export default class RecurrenceField extends React.Component {
                 {this.getEndBehaviorParams()}
             </div>
         return <div>
-            <FormGroup check="check">
-                <Label check="check">
+            <FormGroup check>
+                <Label check>
                     <Input id="enable" type="checkbox" defaultChecked={this.state.enable} onChange={() => this.setState({
                             enable: document
                                 .getElementById('enable')

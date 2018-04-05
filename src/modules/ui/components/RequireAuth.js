@@ -27,7 +27,7 @@ export default class RequireAuth extends React.Component {
         if (!this.state.user && !this.state.updated) {
             return (
                 <div className="Center-progress">
-                    <Progress animated="animated" color="primary" value={100}>Signing in...</Progress>
+                    <Progress animated color="primary" value={100}>Signing in...</Progress>
                 </div>
             )
         } else if (this.state.updated) {

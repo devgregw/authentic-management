@@ -15,7 +15,7 @@ export default class App extends Component {
             <BrowserRouter>
                 <div>
                     <Switch>
-                        <Route exact="exact" path="/" render={({match}) => <RequireAuth path={match.path} render={() => <Home/>}/>}/>
+                        <Route exact path="/" render={({match}) => <RequireAuth path={match.path} render={() => <Home/>}/>}/>
                         <Route exact path="/editor" render={({match}) => <RequireAuth path={match.path} render={() => <Editor/>}/>}/>
                         <Route path="/editor/reorder" component={Reorder}/>
                         <Route path="/account/auth/:action" component={Authentication}/>

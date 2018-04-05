@@ -1,12 +1,16 @@
 import React from 'react'
 import {
-    InputGroup, InputGroupAddon, Input, InputGroupButton
+    ButtonGroup, Button
 } from 'reactstrap'
-import moment from 'moment'
+import * as moment from 'moment'
+import Datetime from 'react-datetime'
 
 export default class DateTime extends React.Component {
     constructor(props) {
         super(props)
+        this.state = {
+            newValue: null
+        }
         this.getValue = this.getValue.bind(this)
         this.isValid = this.isValid.bind(this)
         this.getSelectedValue = this.getSelectedValue.bind(this)
@@ -14,7 +18,7 @@ export default class DateTime extends React.Component {
     }
 
     getSelectedValue() {
-        return moment(`${this.dateInput.value} ${this.timeInput.value}`, 'YYYY-MM-DD kk:mm')
+        return moment.isMoment(this.inputValue) ? this.inputValue : moment('-')//moment(`${this.dateValue || '-'} ${this.timeValue || '-'}`, 'YYYY-MM-DD kk:mm')
     }
 
     getValue() {
@@ -25,44 +29,32 @@ export default class DateTime extends React.Component {
         return this.getSelectedValue().isValid()
     }
 
-    initializeInnerRef(type, value) {
-        this[`${type}Input`] = value
-        if (value)
-            value.onchange = this.manualFireOnChange
-    }
-
-    manualFireOnChange() {
+    manualFireOnChange(v) {
+        this.inputValue = v
         if (this.props.onChange)
-            this.props.onChange(this.getValue())
+            this.props.onChange(v || this.getValue())
     }
 
     render() {
+        var value = this.state.newValue ? this.state.newValue : (this.props.moment ? this.props.moment : moment('-'))
+        if (this.didChange)
+            this.manualFireOnChange(value.isValid() ? value : null)
+        this.didChange = false
         return <div>
-            <InputGroup>
-                <InputGroupAddon addonType="prepend">Date</InputGroupAddon>
-                <Input disabled={this.props.disabled} innerRef={this.initializeInnerRef.bind(this, 'date')} type="date" defaultValue={this.props.moment ? this.props.moment.format('YYYY-MM-DD') : null}/>
-                <InputGroupButton disabled={this.props.disabled} onClick={() => {
-                    this.dateInput.value = moment().format('YYYY-MM-DD')
-                    this.manualFireOnChange()
-                }} color="secondary">Today</InputGroupButton>
-                <InputGroupButton disabled={this.props.disabled} onClick={() => {
-                    this.dateInput.value = null
-                    this.manualFireOnChange()
-                }} color="secondary">Clear</InputGroupButton>
-            </InputGroup>
-            <br/>
-            <InputGroup>
-                <InputGroupAddon addonType="prepend">Time</InputGroupAddon>
-                <Input disabled={this.props.disabled} innerRef={this.initializeInnerRef.bind(this, 'time')} type="time" defaultValue={this.props.moment ? this.props.moment.format('kk:mm') : null}/>
-                <InputGroupButton disabled={this.props.disabled} onClick={() => {
-                    this.timeInput.value = moment().format('kk:mm')
-                    this.manualFireOnChange()
-                }} color="secondary">Now</InputGroupButton>
-                <InputGroupButton disabled={this.props.disabled} onClick={() => {
-                    this.timeInput.value = null
-                    this.manualFireOnChange()
-                }} color="secondary">Clear</InputGroupButton>
-            </InputGroup>
+            <Datetime ref={f => this.dateTime = f} value={value} onChange={val => {
+                this.didChange = true
+                this.setState({newValue: val})
+            }}/>
+            <ButtonGroup>
+                <Button onClick={() => {
+                    this.didChange = true
+                    this.setState({newValue: moment()})
+                }} color="primary">Now</Button>
+                <Button onClick={() => {
+                    this.didChange = true
+                    this.setState({newValue: moment('-')})
+                }} color="warning">Clear</Button>
+            </ButtonGroup>
         </div>
     }
 }

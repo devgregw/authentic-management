@@ -20,8 +20,8 @@ export default class VisibilityRulesField extends React.Component {
         this.getRangeAlerts = () => this.state ? <div style={{marginTop: '1rem'}}>
         <Alert isOpen={this.nothing()} color="info"><b>NOTE: </b>This tab will be hidden because no date and time range was specified.</Alert>
             <Alert isOpen={this.state.dateStatus.error} color="danger"><b>ERROR: </b>The specified date and time range could not be parsed.  {this.state.dateStatus.error}</Alert>
-            <Alert isOpen={this.state.dateStatus.neither} color="danger">This tab will not be visible.</Alert>
-            <Alert isOpen={this.state.dateStatus.hidden} color="danger">This tab will be hidden until {this.state.dateStatus.hidden ? this.state.dateStatus.hidden.format('dddd, D MMMM, YYYY [at] h:mm A') : 'null'}.</Alert>
+            <Alert isOpen={this.state.dateStatus.neither} color="danger">This tab will never be visible.</Alert>
+            <Alert isOpen={this.state.dateStatus.hidden} color="warning">This tab will be hidden until {this.state.dateStatus.hidden ? this.state.dateStatus.hidden.format('dddd, D MMMM, YYYY [at] h:mm A') : 'null'}.</Alert>
             <Alert isOpen={this.state.dateStatus.visible} color="success">This tab will be visible until {this.state.dateStatus.visible ? this.state.dateStatus.visible.format('dddd, D MMMM, YYYY [at] h:mm A') : 'null'}.</Alert>
     </div> : null
         this.validate = this.validate.bind(this)
@@ -66,7 +66,7 @@ export default class VisibilityRulesField extends React.Component {
     }
 
     getValue() {
-        return { override: this.state.visibilityOverride, ...this.range.getValue() }
+        return { override: this.state.visibilityOverride, ...(this.range ? this.range.getValue() : {}) }
     }
 
     render() {
@@ -83,8 +83,8 @@ export default class VisibilityRulesField extends React.Component {
             return null
         }
         return <div>
-            <FormGroup check="check">
-                <Label check="check">
+            <FormGroup check>
+                <Label check>
                     <Input id="vis" type="checkbox" defaultChecked={this.state.visibilityOverride} onChange={() => this.setState({
                             visibilityOverride: document
                                 .getElementById('vis')
@@ -96,7 +96,7 @@ export default class VisibilityRulesField extends React.Component {
             <Alert isOpen={this.state.visibilityOverride} color="warning"><b>NOTE: </b>This tab will be visible regardless of the date and time range specified below.</Alert>
             <Alert isOpen={!this.state.visibilityOverride && this.nothing()} color="info"><b>NOTE: </b> This tab will be hidden.  Specify a date and time range to automatically control this tab's visibility.</Alert>
             <Alert isOpen={!this.state.visibilityOverride && !this.nothing()} color="info"><b>NOTE: </b> This tab's visibility will be determined by the date and time range specified below.</Alert>
-            <DateRangeField startValue={this.props.value ? moment(this.props.value.start) : ''} endValue={this.props.value ? moment(this.props.value.end) : ''} ref={f => this.range = f} disabled={this.state.visibilityOverride} onChange={this.handleChange.bind(this)}/>
+            { !this.state.visibilityOverride ? <DateRangeField startValue={this.props.value ? moment(this.props.value.start) : ''} endValue={this.props.value ? moment(this.props.value.end) : ''} ref={f => this.range = f} onChange={this.handleChange.bind(this)}/> : null }
             { this.state.visibilityOverride ? null : this.getRangeAlerts() }
             
         </div>

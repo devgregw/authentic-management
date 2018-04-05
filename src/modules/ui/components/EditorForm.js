@@ -63,8 +63,8 @@ export default class EditorForm extends React.Component {
                     title: 'Title Visibility',
                     property: 'hideTitle',
                     description: 'Check this box to hide the card\'s title on the home screen.  This is useful when the header image already contains the title.',
-                    render: value => <FormGroup check="check">
-                        <Label check="check">
+                    render: value => <FormGroup check>
+                        <Label check>
                             <Input id="hideTitle" type="checkbox" defaultChecked={value || false}/>{' '}
                             Hide title
                         </Label>
@@ -195,8 +195,8 @@ export default class EditorForm extends React.Component {
                     title: 'Visible',
                     property: 'visible',
                     description: 'If this box is checked, the separator will appear as a horizontal line.',
-                    render: value => <FormGroup check="check">
-                        <Label check="check">
+                    render: value => <FormGroup check>
+                        <Label check>
                             <Input id="visible" defaultChecked={value || true} type="checkbox"/>{' '}
                             Visible
                         </Label>
@@ -254,8 +254,8 @@ export default class EditorForm extends React.Component {
                     title: 'Header Visibility',
                     property: 'hideHeader',
                     description: 'Check this box to hide the header image on this tab\'s content page.',
-                    render: value => <FormGroup check="check">
-                        <Label check="check">
+                    render: value => <FormGroup check>
+                        <Label check>
                             <Input id="hideHeader" type="checkbox" defaultChecked={value || false}/>{' '}
                             Hide header
                         </Label>
@@ -356,7 +356,7 @@ export default class EditorForm extends React.Component {
     renderField(field,
         data
     ) {
-        return <FormGroup>
+        return <FormGroup key={`${field.property}_${Math.random() * 1000}`}>
             <Label className="Label-title" for={field.property}>{field.title} {field.optional ? <Badge pill color="primary">Optional</Badge> : null}</Label>
             {
                 field.description

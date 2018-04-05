@@ -17,7 +17,7 @@ export default class ProgressModal extends React.Component {
                                     transform: 'translateY(-50%)'
                                 }}>
                 <ModalBody>
-                    <Progress animated="animated" color={this.props.progressColor || 'primary'} value={this.props.value || 100}>{this.props.progressText}</Progress>
+                    <Progress animated color={this.props.progressColor || 'primary'} value={this.props.value || 100}>{this.props.progressText}</Progress>
                 </ModalBody>
             </Modal>
         )

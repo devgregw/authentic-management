@@ -30,9 +30,9 @@ export default class MainToolbar extends React.Component {
 
     render() {
         return (
-            <Navbar fixed="top" dark="dark" color="dark">
+            <Navbar fixed="top" dark color="dark">
                 <Nav className="mr-auto">
-                    <NavItem active="active">
+                    <NavItem active>
                         <ButtonGroup>
                             <Button color="success" onClick={this
                                     .on

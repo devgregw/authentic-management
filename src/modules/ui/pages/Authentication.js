@@ -125,8 +125,8 @@ export default class Authentication extends React.Component {
                                 <FormGroup>
                                     {pwd}
                                 </FormGroup>
-                                <FormGroup check="check">
-                                    <Label check="check">
+                                <FormGroup check>
+                                    <Label check>
                                         <Input id="remember" type="checkbox"/>{' '}
                                         Remember me
                                     </Label>
@@ -146,7 +146,7 @@ export default class Authentication extends React.Component {
                 .then(() => window.location.replace('/account/auth/signin?post=1&to=/'))
             return (
                 <div className="Center-progress">
-                    <Progress animated="animated" color="danger" value={100}>Signing out...</Progress>
+                    <Progress animated color="danger" value={100}>Signing out...</Progress>
                 </div>
             )
         } else {

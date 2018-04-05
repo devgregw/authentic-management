@@ -108,7 +108,7 @@ export default class Home extends React.Component {
             case 'tabs':
                 var cards = <p>This tab does not contain any content.  <Badge color="warning" pill>Empty tabs will be hidden from the app.</Badge><br/>To add an element, click New.</p>
                 if (val.elements)
-                    cards = val.elements.map(e => <ContentCard type="element" index={val.elements.indexOf(e)} data={e} extras={{tab: val}} refresh={() => this.forceUpdate()}/>)
+                    cards = val.elements.map(e => <ContentCard key={e.id} type="element" index={val.elements.indexOf(e)} data={e} extras={{tab: val}} refresh={() => this.forceUpdate()}/>)
                 return <div>
                     <h2>{val.title} <Badge color="secondary">Elements</Badge> <Button onClick={() => Utils.openReorder(val.id)} color="primary" disabled={!val.elements || (val.elements || []).length <= 1}>Reorder</Button></h2>
                     {cards}
@@ -124,13 +124,13 @@ export default class Home extends React.Component {
         }
     }
 
-    categories = ['tabs','blog','events','meta']
+    categories = ['tabs', 'events', 'blog', 'meta']
 
     transform(val) {
         var content
         switch (this.state.path.last()) {
             case '':
-                content = this.categories.map(c => <ContentCard type="category" data={{
+                content = this.categories.map(c => <ContentCard key={c} type="category" data={{
                     type: c
                 }} push={this.push}/>)
                 break
