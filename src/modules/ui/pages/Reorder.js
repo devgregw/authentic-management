@@ -41,7 +41,7 @@ export default class Reorder extends React.Component {
     }
 
     makeCard(t, e) {
-        return <Card className="Content-card" style={{minHeight: '150px'}}>
+        return <Card key={e.id} className="Content-card" style={{minHeight: '150px'}}>
                 <CardBody style={{display: 'flex', flexDirection: 'row'}}>
                     <div style={{position: 'relative', marginRight: '1.25rem'}}>
                         <Button color={this.state.newList.indexOf(e) === 0 ? 'light' : 'primary'} size="lg" onClick={this.move.bind(this, e, 'up')} disabled={this.state.newList.indexOf(e) === 0}>↑</Button>

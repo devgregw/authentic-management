@@ -21,7 +21,7 @@ import * as moment from 'moment'
 export default class ContentCard extends React.Component {
     static propTypes = {
         type: PropTypes.string,
-        data: PropTypes.object,
+        data: PropTypes.any,
         refresh: PropTypes.func,
         push: PropTypes.func
     }
