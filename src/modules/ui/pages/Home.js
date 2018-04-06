@@ -11,7 +11,7 @@ export default class Home extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            path: new Path((queryString.parse(window.location.search).path || '').split('/').filter(p => !!p) || [])
+            path: new Path((queryString.parse(window.location.search).path || '').split('/').filter(p => Boolean(p)) || [])
         }
         this.transformSecondary = this.transformSecondary.bind(this)
         this.push = this.push.bind(this)

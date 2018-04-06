@@ -456,7 +456,7 @@ export default class EditorForm extends React.Component {
             return this
                 .transform
                 .bind(this)({})
-        return <ContentLoader path={new Path(info.path.split('/').filter(str => !!str))} transformer={this
+        return <ContentLoader path={new Path(info.path.split('/').filter(str => Boolean(str)))} transformer={this
                 .transform
                 .bind(this)}/>
 

@@ -7,7 +7,7 @@ export default class RecurrenceField extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            enable: false
+            enable: Boolean(props.value)
         }
         this.getValue = this.getValue.bind(this)
         this.validate = this.validate.bind(this)

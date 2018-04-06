@@ -116,7 +116,7 @@ export default class Authentication extends React.Component {
                                 <Alert color="success" isOpen={this.state.postAlert} toggle={() => this.setState({postAlert: false})}>
                                     You've been signed out.
                                 </Alert>
-                                <Alert color="danger" isOpen={!!this.state.error}>
+                                <Alert color="danger" isOpen={Boolean(this.state.error)}>
                                     {this.state.error.toString()}
                                 </Alert>
                                 <FormGroup>
