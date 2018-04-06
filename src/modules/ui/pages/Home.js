@@ -85,10 +85,7 @@ export default class Home extends React.Component {
     }
 
     componentDidMount() {
-        window.addEventListener('popstate', e => {
-            this.pop()
-            //e.preventDefault()
-        })
+        window.addEventListener('popstate', e => this.pop())
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -177,7 +174,6 @@ export default class Home extends React.Component {
     }
 
     push(p) {
-        //this.permit = true
         this.setState({path: this.state.path.append(p)})
     }
 
@@ -188,7 +184,7 @@ export default class Home extends React.Component {
 
     breadcrumbPop(index) {
         var arr = []
-        for (var i = 0; i < index; i++) 
+        for (var i = 0; i < index; i++)
             arr.push(this.state.path.get(i))
         this.setState({path: new Path(arr)})
     }

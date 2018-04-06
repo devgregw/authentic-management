@@ -113,7 +113,6 @@ export default class RegistrationConfigurationField extends React.Component {
             <Label for="form_url" className="Label-description">If this event requires payment, ensure that (1) the custom registration form handles online payments and/or (2) payment will be accepted at the door (and indicate so in the description box).</Label>
             <Input type="url" innerRef={f => this.formUrl = f} id="form_url" defaultValue={this.props.value ? this.props.value.url : ''}/>
         </div>
-        //Configure with <a href="https://authenticcity.breezechms.com/" rel="noopener noreferrer" target="_blank">Breeze ChMS</a>
         return <div>
             <FormGroup tag="fieldset">
           <FormGroup check>

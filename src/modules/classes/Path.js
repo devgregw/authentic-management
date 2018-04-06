@@ -1,8 +1,6 @@
 export default class Path {
     constructor(pieces) {
-        //var p = typeof pieces === 'object' ? pieces : pieces.split('/').filter(str => !!str)
         this.pieces = pieces || []
-        //console.log(this.pieces)
         this.get = this
             .get
             .bind(this)

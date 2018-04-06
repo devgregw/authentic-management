@@ -18,7 +18,7 @@ export default class DateTime extends React.Component {
     }
 
     getSelectedValue() {
-        return moment.isMoment(this.inputValue) ? this.inputValue : moment('-')//moment(`${this.dateValue || '-'} ${this.timeValue || '-'}`, 'YYYY-MM-DD kk:mm')
+        return moment.isMoment(this.inputValue) ? this.inputValue : moment('-')
     }
 
     getValue() {

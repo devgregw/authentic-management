@@ -86,7 +86,6 @@ export default class ContentCard extends React.Component {
                                     .toggleDeleteModal
                                     .bind(this)} header="Delete Confirmation" body={<p>Are you sure you want to delete this tab?<br/><br/>
                                         {this.props.data.title}<br/>/tabs/{this.props.data.id} / </p>}
-                                //{`Are you sure you want to delete this tab?<br><br>${this.props.data.title}<br>/tabs/${this.props.data.id}`}
                                 primary="Delete" primaryColor="danger" secondary="Cancel" onPrimary={() => {
                                     this.setState({ProgressModal: true})
                                     Delete.tab(this.props.data).then(() => {
@@ -117,7 +116,6 @@ export default class ContentCard extends React.Component {
                                     .toggleDeleteModal
                                     .bind(this)} header="Delete Confirmation" body={<p>Are you sure you want to delete this event?<br/><br/>
                                         {this.props.data.title}<br/>/events/{this.props.data.id} / </p>}
-                                //{`Are you sure you want to delete this tab?<br><br>${this.props.data.title}<br>/tabs/${this.props.data.id}`}
                                 primary="Delete" primaryColor="danger" secondary="Cancel" onPrimary={() => {
                                     this.setState({ProgressModal: true})
                                     Delete.event(this.props.data).then(() => {
@@ -168,5 +166,3 @@ export default class ContentCard extends React.Component {
         }
     }
 }
-
-//  `/tabs/${this.props.extras.tab.id}/bundles/${this.props.extras.tab.bundles.sort((a, b) => a.id.localeCompare(b.id)).map(b => b.id).indexOf(this.props.data.id)}`
