@@ -12,7 +12,6 @@ export default class ContentLoader extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            loaded: false,
             content: null
         }
     }
@@ -20,7 +19,7 @@ export default class ContentLoader extends React.Component {
     shouldComponentUpdate(p,
         s
     ) {
-        return JSON.stringify(s) !== JSON.stringify(this.state)
+        return Boolean(s.content) !== Boolean(this.state.content)
     }
 
     componentWillReceiveProps(next) {
@@ -42,16 +41,11 @@ export default class ContentLoader extends React.Component {
                     c = <p style={{color: 'red'}}>{ex.toString()}</p>
                 }
                 this.setState({
-                    loaded: true,
                     content: c
                 })
             })
-        return this.state.loaded
-            ? (this.state.content || null)
-            : (
-                <Progress style={{
+        return this.state.content || <Progress style={{
                         margin: '0 1rem'
                     }} animated color="primary" value={100}>Loading...</Progress>
-            )
     }
 }
