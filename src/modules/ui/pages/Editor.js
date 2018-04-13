@@ -49,7 +49,16 @@ export default class Editor extends React.Component {
             var info = this.getEditorInfo()
             this.setState({savingModal: true})
             // eslint-disable-next-line
-            if (info.category.indexOf('elements') === -1) {
+            if (info.category.indexOf('appearance') >= 0)
+                setTimeout(() => {
+                    Promise.all([firebase.database().ref(`/appearance/${info.parent}/`).update(x, null), this.form.finalize()]).then(() => {
+                        this.closeEditor(true)
+                    }, e => {
+                        alert(e)
+                    this.closeEditor(false)
+                    })
+                }, 50)
+            else if (info.category.indexOf('elements') === -1)
                 setTimeout(() => {
                     Promise.all([firebase.database().ref(`/${info.category}/${x.id}/`)[info.path ? 'update' : 'set'](x, null), this.form.finalize()]).then(() => {
                         this.closeEditor(true)
@@ -58,7 +67,7 @@ export default class Editor extends React.Component {
                     this.closeEditor(false)
                     })
                 }, 50)
-            } else {
+            else
                 setTimeout(() => {
                     firebase.database().ref(`/tabs/${info.parent}/`).once('value').then(snap => {
                         setTimeout(() => {
@@ -80,7 +89,6 @@ export default class Editor extends React.Component {
                         }, 50)
                     })
                 }, 50)
-            }
         }
     }
 

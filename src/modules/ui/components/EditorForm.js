@@ -333,6 +333,28 @@ export default class EditorForm extends React.Component {
                     get: () => this.registrationConfigurationField.getValue(),
                     validate: () => this.registrationConfigurationField.validate()
                 }
+            ],
+            appearance_events: [
+                this.fieldPresets.titleField,
+                this.fieldPresets.titleVisibilityField,
+                {
+                    title: "Header Image",
+                    property: "header",
+                    description: "Specify a header image.  Click Clear to remove the image or click Reset to restore the original value.",
+                    render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
+                    get: () => `header_appearance_events` +
+                                this
+                        .imageUploader
+                        .getExtension(),
+                    validate: () => this
+                        .imageUploader
+                        .hasValue()
+                            ? false
+                            : 'A header image must be specified.',
+                    finalize: () => this
+                        .imageUploader
+                        .saveImage('header_appearance_events')
+                }
             ]
         }
     }

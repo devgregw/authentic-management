@@ -54,7 +54,12 @@ export default class ContentCard extends React.Component {
                     case 'blog':
                         return <BasicCard title="Blog"><h2><Badge color="warning" pill>Under Construction</Badge></h2></BasicCard>
                     case 'events':
-                        return <BasicCard title="Upcoming Events"><Button onClick={() => this.props.push('events')} size="lg" outline color="primary">Manage</Button></BasicCard>/*<BasicCard title="Upcoming Events"><h2><Badge color="warning" pill>Under Construction</Badge></h2></BasicCard>*/
+                        return <BasicCard title="Upcoming Events">
+                            <ButtonGroup>
+                            <Button onClick={() => this.props.push('events')} size="lg" outline color="primary">Manage</Button>
+                            <Button onClick={() => Utils.openEditor({category: 'appearance_events', parent: 'events', path: '/appearance/events/'})} outline color="dark">Edit Appearance</Button>
+                            </ButtonGroup>
+                            </BasicCard>
                     case 'meta':
                         return <BasicCard title="Resources">
                             <p>Because the <span id="ACCAMS" style={{borderBottom: '1px dotted black', cursor: 'help'}}>ACCAMS</span> is <Badge color="warning" pill>Under Construction</Badge>, some features may be broken or unavailable.<br/>
