@@ -15,6 +15,7 @@ export default class DateTime extends React.Component {
         this.isValid = this.isValid.bind(this)
         this.getSelectedValue = this.getSelectedValue.bind(this)
         this.manualFireOnChange = this.manualFireOnChange.bind(this)
+        this.didChange = true
     }
 
     getSelectedValue() {
