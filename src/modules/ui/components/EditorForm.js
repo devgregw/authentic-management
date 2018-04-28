@@ -100,7 +100,8 @@ export default class EditorForm extends React.Component {
                         property: "type",
                         description: "",
                         render: value => <p style={{textTransform: 'capitalize'}}>{type}</p>,
-                        get: () => type
+                        get: () => type,
+                        validate: () => false
                     },
                     ...idp
                 ],
