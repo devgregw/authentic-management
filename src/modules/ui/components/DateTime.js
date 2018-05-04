@@ -39,7 +39,7 @@ export default class DateTime extends React.Component {
     render() {
         var value = this.state.newValue ? this.state.newValue : (this.props.moment ? this.props.moment : moment('-'))
         if (this.didChange)
-            this.manualFireOnChange(value.isValid() ? value : null)
+            this.manualFireOnChange((value.isValid ? value.isValid() : false) ? value : null)
         this.didChange = false
         return <div>
             <Datetime ref={f => this.dateTime = f} value={value} onChange={val => {

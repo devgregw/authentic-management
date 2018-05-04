@@ -7,15 +7,16 @@ export default class RecurrenceField extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            enable: Boolean(props.value)
+            enable: Boolean(props.value),
+            endBehavior: props.value ? props.value.endBehavior : 'infinite'
         }
         this.getValue = this.getValue.bind(this)
         this.validate = this.validate.bind(this)
     }
 
     getEndBehaviorParams() {
-        var input = document.getElementById('endBehavior')
-        switch (input ? input.value : 'infinite') {
+        //var input = document.getElementById('endBehavior')
+        switch (this.state.endBehavior) {
             case 'until':
             return <div>
                 <Label for="until">Date</Label>
@@ -92,7 +93,7 @@ export default class RecurrenceField extends React.Component {
                 <Label for="interval">Interval</Label>
                 <Input type="number" id="interval" min="1" step="1" defaultValue={this.props.value ? this.props.value.interval : '1'}/>
                 <Label for="endBehavior">End Behavior</Label>
-                <Input innerRef={i => (i || document.getElementById('endBehavior')).onchange = () => this.forceUpdate()} type="select" id="endBehavior" defaultValue={this.props.value ? this.props.value.endBehavior : 'infinite'}>
+                <Input innerRef={i => (i || document.getElementById('endBehavior')).onchange = () => this.setState({endBehavior: document.getElementById("endBehavior").value})} type="select" id="endBehavior" defaultValue={this.state.endBehavior}>
                     <option value="infinite">Infinite</option>
                     <option value="until">Until Date</option>
                     <option value="number">Number of Occurrences</option>
