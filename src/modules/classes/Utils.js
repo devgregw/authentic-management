@@ -2,6 +2,11 @@ import OpenTabAction from '../ui/components/actionFields/OpenTabAction'
 import OpenURLAction from '../ui/components/actionFields/OpenURLAction'
 import GetDirectionsAction from '../ui/components/actionFields/GetDirectionsAction'
 import EmailAction from '../ui/components/actionFields/EmailAction'
+
+import OpenEventAction from '../ui/components/actionFields/OpenEventAction'
+import ShowMapAction from '../ui/components/actionFields/ShowMapAction'
+import AddToCalendarAction from '../ui/components/actionFields/AddToCalendarAction'
+
 import React from 'react'
 
 export default class Utils {
@@ -66,7 +71,10 @@ export default class Utils {
         OpenTabAction: OpenTabAction,
         OpenURLAction: OpenURLAction,
         GetDirectionsAction: GetDirectionsAction,
-        EmailAction: EmailAction
+        EmailAction: EmailAction,
+        OpenEventAction: OpenEventAction,
+        ShowMapAction: ShowMapAction,
+        AddToCalendarAction: AddToCalendarAction
     }
 
     static get actionClassesIndexed() {
