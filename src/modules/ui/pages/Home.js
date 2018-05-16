@@ -121,7 +121,7 @@ export default class Home extends React.Component {
         }
     }
 
-    categories = ['tabs', 'events', 'blog', 'meta']
+    categories = ['tabs', 'events', 'notifications', 'blog', 'meta']
 
     transform(val) {
         var content

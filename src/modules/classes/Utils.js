@@ -45,6 +45,10 @@ export default class Utils {
         return newWindow;
     }
 
+    static openSender() {
+        Utils.openPopup(`${Utils.getBaseUrl()}/send`, 1000, 600)
+    }
+
     static openNewEditor(info) {
         Utils.openPopup(`${Utils.getBaseUrl()}/editor?action=new&category=${info.category}${info.parent ? `&parent=${info.parent}` : ''}`, 1000, 600)
     }

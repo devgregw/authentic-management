@@ -8,6 +8,7 @@ import RequireAuth from './modules/ui/components/RequireAuth.js'
 import Editor from './modules/ui/pages/Editor.js'
 import Reorder from './modules/ui/pages/Reorder.js'
 import StorageViewer from './modules/ui/pages/StorageViewer'
+import Sender from './modules/ui/pages/Sender'
 
 export default class App extends Component {
     render() {
@@ -17,6 +18,7 @@ export default class App extends Component {
                     <Switch>
                         <Route exact path="/" render={({match}) => <RequireAuth path={match.path} render={() => <Home/>}/>}/>
                         <Route exact path="/editor" render={({match}) => <RequireAuth path={match.path} render={() => <Editor/>}/>}/>
+                        <Route exact path="/send" render={({match}) => <RequireAuth path={match.path} render={() => <Sender/>}/>}/>
                         <Route path="/editor/reorder" component={Reorder}/>
                         <Route path="/account/auth/:action" component={Authentication}/>
                         <Route path="/account/meta/changename" render={({match}) => <RequireAuth path={match.path} render={() => <ChangeDisplayName/>}/>}/>

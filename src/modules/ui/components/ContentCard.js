@@ -45,12 +45,9 @@ export default class ContentCard extends React.Component {
             case 'category':
                 switch (this.props.data.type) {
                     case 'tabs':
-                        return <BasicCard title="Tabs"><Button onClick={() => this.props.push('tabs')} size="lg" outline color="primary">Manage</Button></BasicCard> /*<Card className="Content-card">
-                            <CardBody>
-                                <CardTitle>Tabs</CardTitle>
-                                <Button onClick={() => this.props.push('tabs')} outline color="primary">Manage</Button>
-                            </CardBody>
-                        </Card>*/
+                        return <BasicCard title="Tabs"><Button onClick={() => this.props.push('tabs')} size="lg" outline color="primary">Manage</Button></BasicCard>
+                    case 'notifications':
+                        return <BasicCard title="Notifications"><Button onClick={() => Utils.openSender()} size="lg" outline color="primary">Send Notification</Button></BasicCard>
                     case 'blog':
                         return <BasicCard title="Blog"><h2><Badge color="warning" pill>Under Construction</Badge></h2></BasicCard>
                     case 'events':
