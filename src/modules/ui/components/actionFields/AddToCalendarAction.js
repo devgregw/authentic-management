@@ -1,5 +1,5 @@
 import React from 'react'
-import {Input,Label,Button} from 'reactstrap'
+import {Input,Label} from 'reactstrap'
 
 export default class AddToCalendarAction extends React.Component {
     constructor(props) {
@@ -24,6 +24,7 @@ export default class AddToCalendarAction extends React.Component {
     }
 
     render() {
+        // eslint-disable-next-line
         if (this.state.group == 0)
             return this.make(
                 <Input type="select" id="action_atca_0_eventId" defaultValue={Object.getOwnPropertyNames(this.props.database.events)[0]}>
