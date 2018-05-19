@@ -121,14 +121,15 @@ export default class Home extends React.Component {
         }
     }
 
-    categories = ['tabs', 'events', 'notifications', 'blog', 'meta']
+    categories = ['tabs', 'events', 'notifications', 'blog', 'links', 'meta']
 
     transform(val) {
         var content
         switch (this.state.path.last()) {
             case '':
                 content = this.categories.map(c => <ContentCard key={c} type="category" data={{
-                    type: c
+                    type: c,
+                    ...val
                 }} push={this.push}/>)
                 break
             case 'tabs':
