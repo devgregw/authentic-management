@@ -84,16 +84,15 @@ export default class ContentCard extends React.Component {
                             <Badge style={{fontSize: 'x-large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(this.props.data.events).length}</Badge>
                             { eventErrors ? <Badge style={{fontSize: 'large', verticalAlign: 'middle', margin: '3px'}} color="warning">{eventErrors} need{eventErrors !== 1 ? '' : 's'} attention</Badge> : null }
                             </BasicCard>
-                    case 'links':
-                        return <BasicCard title="Download Links">
-                            <h2><Badge pill color="danger">Unavailable</Badge></h2>
-                        </BasicCard>
                     case 'meta':
                         return <BasicCard title="Resources">
                             <p>Because the App Management System is under construction, some features may be broken or unavailable.<br/>
                             To track development progress, check out the Trello Roadmap.<br/>To report an issue or make a suggestion, click Contact.</p>
                             <Button color="link" size="lg" onClick={() => window.open('https://trello.com/b/QUgekVh6/app-roadmap', '_blank')}>Trello Roadmap →</Button><br/>
                             <Button color="link" size="lg" onClick={() => window.location.assign('mailto:devgregw@outlook.com')}>Contact →</Button>
+                            <hr/>
+                            <h5>Download Links</h5>
+                            <p>Android: <Badge pill color="warning">Unavailable</Badge><br/>iOS: <Badge pill color="warning">Unavailable</Badge></p>
                             <hr/>
                             <h5>Version Codes</h5>
                             <p>{`Android: ${this.props.data.versions.android}`}<br/>{`iOS: ${this.props.data.versions.ios}`}</p>
