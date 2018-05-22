@@ -81,7 +81,7 @@ export default class EditorForm extends React.Component {
                     render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
                     get: () => `header_${document
                         .getElementById('id')
-                        .value}` +
+                        .value}` + this.imageUploader.random +
                                 this
                         .imageUploader
                         .getExtension(),
@@ -92,7 +92,7 @@ export default class EditorForm extends React.Component {
                             : 'A header image must be specified.',
                     finalize: () => this
                         .imageUploader
-                        .saveImage(`header_${document.getElementById('id').value}`)
+                        .saveImage(`header_${document.getElementById('id').value}${this.imageUploader.random}`)
                 },
                 getElementBaseFields: type => [
                     {
@@ -131,7 +131,7 @@ export default class EditorForm extends React.Component {
                         .getEditorInfo()
                         .parent}_${document
                         .getElementById('id')
-                        .value}` +
+                        .value}` + this.imageUploader.random +
                                 this
                         .imageUploader
                         .getExtension(),
@@ -142,7 +142,7 @@ export default class EditorForm extends React.Component {
                             : 'An image must be specified.',
                     finalize: () => this
                         .imageUploader
-                        .saveImage(`imageElement_${this.getEditorInfo().parent}_${document.getElementById('id').value}`)
+                        .saveImage(`imageElement_${this.getEditorInfo().parent}_${document.getElementById('id').value}${this.imageUploader.random}`)
                 }
             ],
             elements_title: [
@@ -343,7 +343,7 @@ export default class EditorForm extends React.Component {
                     property: "header",
                     description: "Specify a header image.  Click Clear to remove the image or click Reset to restore the original value.",
                     render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
-                    get: () => `header_appearance_events` +
+                    get: () => `header_appearance_events${this.imageUploader.random}` +
                                 this
                         .imageUploader
                         .getExtension(),
@@ -354,7 +354,7 @@ export default class EditorForm extends React.Component {
                             : 'A header image must be specified.',
                     finalize: () => this
                         .imageUploader
-                        .saveImage('header_appearance_events')
+                        .saveImage('header_appearance_events' + this.imageUploader.random)
                 }
             ]
         }

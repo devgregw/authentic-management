@@ -54,12 +54,15 @@ export default class ImageUploader extends React.Component {
     }
 
     saveImage(name) {
-        return new Promise((resolve, reject) => {
+        var promises = [new Promise((resolve, reject) => {
             if (this.state.location === 'local')
-                firebase.storage().ref(name + this.getExtension()).put(this.getFileInput().files[0]).on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => this.setState({bytesTransferred: snapshot.bytesTransferred, totalBytes: snapshot.totalBytes}), reject, resolve)
+                firebase.storage().ref(name + this.getExtension()).put(this.getFileInput().files[0], {cacheControl: 'no-cache'}).on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => this.setState({bytesTransferred: snapshot.bytesTransferred, totalBytes: snapshot.totalBytes}), reject, resolve)
             else
                 resolve()
-        })
+        })]
+        if (this.props.value)
+            promises.push(firebase.storage().ref(this.props.value).delete())
+        return Promise.all(promises)
         
     }
 
