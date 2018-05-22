@@ -10,6 +10,10 @@ import AddToCalendarAction from '../ui/components/actionFields/AddToCalendarActi
 import React from 'react'
 
 export default class Utils {
+    static get version() {
+        return '5.22.18.1'
+    }
+
     static openPopup(url, w, h) {
         var dualScreenLeft = window.screenLeft !== undefined
             ? window.screenLeft

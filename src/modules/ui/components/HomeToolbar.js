@@ -15,6 +15,7 @@ import {
     Collapse
 } from 'reactstrap'
 import * as firebase from 'firebase'
+import Utils from '../../classes/Utils'
 
 export default class MainToolbar extends React.Component {
     static propTypes = {
@@ -145,6 +146,9 @@ export default class MainToolbar extends React.Component {
                                         <DropdownItem className="text-danger" onClick={this
                                                 .toggleSignOut
                                                 .bind(this)}>Sign out</DropdownItem>
+                                        <DropdownItem divider/>
+                                        <DropdownItem header>Version</DropdownItem>
+                                        <DropdownItem disabled>{Utils.version}</DropdownItem>
                                         <BasicModal isOpen={this.state.signOutModal} toggle={this
                                                 .toggleSignOut
                                                 .bind(this)} header="Sign Out" body="Are you sure you want to sign out?" primary="Yes" secondary="Cancel" onPrimary={() => window.location.href = '/account/auth/signout'}/>
