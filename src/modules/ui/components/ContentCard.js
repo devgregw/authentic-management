@@ -40,6 +40,8 @@ export default class ContentCard extends React.Component {
     }
 
     validateTabs(tabs) {
+        if (!tabs)
+            return 0
         var count = 0
         for (var id in tabs) {
             let tab = tabs[id]
@@ -50,6 +52,8 @@ export default class ContentCard extends React.Component {
     }
 
     validateEvents(events) {
+        if (!events)
+            return 0
         var count = 0
         for (var id in events) {
             let event = events[id]
@@ -67,7 +71,7 @@ export default class ContentCard extends React.Component {
                         let tabErrors = this.validateTabs(this.props.data.tabs)
                         return <BasicCard title="Tabs">
                             <Button onClick={() => this.props.push('tabs')} size="lg" outline color="primary">Manage</Button>
-                            <Badge style={{fontSize: 'x-large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(this.props.data.tabs).length}</Badge>
+                            <Badge style={{fontSize: 'x-large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(this.props.data.tabs || {}).length}</Badge>
                             { tabErrors ? <Badge style={{fontSize: 'large', verticalAlign: 'middle', margin: '3px'}} color="warning">{tabErrors} need{tabErrors !== 1 ? '' : 's'} attention</Badge> : null }
                         </BasicCard>
                     case 'notifications':
@@ -81,7 +85,7 @@ export default class ContentCard extends React.Component {
                             <Button onClick={() => this.props.push('events')} size="lg" outline color="primary">Manage</Button>
                             <Button onClick={() => Utils.openEditor({category: 'appearance_events', parent: 'events', path: '/appearance/events/'})} outline color="dark">Edit Appearance</Button>
                             </ButtonGroup>
-                            <Badge style={{fontSize: 'x-large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(this.props.data.events).length}</Badge>
+                            <Badge style={{fontSize: 'x-large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(this.props.data.events || {}).length}</Badge>
                             { eventErrors ? <Badge style={{fontSize: 'large', verticalAlign: 'middle', margin: '3px'}} color="warning">{eventErrors} need{eventErrors !== 1 ? '' : 's'} attention</Badge> : null }
                             </BasicCard>
                     case 'meta':
