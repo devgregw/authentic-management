@@ -143,6 +143,19 @@ export default class EditorForm extends React.Component {
                     finalize: () => this
                         .imageUploader
                         .saveImage(`imageElement_${this.getEditorInfo().parent}_${document.getElementById('id').value}${this.imageUploader.random}`)
+                },
+                {
+                    title: "Enlargeable",
+                    property: 'enlargeButton',
+                    description: 'Choose whether to allow users to enlarge the image or download it.',
+                    render: value => <FormGroup check>
+                        <Label check>
+                            <Input id="enlargeButton" type="checkbox" defaultChecked={value || false}/>{' '}
+                            Include enlarge button
+                        </Label>
+                    </FormGroup>,
+                    validate: () => false,
+                    get: () => document.getElementById('enlargeButton').checked
                 }
             ],
             elements_title: [
@@ -294,10 +307,23 @@ export default class EditorForm extends React.Component {
                 {
                     title: 'Date and Time',
                     property: 'dateTime',
-                    description: '',
+                    description: 'Specify approximately when this event will begin and end.',
                     render: value => <DateRangeField ref={f => this.dateRangeField = f} startValue={value ? value.start : null} endValue={value ? value.end : null}/>,
                     get: () => this.dateRangeField.getValue(),
                     validate: () => this.dateRangeField.validate()
+                },
+                {
+                    title: 'Hide End Date',
+                    property: 'hideEndDate',
+                    description: 'Specify whether to hide the end date in the app.  NOTE: this option is ignored if the event does not end on the same day that it started on.',
+                    render: value => <FormGroup check>
+                        <Label check>
+                            <Input id="hideEndDate" type="checkbox" defaultChecked={value || false}/>{' '}
+                            Hide end date
+                        </Label>
+                    </FormGroup>,
+                    validate: () => false,
+                    get: () => document.getElementById("hideEndDate").checked
                 },
                 {
                     title: 'Recurrence',
