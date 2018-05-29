@@ -41,7 +41,7 @@ export default class Delete {
             firebase
                 .database()
                 .ref(`/tabs/${updated.id}/`)
-                .update(updated)
+                .update(updated.filter(o => Boolean(o)))
         ]
         if (data.type === 'image') 
             promises.push(firebase.storage().ref(data.image).delete())

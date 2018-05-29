@@ -175,24 +175,30 @@ export default class Home extends React.Component {
     }
 
     push(p) {
-        this.setState({path: this.state.path.append(p)})
+        var newPath = this.state.path.append(p)
+        window.history['pushState']({}, '', `/?path=${newPath.toString()}`)
+        window.location.reload()
+        //this.setState({path: newPath})
     }
 
     pop() {
-        this.back = true
-        this.setState({path: this.state.path.pop()})
+        var newPath = this.state.path.pop()
+        window.history['replaceState']({}, '', `/?path=${newPath.toString()}`)
+        window.location.reload()
+        //this.setState({path: newPath})
     }
 
     breadcrumbPop(index) {
         var arr = []
         for (var i = 0; i < index; i++)
             arr.push(this.state.path.get(i))
-        this.setState({path: new Path(arr)})
+        var newPath = new Path(arr)
+        window.history['replaceState']({}, '', `/?path=${newPath.toString()}`)
+        window.location.reload()
+        //this.setState({path: newPath})
     }
 
     render() {
-        window.history[!this.back ? 'pushState' : 'replaceState']({}, '', `/?path=${this.state.path.toString()}`)
-        this.back = false
         return (
             <div><HomeToolbar items={this.getItems()} onNew={info => Utils.openNewEditor(info)} onHome={this.goHome} onBack={this.pop} onRefresh={() => this.forceUpdate()}/>
                 <Breadcrumb tag="nav" style={{

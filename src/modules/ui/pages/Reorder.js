@@ -61,7 +61,7 @@ export default class Reorder extends React.Component {
         this.setState({ProgressModal: true})
         setTimeout(() => {
             var newTab = this.state.tab
-            newTab.elements = this.state.newList
+            newTab.elements = this.state.newList.filter(o => Boolean(o))
             firebase.database().ref(`/tabs/${newTab.id}`).update(newTab).then(() => this.closeEditor(true), err => {
                 alert(err)
                 this.closeEditor(false)
