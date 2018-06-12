@@ -365,10 +365,7 @@ export default class EditorForm extends React.Component {
                     property: "header",
                     description: "Specify a header image.  Click Clear to remove the image or click Reset to restore the original value.",
                     render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
-                    get: () => `header_appearance_events${this.imageUploader.random}` +
-                                this
-                        .imageUploader
-                        .getExtension(),
+                    get: () => this.imageUploader.getName('header_appearance_events'),
                     validate: () => this
                         .imageUploader
                         .hasValue()
@@ -376,7 +373,7 @@ export default class EditorForm extends React.Component {
                             : 'A header image must be specified.',
                     finalize: () => this
                         .imageUploader
-                        .saveImage('header_appearance_events' + this.imageUploader.random)
+                        .saveImage(this.imageUploader.getName('header_appearance_events'))
                 }
             ]
         }
