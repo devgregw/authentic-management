@@ -26,7 +26,7 @@ export default class EditorForm extends React.Component {
             title: "ID",
             property: "id",
             description: "This is a unique identifier.  It cannot be changed.",
-            render: value => <Input id="id" defaultValue={value || this.createId()} readOnly="readOnly"/>,
+            render: value => <Input id="id" style={{fontFamily: 'monospace !important'}} defaultValue={value || this.createId()} readOnly="readOnly"/>,
             get: () => document
                 .getElementById('id')
                 .value,
@@ -79,12 +79,9 @@ export default class EditorForm extends React.Component {
                     property: "header",
                     description: "Specify a header image.  Click Clear to remove the image or click Reset to restore the original value.",
                     render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
-                    get: () => `header_${document
+                    get: () => this.imageUploader.getName(`header_${document
                         .getElementById('id')
-                        .value}` + this.imageUploader.random +
-                                this
-                        .imageUploader
-                        .getExtension(),
+                        .value}`),
                     validate: () => this
                         .imageUploader
                         .hasValue()
@@ -92,7 +89,9 @@ export default class EditorForm extends React.Component {
                             : 'A header image must be specified.',
                     finalize: () => this
                         .imageUploader
-                        .saveImage(`header_${document.getElementById('id').value}${this.imageUploader.random}`)
+                        .saveImage(this.imageUploader.getName(`header_${document
+                            .getElementById('id')
+                            .value}`))
                 },
                 getElementBaseFields: type => [
                     {
@@ -127,14 +126,11 @@ export default class EditorForm extends React.Component {
                     property: "image",
                     description: "Click Clear to remove the image or click Reset to restore the original value.",
                     render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
-                    get: () => `imageElement_${this
+                    get: () => this.imageUploader.getName(`imageElement_${this
                         .getEditorInfo()
                         .parent}_${document
                         .getElementById('id')
-                        .value}` + this.imageUploader.random +
-                                this
-                        .imageUploader
-                        .getExtension(),
+                        .value}`),
                     validate: () => this
                         .imageUploader
                         .hasValue()
@@ -142,7 +138,7 @@ export default class EditorForm extends React.Component {
                             : 'An image must be specified.',
                     finalize: () => this
                         .imageUploader
-                        .saveImage(`imageElement_${this.getEditorInfo().parent}_${document.getElementById('id').value}${this.imageUploader.random}`)
+                        .saveImage(this.imageUploader.getName(`imageElement_${this.getEditorInfo().parent}_${document.getElementById('id').value}`))
                 },
                 {
                     title: "Enlargeable",
