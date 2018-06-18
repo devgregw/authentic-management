@@ -10,12 +10,48 @@ import Reorder from './modules/ui/pages/Reorder.js'
 import StorageViewer from './modules/ui/pages/StorageViewer'
 import Sender from './modules/ui/pages/Sender'
 
+import Debug from './modules/ui/pages/Debug'
+
+import DateTime from './modules/ui/components/DateTime'
+import * as moment from 'moment'
+import {Button} from 'reactstrap'
+
+class Demo extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            value: null,
+            id: Math
+            .random()
+            .toString(36)
+            .substr(2, 10)
+            .toUpperCase()
+        }
+    }
+
+    render() {
+        return <div>
+            <DateTime onChange={v => this.setState({value: v})}/>
+            <p>{moment.isMoment(this.state.value) ? moment(this.state.value).toISOString() : "INVALID"}</p>
+            <p>{moment.isMoment(this.state.value) ? moment(this.state.value).valueOf() : "INVALID"}</p>
+            <p>{this.state.id}</p>
+            <Button color="dark" onClick={() => this.setState({id: Math
+            .random()
+            .toString(36)
+            .substr(2, 10)
+            .toUpperCase()})}>Regen</Button>
+        </div>
+    }
+}
+
 export default class App extends Component {
     render() {
         return (
             <BrowserRouter>
                 <div>
                     <Switch>
+                        <Route exact path="/demo" render={({match}) => <Demo/>}/>
+                        <Route exact path="/debug" render={({match}) =>  <RequireAuth path={match.path} render={() => <Debug/>}/>}/>
                         <Route exact path="/" render={({match}) => <RequireAuth path={match.path} render={() => <Home/>}/>}/>
                         <Route exact path="/editor" render={({match}) => <RequireAuth path={match.path} render={() => <Editor/>}/>}/>
                         <Route exact path="/send" render={({match}) => <RequireAuth path={match.path} render={() => <Sender/>}/>}/>
