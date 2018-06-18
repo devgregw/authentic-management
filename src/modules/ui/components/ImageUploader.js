@@ -1,5 +1,5 @@
 import React from 'react'
-import {Input,Button,ButtonGroup} from 'reactstrap'
+import {Input,Button,ButtonGroup,Badge} from 'reactstrap'
 import * as firebase from 'firebase'
 import ProgressModal from './ProgressModal'
 
@@ -35,18 +35,18 @@ export default class ImageUploader extends React.Component {
         switch (this.state.location) {
             case 'storage':
             img.src = 'https://placeholdit.imgix.net/~text?txtsize=40&txt=Loading&w=200&h=200&txtfont=sans-serif'
-                firebase.storage().ref(this.state.data).getDownloadURL().then(url => this.setState({location: 'storage:loaded', url: url}), err => {this.setState({location: 'none', data: null}); console.log(err)})
+                firebase.storage().ref(this.state.data.name).getDownloadURL().then(url => this.setState({location: 'storage:loaded', url: url}), err => {this.setState({location: 'none', data: null}); console.log(err)})
                 break
             case 'storage:loaded':
                 img.src = this.state.url
                 break;
             case 'local':
                 if (this.state.data)
-                    img.src = this.state.data
+                    img.src = this.state.data.name
                 else {
                     img.src = 'https://placeholdit.imgix.net/~text?txtsize=40&txt=Loading&w=200&h=200&txtfont=sans-serif'
                     var reader = new FileReader()
-                    reader.onload = event => this.setState({location: 'local', data: event.target.result})
+                    reader.onload = event => this.setState({location: 'local', data: {name: event.target.result, width: 0, height: 0}})
                     reader.readAsDataURL(this.state.file)
                 }
                 break
@@ -60,14 +60,16 @@ export default class ImageUploader extends React.Component {
             return base + this.random + this.getExtension()
         if (this.state.location === 'none')
             return ''
-        return this.props.value
+        return this.props.value.name
     }
 
-    saveImage(name) {
+    saveImage(base) {
         /*var promises = [new Promise((resolve, reject) => {
             if (this.state.location === 'local')
                 firebase.storage().ref(name + this.getExtension()).put(this.getFileInput().files[0], {cacheControl: 'no-cache'}).on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => this.setState({bytesTransferred: snapshot.bytesTransferred, totalBytes: snapshot.totalBytes}), reject, resolve)
         })]*/
+        let name = this.getName(base)
+        var size = {width: 0, height: 0}
         this.setState({preparing: true})
         var promises = []
         if (this.state.location === 'local') {
@@ -75,21 +77,19 @@ export default class ImageUploader extends React.Component {
                 var reader = new FileReader()
                 reader.onload = () => {
                     var result = reader.result
-                    window.fetch('https://devgregw.com/utilities/tinify/tinify.php', {
-                        method: "POST",
-                        body: result.substr(result.lastIndexOf(',') + 1)
-                    }).then(r => {
-                        r.text().then(data => {
-                            firebase.storage().ref(name).putString(result.substr(0, result.lastIndexOf(',') + 1) + data, 'data_url', {cacheControl: 'no-cache'}).on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => this.setState({preparing: false, bytesTransferred: snapshot.bytesTransferred, totalBytes: snapshot.totalBytes}), reject, resolve)
-                        })
-                    })
+                    let image = new Image()
+                    image.onload = () => {
+                        size = {width: image.width, height: image.height}
+                        firebase.storage().ref(name).putString(result, 'data_url', {cacheControl: 'no-cache'}).on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => this.setState({preparing: false, bytesTransferred: snapshot.bytesTransferred, totalBytes: snapshot.totalBytes}), reject, resolve)
+                    }
+                    image.src = result
                 }
                 reader.readAsDataURL(this.getFileInput().files[0])
             }))
         }
         if (this.props.value && this.state.location === 'local')
-            promises.push(firebase.storage().ref(this.props.value).delete())
-        return Promise.all(promises)
+            promises.push(firebase.storage().ref(this.props.value.name).delete())
+        return Promise.all(promises).then(() => {return {name: name, ...size}})
         
     }
 
@@ -98,7 +98,7 @@ export default class ImageUploader extends React.Component {
     }
 
     getExtension() {
-        var name = this.props.value || (this.state.file ? this.state.file.name : '.undefined')
+        var name = this.props.value ? this.props.value.name : (this.state.file ? this.state.file.name : '.undefined')
         return name.substr(name.lastIndexOf('.'))
     }
 
@@ -107,8 +107,21 @@ export default class ImageUploader extends React.Component {
             this.setState({location: 'storage', data: this.props.value})
             return null
         }
-        var url = `https://accams.devgregw.com/meta/storage/${this.state.data}`
         return <div>
+            <h5>
+                <Badge color="warning" pill>IMPORTANT</Badge><br/>
+                It is <b>strongly</b> recommended that you compress all images before uploading them.  High-resolution images and/or images larger than 1-2 MB will significantly degrade performance.  To compress your images, follow the following instructions:<br/>
+                <ol>
+                    <li>Go to <a href="http://compressimage.toolur.com/">http://compressimage.toolur.com/</a></li>
+                    <li>Click 'Upload Images' and select the images you wish to compress</li>
+                    <li>Compression method: A</li>
+                    <li>Image quality: 90</li>
+                    <li>Compression type: Normal</li>
+                    <li>Resize: Set W to 1000 and H to 0; check 'Do not enlarge images'</li>
+                    <li>Click 'Compress Images' and wait for the process to complete</li>
+                    <li>For each image, click 'Download' to save it</li>
+                </ol>
+            </h5>
             <Input accept="image/png, image/jpeg" innerRef={i => {
                 this.fileInput = i;
                 this.getFileInput().onchange = () => {
@@ -123,7 +136,7 @@ export default class ImageUploader extends React.Component {
             </ButtonGroup>
             <ProgressModal isOpen={this.state.totalBytes > 0} progressColor="primary" value={(this.state.bytesTransferred / (this.state.totalBytes || 1)) * 100} progressText={Math.round((this.state.bytesTransferred / (this.state.totalBytes || 1)) * 100) + '%'}/>
             <ProgressModal isOpen={this.state.preparing} progressColor="primary" value={100} progressText="Preparing media..."/>
-            <p>Download URL: {this.state.location.startsWith('storage') ? <a href={url} target="_blank">{url}</a> : 'none'}</p>
+            <p>Download URL: {this.state.location.startsWith('storage') ? <a href={`https://accams.devgregw.com/meta/storage/${this.state.data.name}`} target="_blank">{`https://accams.devgregw.com/meta/storage/${this.state.data.name}`}</a> : 'none'}</p>
             <img alt="Preview" ref={i => this.getData(i || document.getElementById(`imagePreview${this.random}`))} id={`imagePreview${this.random}`} style={{width: '200px', height: 'auto', border: '1px solid black'}}/>
             </div>
     }

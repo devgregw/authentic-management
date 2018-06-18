@@ -79,7 +79,7 @@ export default class EditorForm extends React.Component {
                     property: "header",
                     description: "Specify a header image.  Click Clear to remove the image or click Reset to restore the original value.",
                     render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
-                    get: () => this.imageUploader.getName(`header_${document
+                    get: () => this.imageUploader.saveImage(`header_${document
                         .getElementById('id')
                         .value}`),
                     validate: () => this
@@ -87,11 +87,11 @@ export default class EditorForm extends React.Component {
                         .hasValue()
                             ? false
                             : 'A header image must be specified.',
-                    finalize: () => this
-                        .imageUploader
-                        .saveImage(this.imageUploader.getName(`header_${document
-                            .getElementById('id')
-                            .value}`))
+                    //finalize: () => this
+                        //.imageUploader
+                        //.saveImage(this.imageUploader.getName(`header_${document
+                            //.getElementById('id')
+                            //.value}`))
                 },
                 getElementBaseFields: type => [
                     {
@@ -126,7 +126,7 @@ export default class EditorForm extends React.Component {
                     property: "image",
                     description: "Click Clear to remove the image or click Reset to restore the original value.",
                     render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
-                    get: () => this.imageUploader.getName(`imageElement_${this
+                    get: () => this.imageUploader.saveImage(`imageElement_${this
                         .getEditorInfo()
                         .parent}_${document
                         .getElementById('id')
@@ -136,9 +136,9 @@ export default class EditorForm extends React.Component {
                         .hasValue()
                             ? false
                             : 'An image must be specified.',
-                    finalize: () => this
-                        .imageUploader
-                        .saveImage(this.imageUploader.getName(`imageElement_${this.getEditorInfo().parent}_${document.getElementById('id').value}`))
+                    //finalize: () => this
+                        //.imageUploader
+                        //.saveImage(this.imageUploader.getName(`imageElement_${this.getEditorInfo().parent}_${document.getElementById('id').value}`))
                 },
                 {
                     title: "Enlargeable",
@@ -365,23 +365,21 @@ export default class EditorForm extends React.Component {
                     property: "header",
                     description: "Specify a header image.  Click Clear to remove the image or click Reset to restore the original value.",
                     render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
-                    get: () => this.imageUploader.getName('header_appearance_events'),
+                    get: () => this.imageUploader.saveImage('header_appearance_events'),
                     validate: () => this
                         .imageUploader
                         .hasValue()
                             ? false
                             : 'A header image must be specified.',
-                    finalize: () => this
-                        .imageUploader
-                        .saveImage(this.imageUploader.getName('header_appearance_events'))
+                    //finalize: () => this
+                        //.imageUploader
+                        //.saveImage(this.imageUploader.getName('header_appearance_events'))
                 }
             ]
         }
     }
 
-    shouldComponentUpdate(p,
-        s
-    ) {
+    shouldComponentUpdate(p, s) {
         return false
     }
 
@@ -389,9 +387,7 @@ export default class EditorForm extends React.Component {
         return Math
             .random()
             .toString(36)
-            .substr(2,
-                10
-            )
+            .substr(2, 10)
             .toUpperCase()
     }
 
@@ -428,6 +424,18 @@ export default class EditorForm extends React.Component {
     }
 
     collect() {
+        var promises = []
+        var result = {}
+        this.fields[this.getEditorInfo().category].forEach(f => {
+            let value = f.get()
+            if (typeof value.then === "function")
+                promises.push(value.then(r => result[f.property] = r))
+            else
+                result[f.property] = value
+        })
+        return Promise.all(promises).then(() => result)
+        //return new Promise((resolve, reject) => Promise.all(promises).then(() => resolve(result)))
+        /*
         var final = {}
         this
             .fields[
@@ -436,7 +444,7 @@ export default class EditorForm extends React.Component {
                     .category
             ]
             .forEach(f => final[f.property] = f.get())
-        return final
+        return final*/
     }
 
     getEditorInfo() {

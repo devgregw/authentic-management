@@ -45,50 +45,52 @@ export default class Editor extends React.Component {
         if ((errors = this.form.validate()) && errors.length > 0)
             this.setState({errorModal: true, errors: errors})
         else {
-            var x = this.form.collect()
-            var info = this.getEditorInfo()
             this.setState({savingModal: true})
-            // eslint-disable-next-line
-            if (info.category.indexOf('appearance') >= 0)
-                setTimeout(() => {
-                    Promise.all([firebase.database().ref(`/appearance/${info.parent}/`).update(x, null), this.form.finalize()]).then(() => {
-                        this.closeEditor(true)
-                    }, e => {
-                        alert(e)
-                    this.closeEditor(false)
-                    })
-                }, 50)
-            else if (info.category.indexOf('elements') === -1)
-                setTimeout(() => {
-                    Promise.all([firebase.database().ref(`/${info.category}/${x.id}/`)[info.path ? 'update' : 'set'](x, null), this.form.finalize()]).then(() => {
-                        this.closeEditor(true)
-                    }, e => {
-                        alert(e)
-                    this.closeEditor(false)
-                    })
-                }, 50)
-            else
-                setTimeout(() => {
-                    firebase.database().ref(`/tabs/${info.parent}/`).once('value').then(snap => {
-                        setTimeout(() => {
-                            var tab = snap.val()
-                            if (!tab.elements)
-                                tab.elements = []
-                            var i;
-                            // eslint-disable-next-line
-                            if ((i = tab.elements.map(v => v.id).indexOf(x.id)) === -1)
-                                tab.elements.push(x)
-                            else
-                                tab.elements[i] = x
-                            Promise.all([firebase.database().ref(`/tabs/${info.parent}/`).update(tab), this.form.finalize()]).then(() => {
-                                this.closeEditor(true)
-                            }, e => {
-                                alert(e)
-                                this.closeEditor(false)
-                            })
-                        }, 50)
-                    })
-                }, 50)
+            this.form.collect().then(x => {
+                var info = this.getEditorInfo()
+            
+                // eslint-disable-next-line
+                if (info.category.indexOf('appearance') >= 0)
+                    setTimeout(() => {
+                        Promise.all([firebase.database().ref(`/appearance/${info.parent}/`).update(x, null)]).then(() => {
+                            this.closeEditor(true)
+                        }, e => {
+                            alert(e)
+                        this.closeEditor(false)
+                        })
+                    }, 50)
+                else if (info.category.indexOf('elements') === -1)
+                    setTimeout(() => {
+                        Promise.all([firebase.database().ref(`/${info.category}/${x.id}/`)[info.path ? 'update' : 'set'](x, null)]).then(() => {
+                            this.closeEditor(true)
+                        }, e => {
+                            alert(e)
+                        this.closeEditor(false)
+                        })
+                    }, 50)
+                else
+                    setTimeout(() => {
+                        firebase.database().ref(`/tabs/${info.parent}/`).once('value').then(snap => {
+                            setTimeout(() => {
+                                var tab = snap.val()
+                                if (!tab.elements)
+                                    tab.elements = []
+                                var i;
+                                // eslint-disable-next-line
+                                if ((i = tab.elements.map(v => v.id).indexOf(x.id)) === -1)
+                                    tab.elements.push(x)
+                                else
+                                    tab.elements[i] = x
+                                Promise.all([firebase.database().ref(`/tabs/${info.parent}/`).update(tab)]).then(() => {
+                                    this.closeEditor(true)
+                                }, e => {
+                                    alert(e)
+                                    this.closeEditor(false)
+                                })
+                            }, 50)
+                        })
+                    }, 50)
+            })
         }
     }
 
