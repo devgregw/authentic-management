@@ -80,6 +80,11 @@ export default class MainToolbar extends React.Component {
                             .bind(this)}/>
                     <Collapse isOpen={this.state.navToggle} navbar>
                         <Nav className="ml-auto" navbar>
+                            {Utils.isLocalhost() ? <NavItem active>
+                                <Button color="warning" style={{
+                                        margin: '1.5px'
+                                    }} onClick={() => window.location.replace('/debug')}>Debug</Button>
+                            </NavItem> : null}
                             <NavItem active>
                                 <Button color="light" style={{
                                         margin: '1.5px'
