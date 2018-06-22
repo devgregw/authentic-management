@@ -233,7 +233,18 @@ export default class EditorForm extends React.Component {
                     title: 'Video ID',
                     property: 'videoId',
                     description: 'Specify the video\'s ID.',
-                    render: value => <Input id="videoId" defaultValue={value}/>,
+                    render: value => <div>
+                        <p>
+                            To find the video ID, look at the video's URL:<br/>
+                            <ul>
+                                <li>YouTube (1): https://youtube.com/watch?v=<Badge color="primary">Video ID here</Badge></li>
+                                <li>YouTube (2): https://youtu.be/<Badge color="primary">Video ID here</Badge></li>
+                                <li>Vimeo: https://vimeo.com/<Badge color="primary">Video ID here</Badge></li>
+                            </ul>
+                            Copy that value into the box below.
+                        </p>
+                        <Input id="videoId" defaultValue={value}/>
+                    </div>,
                     get: () => document
                         .getElementById('videoId')
                         .value,
