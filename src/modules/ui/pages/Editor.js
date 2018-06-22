@@ -52,7 +52,7 @@ export default class Editor extends React.Component {
                 // eslint-disable-next-line
                 if (info.category.indexOf('appearance') >= 0)
                     setTimeout(() => {
-                        Promise.all([firebase.database().ref(`/appearance/${info.parent}/`).update(x, null)]).then(() => {
+                        firebase.database().ref(`/appearance/${info.parent}/`).update(x, null).then(() => {
                             this.closeEditor(true)
                         }, e => {
                             alert(e)
@@ -61,7 +61,7 @@ export default class Editor extends React.Component {
                     }, 50)
                 else if (info.category.indexOf('elements') === -1)
                     setTimeout(() => {
-                        Promise.all([firebase.database().ref(`/${info.category}/${x.id}/`)[info.path ? 'update' : 'set'](x, null)]).then(() => {
+                        firebase.database().ref(`/${info.category}/${x.id}/`)[info.path ? 'update' : 'set'](x, null).then(() => {
                             this.closeEditor(true)
                         }, e => {
                             alert(e)
@@ -81,7 +81,7 @@ export default class Editor extends React.Component {
                                     tab.elements.push(x)
                                 else
                                     tab.elements[i] = x
-                                Promise.all([firebase.database().ref(`/tabs/${info.parent}/`).update(tab)]).then(() => {
+                                firebase.database().ref(`/tabs/${info.parent}/`).update(tab).then(() => {
                                     this.closeEditor(true)
                                 }, e => {
                                     alert(e)
