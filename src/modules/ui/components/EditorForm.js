@@ -228,7 +228,8 @@ export default class EditorForm extends React.Component {
                     </Input>,
                     get: () => document
                         .getElementById('provider')
-                        .value
+                        .value,
+                    validate: () => false
                 }, {
                     title: 'Video ID',
                     property: 'videoId',
@@ -424,7 +425,7 @@ export default class EditorForm extends React.Component {
         var result = {}
         this.fields[this.getEditorInfo().category].forEach(f => {
             let value = f.get()
-            if (typeof value.then === "function")
+            if (value != null && typeof value.then === "function")
                 promises.push(value.then(r => result[f.property] = r))
             else
                 result[f.property] = value
