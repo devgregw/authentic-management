@@ -1,5 +1,62 @@
 import React from 'react'
-import {Input,Label} from 'reactstrap'
+import {Input,Label,Alert} from 'reactstrap'
+import DateRangeField from '../DateRangeField'
+import * as moment from 'moment'
+
+class ATCAGroup0Params extends React.Component {
+    constructor(props) {
+        super(props)
+        this.getValue = this.getValue.bind(this)
+    }
+
+    render() {
+        var deleted = false
+        if (this.props.current && Object.getOwnPropertyNames(this.props.database.events || {}).indexOf(this.props.current.eventId) < 0)
+            deleted = true
+        return <div>
+            {deleted ? <Alert color="warning">The event you selected ({this.props.current.eventId}) no longer exists.  Please select another event.</Alert> : null}
+            <Input type="select" id="action_atca_0_eventId" defaultValue={this.props.current && !deleted ? this.props.current.eventId : Object.getOwnPropertyNames(this.props.database.events)[0]}>
+                    {(() => {
+                        var items = []
+                        var events = this.props.database.events
+                        for (var id in events)
+                            items.push(<option key={id} value={id}>{`${events[id].title} (${id})`}</option>)
+                        return items
+                    })()}
+            </Input>
+        </div>
+    }
+
+    getValue() {
+        return {eventId: document.getElementById('action_atca_0_eventId').value}
+    }
+}
+
+class ATCAGroup1Params extends React.Component {
+    constructor(props) {
+        super(props)
+        this.getValue = this.getValue.bind(this)
+    }
+
+    render() {
+        return <div>
+            <Label for="action_atca_0_title">Title</Label>
+            <Input id="action_atca_0_title" defaultValue={this.props.current ? this.props.current.title : ''}/>
+            <Label for="action_atca_0_location">Location</Label>
+            <Input id="action_atca_0_location" defaultValue={this.props.current ? this.props.current.location : ''}/>
+            <Label>Date and Time</Label>
+            <DateRangeField ref={f => this.dateRangeField = f} startValue={this.props.current ? this.props.current.dates.start : null} endValue={this.props.current ? this.props.current.dates.end : null}/>
+        </div>
+    }
+
+    getValue() {
+        return {
+            title: document.getElementById('action_atca_0_title').value,
+            location: document.getElementById('action_atca_0_location').value,
+            dates: this.dateRangeField.getValue()
+        }
+    }
+}
 
 export default class AddToCalendarAction extends React.Component {
     constructor(props) {
@@ -11,51 +68,49 @@ export default class AddToCalendarAction extends React.Component {
         this.getValue = this.getValue.bind(this)
     }
 
-    make(content) {
+    render() {
         return <div>
             <Label for="action_atca_group">Source</Label>
-            <Input type="select" id="action_atca_group" innerRef={s => s.onchange = () => this.setState({group: s.value})} defaultValue={this.state.group.toString()}>
+            <Input innerRef={i => (i || document.getElementById('action_atca_group')).onchange = () => this.setState({group: document.getElementById('action_atca_group').value})} type="select" id="action_atca_group" defaultValue={this.state.group.toString()}>
                 <option value="0">Event</option>
                 <option value="1">Custom</option>
             </Input>
             <hr/>
-            {content}
+            {this.state.group.toString() === '0' ? <ATCAGroup0Params ref={p0 => this.p0 = p0} database={this.props.database} current={this.props.current}/> : <ATCAGroup1Params ref={p1 => this.p1 = p1} current={this.props.current}/>}
         </div>
     }
 
-    render() {
-        // eslint-disable-next-line
-        if (this.state.group == 0)
-            return this.make(
-                <Input type="select" id="action_atca_0_eventId" defaultValue={Object.getOwnPropertyNames(this.props.database.events)[0]}>
-                    {(() => {
-                        var items = []
-                        var events = this.props.database.events
-                        for (var id in events)
-                            items.push(<option key={id} value={id}>{`${events[id].title} (${id})`}</option>)
-                        return items
-                    })()}
-                </Input>
-            )
-        else return this.make(
-                <div>
-
-                </div>
-            )
-    }
-
     validate() {
-        if (!document.getElementById('action_sma_0_addr').value)
-            return {invalid: true, errors: ['No address specified']}
-        return {}
+        let value = this.state.group.toString() === '0' ? this.p0.getValue() : this.p1.getValue()
+        if (this.state.group.toString() === '0') {
+            if (!Boolean(value.eventId))
+                return {invalid: true, errors: ['No event selected.']}
+            return {}
+        } else {
+            var errors = []
+            if (!/\S/.test(value.title))
+                errors.push('No title specified.')
+            if (!/\S/.test(value.location))
+                errors.push('No location specified.')
+            var drfv = this.p1.validate()
+            if (drfv)
+                errors.push(drfv)
+            if (errors.length > 0)
+                return {invalid: true, errors: errors}
+            return {}
+        }
     }
 
     getValue() {
         return {
-            type: 'AddToCale',
-            group: 0,
-            address: document.getElementById('action_sma_0_addr').value
+            type: 'AddToCalendarAction',
+            group: this.state.group,
+            ...(this.state.group.toString() === '0' ? this.p0.getValue() : this.p1.getValue())
         }
+    }
+
+    static newInstance(props) {
+        return <AddToCalendarAction {...props}/>
     }
 
     static get description() {
@@ -71,6 +126,9 @@ export default class AddToCalendarAction extends React.Component {
     }
 
     static getSummary(action) {
-        return `Show Map: ${action.address}`
+        if (action.group.toString() === '0')
+            return `Event ID: ${action.eventId}`
+        else
+            return `"${action.title}" @ "${action.location}" (${moment(action.dates.start, moment.ISO_8601).format('dddd, D MMMM, YYYY [at] h:mm A')} to ${moment(action.dates.end, moment.ISO_8601).format('dddd, D MMMM, YYYY [at] h:mm A')})`
     }
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import {Input} from 'reactstrap'
 import ContentLoader from './ContentLoader.js'
 import Utils from '../../classes/Utils'
+import AddToCalendarAction from './actionFields/AddToCalendarAction.js';
 
 export default class ActionInput extends React.Component {
     constructor(props){
@@ -10,6 +11,8 @@ export default class ActionInput extends React.Component {
     }
 
     transform(data) {
+        if (this.state.index === 6)
+            return this.element = AddToCalendarAction.newInstance({database: data, current: this.props.value})
         this.element = new Utils.actionClassesIndexed[this.state.index]({database: data, current: this.props.value}, this)
         return this.element.render()
     }
