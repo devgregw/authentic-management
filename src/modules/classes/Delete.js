@@ -9,14 +9,14 @@ export default class Delete {
                 .remove(),
             firebase
                 .storage()
-                .ref(data.header)
+                .ref(data.header.name)
                 .delete()
         ]
         if (data.elements) 
             data
                 .elements
                 .filter(e => e.type === 'image')
-                .forEach(e => promises.push(firebase.storage().ref(e.image).delete()))
+                .forEach(e => promises.push(firebase.storage().ref(e.image.name).delete()))
         return Promise.all(promises)
     }
 
@@ -28,7 +28,7 @@ export default class Delete {
                 .remove(),
             firebase
                 .storage()
-                .ref(data.header)
+                .ref(data.header.name)
                 .delete()
         ]
         return Promise.all(promises)

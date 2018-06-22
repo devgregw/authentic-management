@@ -11,7 +11,7 @@ import React from 'react'
 
 export default class Utils {
     static get version() {
-        return '6.18.12'
+        return '6.18.13'
     }
 
     static openPopup(url, w, h) {
