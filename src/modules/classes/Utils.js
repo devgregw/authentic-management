@@ -11,7 +11,7 @@ import React from 'react'
 
 export default class Utils {
     static get version() {
-        return '6.18.8'
+        return '6.18.12'
     }
 
     static openPopup(url, w, h) {
@@ -99,7 +99,7 @@ export default class Utils {
     static getElementSummary(e) {
         switch (e.type) {
             case 'image':
-                return `Source: ${e.image}`
+                return `Source: ${e.image.name} (${e.image.width}*${e.image.height})`
             case 'title':
                 return `Text: ${e.title}`
             case 'text':
