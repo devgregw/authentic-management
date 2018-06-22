@@ -419,21 +419,6 @@ export default class EditorForm extends React.Component {
         </FormGroup>
     }
 
-    finalize() {
-        var promises = []
-        this
-            .fields[
-                this
-                    .getEditorInfo()
-                    .category
-            ]
-            .forEach(f => {
-                if (f.finalize) 
-                    promises.push(f.finalize())
-            })
-        return Promise.all(promises)
-    }
-
     collect() {
         var promises = []
         var result = {}
@@ -445,17 +430,6 @@ export default class EditorForm extends React.Component {
                 result[f.property] = value
         })
         return Promise.all(promises).then(() => result)
-        //return new Promise((resolve, reject) => Promise.all(promises).then(() => resolve(result)))
-        /*
-        var final = {}
-        this
-            .fields[
-                this
-                    .getEditorInfo()
-                    .category
-            ]
-            .forEach(f => final[f.property] = f.get())
-        return final*/
     }
 
     getEditorInfo() {
