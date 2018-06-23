@@ -69,7 +69,7 @@ export default class ImageUploader extends React.Component {
                 firebase.storage().ref(name + this.getExtension()).put(this.getFileInput().files[0], {cacheControl: 'no-cache'}).on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => this.setState({bytesTransferred: snapshot.bytesTransferred, totalBytes: snapshot.totalBytes}), reject, resolve)
         })]*/
         let name = this.getName(base)
-        var size = {width: 0, height: 0}
+        var size = this.props.value ? {width: this.props.value.width, height: this.props.value.height} : {width: 0, height: 0}
         this.setState({preparing: true})
         var promises = []
         if (this.state.location === 'local') {
