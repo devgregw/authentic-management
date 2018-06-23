@@ -8,21 +8,23 @@ export default class ActionInput extends React.Component {
     constructor(props){
         super(props)
         this.state = {index: 0}
+        this.getValue = this.getValue.bind(this)
+        this.validate = this.validate.bind(this)
     }
 
     transform(data) {
         if (this.state.index === 6)
-            return this.element = AddToCalendarAction.newInstance({database: data, current: this.props.value})
-        this.element = new Utils.actionClassesIndexed[this.state.index]({database: data, current: this.props.value}, this)
+            return <AddToCalendarAction ref={r => this.atca = r} {...{database: data, current: this.props.value}}/>
+        else this.element = new Utils.actionClassesIndexed[this.state.index]({database: data, current: this.props.value}, this)
         return this.element.render()
     }
 
-    get value() {
-        return this.element.getValue()
+    getValue() {
+        return this.atca ? this.atca.getValue() : this.element.getValue()
     }
 
     validate() {
-        return this.element.validate()
+        return this.atca ? this.atca.validate() : this.element.validate()
     }
 
     render() {

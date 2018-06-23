@@ -20,11 +20,11 @@ export default class ButtonConfiguration extends React.Component {
     }
 
     getValue() {
-        if (!this.buttonLabel.value || !this.actionInput.value)
+        if (!this.buttonLabel.value || !this.actionInput.getValue())
             return {}
         return {
             label: this.buttonLabel.value,
-            action: this.actionInput.value
+            action: this.actionInput.getValue()
         }
     }
 

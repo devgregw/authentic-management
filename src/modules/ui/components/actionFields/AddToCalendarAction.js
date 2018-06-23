@@ -11,7 +11,7 @@ class ATCAGroup0Params extends React.Component {
 
     render() {
         var deleted = false
-        if (this.props.current && Object.getOwnPropertyNames(this.props.database.events || {}).indexOf(this.props.current.eventId) < 0)
+        if (this.props.current && this.props.current.type === 'AddToCalendarAction' && this.props.current.eventId && Object.getOwnPropertyNames(this.props.database.events || {}).indexOf(this.props.current.eventId) < 0)
             deleted = true
         return <div>
             {deleted ? <Alert color="warning">The event you selected ({this.props.current.eventId}) no longer exists.  Please select another event.</Alert> : null}
@@ -36,6 +36,7 @@ class ATCAGroup1Params extends React.Component {
     constructor(props) {
         super(props)
         this.getValue = this.getValue.bind(this)
+        this.validate = this.validate.bind(this)
     }
 
     render() {
@@ -45,7 +46,7 @@ class ATCAGroup1Params extends React.Component {
             <Label for="action_atca_0_location">Location</Label>
             <Input id="action_atca_0_location" defaultValue={this.props.current ? this.props.current.location : ''}/>
             <Label>Date and Time</Label>
-            <DateRangeField ref={f => this.dateRangeField = f} startValue={this.props.current ? this.props.current.dates.start : null} endValue={this.props.current ? this.props.current.dates.end : null}/>
+            <DateRangeField ref={f => this.dateRangeField = f} startValue={this.props.current && this.props.current.type === 'AddToCalendarAction' ? this.props.current.dates.start : null} endValue={this.props.current && this.props.current.type === 'AddToCalendarAction' ? this.props.current.dates.end : null}/>
         </div>
     }
 
@@ -55,6 +56,10 @@ class ATCAGroup1Params extends React.Component {
             location: document.getElementById('action_atca_0_location').value,
             dates: this.dateRangeField.getValue()
         }
+    }
+
+    validate() {
+        return this.dateRangeField.validate()
     }
 }
 
