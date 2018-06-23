@@ -60,21 +60,6 @@ export default class EditorForm extends React.Component {
                         .value,
                     validate: () => document.getElementById('title').value ? false : 'No title specified.'
                 },
-                titleVisibilityField: {
-                    title: 'Title Visibility',
-                    property: 'hideTitle',
-                    description: 'Check this box to hide the card\'s title on the home screen.  This is useful when the header image already contains the title.',
-                    render: value => <FormGroup check>
-                        <Label check>
-                            <Input id="hideTitle" type="checkbox" defaultChecked={value || false}/>{' '}
-                            Hide title
-                        </Label>
-                    </FormGroup>,
-                    get: () => document
-                        .getElementById('hideTitle')
-                        .checked,
-                    validate: () => false
-                },
                 headerImageField: {
                     title: "Header Image",
                     property: "header",
@@ -272,7 +257,6 @@ export default class EditorForm extends React.Component {
                         return false
                     }
                 }, this.fieldPresets.titleField,
-                this.fieldPresets.titleVisibilityField,
                 this.fieldPresets.headerImageField, {
                     title: 'Header Visibility',
                     property: 'hideHeader',
@@ -320,7 +304,6 @@ export default class EditorForm extends React.Component {
             events: [
                 this.fieldPresets.idField,
                 this.fieldPresets.titleField,
-                this.fieldPresets.titleVisibilityField,
                 {
                     title: 'Description',
                     property: 'description',
