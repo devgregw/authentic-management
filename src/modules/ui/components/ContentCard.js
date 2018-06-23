@@ -114,7 +114,7 @@ export default class ContentCard extends React.Component {
                         <CardTitle>{this.props.data.title} {badge}</CardTitle>
                         <CardSubtitle>/tabs/{this.props.data.id}/</CardSubtitle>
                         <ButtonToolbar className="Content-card-toolbar">
-                        <Button style={{marginRight: '0.625rem'}} onClick={() => this.props.push(this.props.data.id)} outline color="primary">Manage</Button>
+                        {Boolean(this.props.data.action) ? null : <Button style={{marginRight: '0.625rem'}} onClick={() => this.props.push(this.props.data.id)} outline color="primary">Manage</Button>}
                         <ButtonGroup>
                             <Button outline color="dark" onClick={() => Utils.openEditor({category: 'tabs', path: `/tabs/${this.props.data.id}/`})}>Edit</Button>
                             <Button outline color="danger" onClick={this

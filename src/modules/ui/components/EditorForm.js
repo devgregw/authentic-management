@@ -9,6 +9,7 @@ import VisibilityRulesField from './VisibilityRulesField'
 import DateRangeField from './DateRangeField'
 import RecurrenceField from './RecurrenceField'
 import RegistrationConfigurationField from './RegistrationConfigurationField'
+import OptionalActionInput from './OptionalActionInput'
 
 export default class EditorForm extends React.Component {
     constructor(props) {
@@ -286,6 +287,23 @@ export default class EditorForm extends React.Component {
                         .getElementById('hideHeader')
                         .checked,
                     validate: () => false
+                }, {
+                    title: 'Tab Action',
+                    optional: true,
+                    property: 'action',
+                    description: 'Optionally, specify an action to run when a user taps the tile.  If you specify an action here, you will not be able to configure content elements.',
+                    render: value => <OptionalActionInput ref={f => this.oai = f} value={value}/>,
+                    get: () => this
+                        .oai
+                        .getValue(),
+                    validate: () => {
+                        let r = this
+                        .oai
+                        .validate()
+                        if (r.invalid)
+                            return r.errors
+                        return false
+                    }
                 }, {
                     title: 'Tab Visibility',
                     property: 'visibility',
