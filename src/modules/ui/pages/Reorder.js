@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardBody, CardTitle, CardSubtitle, Button } from 'reactstrap'
+import { Card, CardBody, CardTitle, CardSubtitle, Button,ButtonGroup } from 'reactstrap'
 import Utils from '../../classes/Utils'
 import ContentLoader from '../components/ContentLoader'
 import Path from '../../classes/Path'
@@ -40,6 +40,25 @@ export default class Reorder extends React.Component {
         }
     }
 
+    moveTo(e, d) {
+        var list = this.state.newList
+        var mv = (f, t, l) => {
+            l.splice(t, 0, l.splice(f, 1)[0])
+            this.setState({newList: l})
+        }
+        var oldIndex = list.indexOf(e)
+        switch (d) {
+            case 'up':
+                mv(oldIndex, 0, list)
+                break
+            case 'dn':
+                mv(oldIndex, list.length - 1, list)
+                break;
+            default:
+                throw new Error('what the heck')
+        }
+    }
+
     makeCard(t, e) {
         return <Card key={e.id} className="Content-card" style={{minHeight: '150px'}}>
                 <CardBody style={{display: 'flex', flexDirection: 'row'}}>
@@ -52,6 +71,11 @@ export default class Reorder extends React.Component {
                     <CardSubtitle>{Utils.getElementSummary(e)}</CardSubtitle>
                     <br/>
                     <CardSubtitle>{`/tabs/${e.parent}/elements/${t.elements.indexOf(e)}`}</CardSubtitle>
+                    <br/>
+                    <ButtonGroup>
+                        <Button color="link" disabled={this.state.newList.indexOf(e) === 0} onClick={this.moveTo.bind(this, e, 'up')}>Top</Button>
+                        <Button color="link" disabled={this.state.newList.indexOf(e) === this.state.newList.length - 1} onClick={this.moveTo.bind(this, e, 'dn')}>Bottom</Button>
+                    </ButtonGroup>
                     </div>
                 </CardBody>
             </Card>
