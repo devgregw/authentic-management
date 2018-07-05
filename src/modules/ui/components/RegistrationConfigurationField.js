@@ -78,11 +78,11 @@ export default class RegistrationConfigurationField extends React.Component {
                 </div> :
                 <p>No forms have been created.</p>
         } else if (!this.state.forms && !this.state.brerr) {
-            window.fetch('https://devgregw.com/authentic/breeze.php', {method: 'POST', body: `uid=${firebase.auth().currentUser.uid.toString()}`, headers: {'content-type': 'application/x-www-form-urlencoded'}}).then(r => {   
+            window.fetch('https://extras.devgregw.com/authentic/breeze.php', {method: 'POST', body: `uid=${firebase.auth().currentUser.uid.toString()}`, headers: {'content-type': 'application/x-www-form-urlencoded'}}).then(r => {   
                 if (r.ok)
-                    r.json().then(val => this.setState({forms: val, brerr: false}))
+                    r.json().then(val => this.setState({forms: val, breeze: true, brerr: false}))
                 else
-                    this.setState({forms: null, brerr: true})
+                    this.setState({forms: null, brerr: true, breeze: false})
             });
             internal = <div>
                 <Progress animated color="primary" value={100}>Contacting Breeze ChMS...</Progress>
@@ -117,7 +117,7 @@ export default class RegistrationConfigurationField extends React.Component {
             <FormGroup tag="fieldset">
           <FormGroup check>
             <Label check>
-              <Input defaultChecked={this.state.breeze} innerRef={f => { if (f) f.onchange = () => this.setState({breeze: f.checked}) }} type="radio" name="radio1" />{' '}
+              <Input defaultChecked={this.state.breeze} innerRef={f => { if (f) f.onchange = () => this.setState({breeze: f.checked, alreadyReverted: f.checked || undefined}) }} type="radio" name="radio1" />{' '}
               Configure with <a href="https://authenticcity.breezechms.com/" rel="noopener noreferrer" target="_blank"><span><img alt="" src={`${Utils.getBaseUrl()}/breeze.png`}/></span> Breeze ChMS</a>
             </Label>
           </FormGroup>
