@@ -45,7 +45,7 @@ export default class ContentCard extends React.Component {
         var count = 0
         for (var id in tabs) {
             let tab = tabs[id]
-            if (!tab.elements || tab.elements.length === 0)
+            if (!tab.action && (!tab.elements || tab.elements.length === 0))
                 count++
         }
         return count
@@ -114,7 +114,7 @@ export default class ContentCard extends React.Component {
                 var elements = this.props.data.elements || []
                 var count = elements.length
                 var w = count === 1 ? 'Element' : 'Elements'
-                var badge = count === 0 ? <Badge color="warning">No Content</Badge> : <Badge color="secondary">{count} {w}</Badge>
+                var badge = count === 0 && !this.props.data.action ? <Badge color="warning">No Content</Badge> : this.props.data.action ? <Badge color="primary">Action Enabled</Badge> : <Badge color="secondary">{count} {w}</Badge>
                 return <Card className="Content-card">
                     <CardBody>
                         <CardTitle>{this.props.data.title} {badge}</CardTitle>
