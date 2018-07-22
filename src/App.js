@@ -8,6 +8,7 @@ import RequireAuth from './modules/ui/components/RequireAuth.js'
 import Editor from './modules/ui/pages/Editor.js'
 import Reorder from './modules/ui/pages/Reorder.js'
 import StorageViewer from './modules/ui/pages/StorageViewer'
+import ActionCodeViewer from './modules/ui/pages/ActionCodeViewer'
 
 import Debug from './modules/ui/pages/Debug'
 
@@ -57,6 +58,7 @@ export default class App extends Component {
                         <Route path="/account/auth/:action" component={Authentication}/>
                         <Route path="/account/meta/changename" render={({match}) => <RequireAuth path={match.path} render={() => <ChangeDisplayName/>}/>}/>
                         <Route exact path="/meta/storage/:name" render={({match}) => <StorageViewer fileName={match.params.name}/>}/>
+                        <Route exact path="/meta/action" component={ActionCodeViewer}/>
                         <Redirect from="/meta" to="/"/>
                         <Redirect from="/account/meta" to="/"/>
                         <Redirect from="/account/auth" to="/"/>

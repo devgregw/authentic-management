@@ -75,7 +75,13 @@ export default class ContentCard extends React.Component {
                             { tabErrors ? <Badge style={{fontSize: 'large', verticalAlign: 'middle', margin: '3px'}} color="warning">{tabErrors} need{tabErrors !== 1 ? '' : 's'} attention</Badge> : null }
                         </BasicCard>
                     case 'notifications':
-                        return <BasicCard title="Notifications"><Button onClick={() => window.open('https://console.firebase.google.com/project/authentic-city-church/notification/compose', '_blank')} size="lg" outline color="primary">Send Notification</Button></BasicCard>
+                        return <BasicCard title="Notifications">
+                            <ButtonGroup>
+                            <Button onClick={() => window.open('https://console.firebase.google.com/project/authentic-city-church/notification/compose', '_blank')} size="lg" outline color="primary">Send Notification</Button>
+                            <Button onClick={() => Utils.openPopup(`${Utils.getBaseUrl()}/meta/action`, 1000, 600)} outline color="dark">Create Action</Button>
+                            <Button onClick={() => Utils.openPopup(`${Utils.getBaseUrl()}/meta/storage/firebase.pdf`, 1000, 600)} outline color="dark">Instructions</Button>
+                            </ButtonGroup>
+                        </BasicCard>
                     case 'blog':
                         return <BasicCard title="Blog"><h2><Badge color="warning" pill>Under Construction</Badge></h2></BasicCard>
                     case 'events':
