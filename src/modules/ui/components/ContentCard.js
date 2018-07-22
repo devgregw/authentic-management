@@ -102,7 +102,7 @@ export default class ContentCard extends React.Component {
                             <Button color="link" size="lg" onClick={() => window.location.assign('mailto:devgregw@outlook.com')}>Contact →</Button>
                             <hr/>
                             <h5>Download Links</h5>
-                            <p>Android: <Badge pill color="warning">Unavailable</Badge><br/>iOS: <Badge pill color="warning">Unavailable</Badge></p>
+                            <p><a href="https://play.google.com/store/apps/details?id=church.authenticcity.android" rel="noopener noreferrer" target="_blank">Android</a><br/><a href="https://itunes.apple.com/us/app/authentic-city-church/id1402645724?ls=1&mt=8" rel="noopener noreferrer" target="_blank">iOS</a></p>
                             <hr/>
                             <h5>Version Codes</h5>
                             <p>{`Android: ${this.props.data.versions.android}`}<br/>{`iOS: ${this.props.data.versions.ios}`}</p>
