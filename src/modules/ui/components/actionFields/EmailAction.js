@@ -38,7 +38,7 @@ export default class EmailAction extends React.Component {
     }
 
     static get title() {
-        return 'Email Action'
+        return 'Send Email'
     }
 
     static get className() {
@@ -46,6 +46,6 @@ export default class EmailAction extends React.Component {
     }
 
     static getSummary(action) {
-        return `Email: ${action.emailAddress}`
+        return `Send Email: ${action.emailAddress}`
     }
 }
