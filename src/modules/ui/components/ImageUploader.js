@@ -110,7 +110,7 @@ export default class ImageUploader extends React.Component {
         return <div>
             <h5>
                 <Badge color="warning" pill>IMPORTANT</Badge><br/>
-                It is <b>strongly</b> recommended that you compress all images before uploading them.  High-resolution images and/or images larger than 1-2 MB will significantly degrade performance.  To compress your images, follow the following instructions:<br/>
+                <em>Unless you want to allow this image to be downloaded</em>, it is <b>strongly</b> recommended that you compress all images before uploading them.  High-resolution images and/or images larger than 1-2 MB will significantly degrade performance.  To compress your images, follow the following instructions:<br/>
                 <ol>
                     <li>Go to <a href="http://compressimage.toolur.com/">http://compressimage.toolur.com/</a></li>
                     <li>Click 'Upload Images' and select the images you wish to compress</li>
