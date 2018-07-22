@@ -109,7 +109,7 @@ export default class Utils {
             case 'separator':
                 return `Visible: ${e.visible ? 'Yes' : 'No'}`
             case 'video':
-                return `Provider: ${e.provider}, ID: ${e.videoId}`
+                return `"${e.videoInfo.title}" (${e.videoInfo.provider}/${e.videoInfo.id})`
             default:
                 return 'Invalid element type'
         }

@@ -10,6 +10,7 @@ import DateRangeField from './DateRangeField'
 import RecurrenceField from './RecurrenceField'
 import RegistrationConfigurationField from './RegistrationConfigurationField'
 import OptionalActionInput from './OptionalActionInput'
+import VideoInfoField from './VideoInfoField'
 
 export default class EditorForm extends React.Component {
     constructor(props) {
@@ -204,42 +205,14 @@ export default class EditorForm extends React.Component {
                 }
             ],
             elements_video: [
-                ...this.fieldPresets.getElementBaseFields('video'), {
-                    title: 'Video Provider',
-                    property: 'provider',
-                    description: 'Select the service that is hosting the video.',
-                    render: value => <Input type="select" id="provider" defaultValue={value || 'YouTube'}>
-                        <option>YouTube</option>
-                        <option>Vimeo</option>
-                    </Input>,
-                    get: () => document
-                        .getElementById('provider')
-                        .value,
-                    validate: () => false
-                }, {
-                    title: 'Video ID',
-                    property: 'videoId',
-                    description: 'Specify the video\'s ID.',
-                    render: value => <div>
-                        <p>
-                            To find the video ID, look at the video's URL:<br/>
-                            <ul>
-                                <li>YouTube (1): https://youtube.com/watch?v=<Badge color="primary">Video ID here</Badge></li>
-                                <li>YouTube (2): https://youtu.be/<Badge color="primary">Video ID here</Badge></li>
-                                <li>Vimeo: https://vimeo.com/<Badge color="primary">Video ID here</Badge></li>
-                            </ul>
-                            Copy that value into the box below.
-                        </p>
-                        <Input id="videoId" defaultValue={value}/>
-                    </div>,
-                    get: () => document
-                        .getElementById('videoId')
-                        .value,
-                    validate: () => !document
-                        .getElementById('videoId')
-                        .value
-                            ? 'No video ID specified.'
-                            : false
+                ...this.fieldPresets.getElementBaseFields('video'),
+                {
+                    title: 'Video Info',
+                    property: 'videoInfo',
+                    description: 'Specify the video\'s ID and provider.',
+                    render: value => <VideoInfoField ref={f => this.videoInfoField = f} value={value}/>,
+                    get: () => this.videoInfoField.getValue(),
+                    validate: () => this.videoInfoField.validate()
                 }
             ],
             tabs: [
