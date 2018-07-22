@@ -12,6 +12,8 @@ import ActionCodeViewer from './modules/ui/pages/ActionCodeViewer'
 
 import Debug from './modules/ui/pages/Debug'
 
+
+import VideoInfoField from './modules/ui/components/VideoInfoField'
 import DateTime from './modules/ui/components/DateTime'
 import * as moment from 'moment'
 import {Button} from 'reactstrap'
@@ -30,7 +32,8 @@ class Demo extends Component {
     }
 
     render() {
-        return <div>
+        return <VideoInfoField value={{provider: "YouTube", videoId: "aaa", title: "bbbb", thumbnail: "aaa"}}/>
+        /*return <div>
             <DateTime onChange={v => this.setState({value: v})}/>
             <p>{moment.isMoment(this.state.value) ? moment(this.state.value).toISOString() : "INVALID"}</p>
             <p>{moment.isMoment(this.state.value) ? moment(this.state.value).valueOf() : "INVALID"}</p>
@@ -40,7 +43,7 @@ class Demo extends Component {
             .toString(36)
             .substr(2, 10)
             .toUpperCase()})}>Regen</Button>
-        </div>
+        </div>*/
     }
 }
 
