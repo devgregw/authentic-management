@@ -219,7 +219,7 @@ export default class EditorForm extends React.Component {
                 this.fieldPresets.idField, {
                     title: 'Index',
                     property: 'index',
-                    description: 'This is a number which must be greater than or equal to 0.  Tabs will be sorted in ascending order according to this number.  If two or more tabs have the same index, they will be sorted by their ID.',
+                    description: 'This is a number which must be greater than or equal to 0.  An even index (0, 2, 4, etc.) will cause the tab to appear in the left column and an odd index (1, 3, 5, etc.) will cause the tab to appear in the right column.  Tabs will then be sorted in ascending order by the index.',
                     render: value => <Input type="number" id="index" defaultValue={value || "0"} min="0" step="1"/>,
                     get: () => parseInt(document.getElementById('index').value, 10),
                     validate: () => {
