@@ -13,7 +13,7 @@ export default class Debug extends React.Component {
                 .all([
                     firebase
                         .database()
-                        .ref('/tabs/OPQ26R4SRP')
+                        .ref('/tabs/3LNAQMJYKF')
                         .once('value')
                         .then(snapshot => {
                             let proc = (p,
@@ -35,13 +35,14 @@ export default class Debug extends React.Component {
                                                         .items[0]
                                                         .snippet
                                                         .title,
-                                                    thumbnail: `https://img.youtube.com/vi/${i}/maxresdefault.jpg`,
+                                                    thumbnail: json.items[0].snippet.thumbnails.high.url,
+                                                    provider: 'YouTube',
                                                     id: json
                                                         .items[0]
                                                         .id
                                                         .videoId
                                                 }
-                                            })
+                                        })
                                 else 
                                     return window
                                         .fetch(`https://api.vimeo.com/videos/${i}?access_token=e2b6fedeebaa9768c909e81e2565e8a1`)
@@ -56,6 +57,7 @@ export default class Debug extends React.Component {
                                                         .pictures
                                                         .sizes[5]
                                                         .link,
+                                                    provider: 'Vimeo',
                                                     id: json
                                                         .uri
                                                         .replace('/videos/',
@@ -66,9 +68,14 @@ export default class Debug extends React.Component {
                                     }
                             let tab = snapshot.val()
                             tab.elements.forEach((element, i) => {
-                                element.videoInfo.provider = 'YouTube'
-                                additional.push(firebase.database().ref('/tabs/OPQ26R4SRP/elements/' +
-                                i).set(element))
+                                if (element.type == 'video')
+                                additional.push(proc(element.provider, element.videoId).then(info => firebase.database().ref('/tabs/3LNAQMJYKF/elements/' +
+                                i).set({
+                                    id: element.id,
+                                    parent: element.parent,
+                                    type: 'video',
+                                    videoInfo: info
+                                })))
                             })
                         })
                 ])
