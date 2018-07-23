@@ -24,6 +24,7 @@ export default class VideoInfoField extends React.Component {
                     Thumbnail: {this.state.thumbnail}<br/>
                     Title: {this.state.title}<br/>
                 </Alert>
+                default: return null
             }
         }
         this.verifyVideo = (p, i) => {
