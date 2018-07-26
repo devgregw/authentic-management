@@ -390,6 +390,24 @@ export default class EditorForm extends React.Component {
                         //.imageUploader
                         //.saveImage(this.imageUploader.getName('header_appearance_events'))
                 }
+            ],
+            appearance_tabs: [
+                {
+                    title: 'Fill Left Column',
+                    property: 'fillLeft',
+                    description: 'Specify whether tabs in the left column should be resized to fill all available space.  This setting is ignored when the left column contains more than 4 tabs.',
+                    render: value => <Checkbox id="fillLeft" defaultChecked={Boolean(value)} title="Fill left column"/>,
+                    get: () => document.getElementById('fillLeft').checked,
+                    validate: () => false
+                },
+                {
+                    title: 'Fill Right Column',
+                    property: 'fillRight',
+                    description: 'Specify whether tabs in the right column should be resized to fill all available space.  This setting is ignored when the right column contains more than 4 tabs (including the Upcoming Events tab).',
+                    render: value => <Checkbox id="fillRight" defaultChecked={Boolean(value)} title="Fill right column"/>,
+                    get: () => document.getElementById('fillRight').checked,
+                    validate: () => false
+                }
             ]
         }
     }

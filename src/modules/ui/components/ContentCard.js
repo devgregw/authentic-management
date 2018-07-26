@@ -70,7 +70,10 @@ export default class ContentCard extends React.Component {
                     case 'tabs':
                         let tabErrors = this.validateTabs(this.props.data.tabs)
                         return <BasicCard title="Tabs">
+                            <ButtonGroup>
                             <Button onClick={() => this.props.push('tabs')} size="lg" outline color="primary">Manage</Button>
+                            <Button onClick={() => Utils.openEditor({category: 'appearance_tabs', parent: 'tabs', path: '/appearance/tabs/'})} outline color="dark">Edit Appearance</Button>
+                            </ButtonGroup>
                             <Badge style={{fontSize: 'x-large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(this.props.data.tabs || {}).length}</Badge>
                             { tabErrors ? <Badge style={{fontSize: 'large', verticalAlign: 'middle', margin: '3px'}} color="warning">{tabErrors} need{tabErrors !== 1 ? '' : 's'} attention</Badge> : null }
                         </BasicCard>
