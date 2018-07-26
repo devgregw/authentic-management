@@ -4,6 +4,7 @@ import BasicModal from './BasicModal.js'
 import {
     Button,
     UncontrolledButtonDropdown,
+    Dropdown,
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
@@ -32,7 +33,9 @@ export default class MainToolbar extends React.Component {
             newDropdown: false,
             accountDropdown: false,
             signOutModal: false,
-            navToggle: false
+            navToggle: false,
+            items: [],
+            newMenuOpen: false
         }
     }
 
@@ -113,25 +116,22 @@ export default class MainToolbar extends React.Component {
                                         )}>Refresh</Button>
                             </NavItem>
                             <NavItem>
-                                <UncontrolledButtonDropdown>
+                                <Dropdown isOpen={this.state.newMenuOpen} toggle={() => this.setState({newMenuOpen: !this.state.newMenuOpen, items: this.state.newMenuOpen ? [] : (this.props.onItems ? this.props.onItems() : this.props.items)})}>
                                     <DropdownToggle style={{
                                             margin: '1.5px'
                                         }} color="light" caret>New</DropdownToggle>
                                     <DropdownMenu>
                                         {
-                                            this
-                                                .props
-                                                .items
-                                                .map(i => <DropdownItem key={i.key} onClick={this
+                                            this.state.items.length ? this.state.items.map(i => <DropdownItem key={i.key} onClick={this
                                                             .on
                                                             .bind(this,
                                                                 this.props.onNew,
                                                                 i
                                                             )}>{i.name}</DropdownItem>
-                                                )
+                                                ) : <DropdownItem disabled>No items</DropdownItem>
                                         }
                                     </DropdownMenu>
-                                </UncontrolledButtonDropdown>
+                                </Dropdown>
                             </NavItem>
                             <NavItem>
                                 <UncontrolledButtonDropdown>
