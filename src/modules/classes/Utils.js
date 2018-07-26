@@ -106,6 +106,8 @@ export default class Utils {
                 return `Text: ${e.text}`
             case 'button':
                 return <p>{`Label: ${e._buttonInfo.label}`}<br/>{`Action: ${Utils.getActionSummary(e._buttonInfo.action)}`}</p>
+            case 'thumbnailButton':
+                return <p>{`Label: ${e._buttonInfo.label}`}<br/>{`Action: ${Utils.getActionSummary(e._buttonInfo.action)}`}</p>
             case 'separator':
                 return `Visible: ${e.visible ? 'Yes' : 'No'}`
             case 'video':

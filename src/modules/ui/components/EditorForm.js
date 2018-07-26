@@ -187,6 +187,34 @@ export default class EditorForm extends React.Component {
                         .validate()
                 }
             ],
+            elements_thumbnailButton: [
+                ...this.fieldPresets.getElementBaseFields('thumbnailButton'), {
+                    title: "Button",
+                    property: "_buttonInfo",
+                    description: "",
+                    render: value => <ButtonConfiguration ref={c => this.buttonConfiguration = c} value={value}/>,
+                    get: () => this
+                        .buttonConfiguration
+                        .getValue(),
+                    validate: () => this
+                        .buttonConfiguration
+                        .validate()
+                },
+                {
+                    title: "Thumbnail Image",
+                    property: "thumbnail",
+                    description: "Specify a thumbnail image to display in the button.  Click Clear to remove the image or click Reset to restore the original value.",
+                    render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
+                    get: () => this.imageUploader.saveImage(`thumbnailButton_${document
+                        .getElementById('id')
+                        .value}`),
+                    validate: () => this
+                        .imageUploader
+                        .hasValue()
+                            ? false
+                            : 'A thumbnail image must be specified.'
+                }
+            ],
             elements_separator: [
                 ...this.fieldPresets.getElementBaseFields('separator'), {
                     title: 'Visible',

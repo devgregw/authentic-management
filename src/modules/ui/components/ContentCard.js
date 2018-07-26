@@ -178,7 +178,7 @@ export default class ContentCard extends React.Component {
                 var path = `/tabs/${this.props.extras.tab.id}/elements/${this.props.index}`
                 return <Card className="Content-card">
                 <CardBody>
-                    <CardTitle className="Cap-first">{this.props.data.type}</CardTitle>
+                    <CardTitle className="Cap-first">{this.props.data.type.replace('thumbnailButton', 'thumbnail button')}</CardTitle>
                     <CardSubtitle>{Utils.getElementSummary(this.props.data)}</CardSubtitle>
                     <br/>
                     <CardSubtitle>{path}</CardSubtitle>
