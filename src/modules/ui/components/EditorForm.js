@@ -11,6 +11,7 @@ import RecurrenceField from './RecurrenceField'
 import RegistrationConfigurationField from './RegistrationConfigurationField'
 import OptionalActionInput from './OptionalActionInput'
 import VideoInfoField from './VideoInfoField'
+import Checkbox from './Checkbox'
 
 export default class EditorForm extends React.Component {
     constructor(props) {
