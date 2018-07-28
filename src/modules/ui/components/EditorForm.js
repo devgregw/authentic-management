@@ -374,7 +374,6 @@ export default class EditorForm extends React.Component {
             ],
             appearance_events: [
                 this.fieldPresets.titleField,
-                this.fieldPresets.titleVisibilityField,
                 {
                     title: "Header Image",
                     property: "header",
