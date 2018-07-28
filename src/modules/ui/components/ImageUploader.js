@@ -108,20 +108,25 @@ export default class ImageUploader extends React.Component {
             return null
         }
         return <div>
-            <h5>
-                <Badge color="warning" pill>IMPORTANT</Badge><br/>
-                <em>Unless you want to allow this image to be downloaded</em>, it is <b>strongly</b> recommended that you compress all images before uploading them.  High-resolution images and/or images larger than 1-2 MB will significantly degrade performance.  To compress your images, follow the following instructions:<br/>
+            <h4><Badge color="warning" pill>IMPORTANT</Badge></h4>
+            <p>
+                It is <b>strongly</b> recommended that you compress all images before uploading them.  High-resolution images and/or images larger than 1-2 MB will significantly degrade performance.  To compress your images, follow the following instructions:<br/>
                 <ol>
                     <li>Go to <a href="http://compressimage.toolur.com/">http://compressimage.toolur.com/</a></li>
                     <li>Click 'Upload Images' and select the images you wish to compress</li>
-                    <li>Compression method: A</li>
-                    <li>Image quality: 90</li>
-                    <li>Compression type: Normal</li>
-                    <li>Resize: Set W to 1000 and H to 0; check 'Do not enlarge images'</li>
+                    <li>Compression method: <Badge color="secondary" pill>A</Badge></li>
+                    <li>Image quality: <Badge color="secondary" pill><em>for wallpapers: </em>100</Badge>  <Badge color="secondary" pill><em>everything else: </em>90</Badge></li>
+                    <li>Compression type: <Badge color="secondary" pill>Normal</Badge></li>
+                    <li>Resize
+                        <ul>
+                            <li>Width (W): <Badge color="secondary" pill><em>for tab headers: </em>540</Badge>  <Badge color="secondary" pill><em>for wallpapers: </em>1080</Badge>  <Badge color="secondary" pill><em>everything else: </em>1000</Badge></li>
+                            <li>Height (H): <Badge color="secondary" pill>0</Badge></li>
+                        </ul>
+                    </li>
                     <li>Click 'Compress Images' and wait for the process to complete</li>
-                    <li>For each image, click 'Download' to save it</li>
+                    <li>Click 'Download' to save them</li>
                 </ol>
-            </h5>
+            </p>
             <Input accept="image/png, image/jpeg" innerRef={i => {
                 this.fileInput = i;
                 this.getFileInput().onchange = () => {
