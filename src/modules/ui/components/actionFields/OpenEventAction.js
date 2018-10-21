@@ -10,7 +10,7 @@ export default class OpenEventAction extends React.Component {
         this.getValue = this
             .getValue
             .bind(this)
-        this.getSelect = () => this.__select || document.getElementById('action_oea_0_id')
+        this.makeId = id => id + this.props.rand
     }
 
     render() {
@@ -23,8 +23,8 @@ export default class OpenEventAction extends React.Component {
             events.push(db[id])
         return (
             <div>
-                <Label for="action_oea_0_id">Tab</Label>
-                <Input type="select" id="action_oea_0_id" innerRef={i => this.__select = i} defaultValue={this.props.current
+                <Label for={this.makeId('action_oea_0_id')}>Tab</Label>
+                <Input type="select" id={this.makeId('action_oea_0_id')} innerRef={i => this.__select = i} defaultValue={this.props.current
                         ? this.props.current.eventId
                         : null}>
                     {events.map(t => <option value={t.id}>{t.title}</option>)}
@@ -50,16 +50,17 @@ export default class OpenEventAction extends React.Component {
     }
 
     validate() {
-        if (!this.getSelect()) 
+        let select = this.__select || document.getElementById(this.makeId('action_oea_0_id'))
+        if (!select) 
             return {}
-        if (!this.getSelect().value) 
+        if (!select.value) 
             return {invalid: true, errors: ['No event selected']}
         else 
             return {}
         }
 
     getValue() {
-        var s = this.getSelect()
+        var s = this.__select || document.getElementById(this.makeId('action_oea_0_id'))
         return {
             type: 'OpenEventAction',
             group: 0,

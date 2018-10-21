@@ -6,21 +6,22 @@ export default class EmailAction extends React.Component {
         super(props)
         this.validate = this.validate.bind(this)
         this.getValue = this.getValue.bind(this)
+        this.makeId = id => id + this.props.rand
     }
     
     render() {
         return <div>
-                <Label for="action_ea_0_addr">Email Address</Label>
-                <Input type="email" id="action_ea_0_addr" defaultValue={this.props.current
+                <Label for={this.makeId("action_ea_0_addr")}>Email Address</Label>
+                <Input type="email" id={this.makeId("action_ea_0_addr")} defaultValue={this.props.current
                         ? this.props.current.emailAddress
                         : null}/>
             </div>
     }
 
     validate() {
-        if (!document.getElementById('action_ea_0_addr').value)
+        if (!document.getElementById(this.makeId("action_ea_0_addr")).value)
             return {invalid: true, errors: ['No email address specified']}
-        if (!document.getElementById('action_ea_0_addr').checkValidity())
+        if (!document.getElementById(this.makeId("action_ea_0_addr")).checkValidity())
             return {invalid: true, errors: ['The specified email address did not pass validation']}
         return {}
     }
@@ -29,7 +30,7 @@ export default class EmailAction extends React.Component {
         return {
             type: 'EmailAction',
             group: 0,
-            emailAddress: document.getElementById('action_ea_0_addr').value
+            emailAddress: document.getElementById(this.makeId("action_ea_0_addr")).value
         }
     }
 

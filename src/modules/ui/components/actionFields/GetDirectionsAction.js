@@ -6,12 +6,13 @@ export default class GetDirectionsAction extends React.Component {
         super(props)
         this.validate = this.validate.bind(this)
         this.getValue = this.getValue.bind(this)
+        this.makeId = id => id + this.props.rand
     }
 
     render() {
         return <div>
-                <Label for="action_gda_0_addr">Address</Label>
-                <Input type="text" id="action_gda_0_addr" defaultValue={this.props.current
+                <Label for={this.makeId("action_gda_0_addr")}>Address</Label>
+                <Input type="text" id={this.makeId("action_gda_0_addr")} defaultValue={this.props.current
                         ? this.props.current.address
                         : null}/>
                 <br/>
@@ -19,7 +20,7 @@ export default class GetDirectionsAction extends React.Component {
     }
 
     validate() {
-        if (!document.getElementById('action_gda_0_addr').value)
+        if (!document.getElementById(this.makeId("action_gda_0_addr")).value)
             return {invalid: true, errors: ['No address specified']}
         return {}
     }
@@ -28,7 +29,7 @@ export default class GetDirectionsAction extends React.Component {
         return {
             type: 'GetDirectionsAction',
             group: 0,
-            address: document.getElementById('action_gda_0_addr').value
+            address: document.getElementById(this.makeId("action_gda_0_addr")).value
         }
     }
 

@@ -7,15 +7,16 @@ import AddToCalendarAction from './actionFields/AddToCalendarAction.js';
 export default class ActionInput extends React.Component {
     constructor(props){
         super(props)
-        this.state = {index: 0}
+        this.state = {index: 0, rand: Math.random().toString()}
         this.getValue = this.getValue.bind(this)
         this.validate = this.validate.bind(this)
+        this.makeId = id => id + this.state.rand
     }
 
     transform(data) {
         if (this.state.index === 6)
-            return <AddToCalendarAction ref={r => this.atca = r} {...{database: data, current: this.props.value}}/>
-        else this.element = new Utils.actionClassesIndexed[this.state.index]({database: data, current: this.props.value}, this)
+            return <AddToCalendarAction ref={r => this.atca = r} {...{database: data, current: this.props.value, rand: this.state.rand}}/>
+        else this.element = new Utils.actionClassesIndexed[this.state.index]({database: data, current: this.props.value, rand: this.state.rand}, this)
         return this.element.render()
     }
 
@@ -35,7 +36,7 @@ export default class ActionInput extends React.Component {
             return null
         }
         return <div>
-            <Input type="select" id="action_type" defaultValue={this.state.index} innerRef={e => (e || document.getElementById('action_type')).onchange = event => {
+            <Input type="select" id={this.makeId("action_type")} defaultValue={this.state.index} innerRef={e => (e || document.getElementById(this.makeId("action_type"))).onchange = event => {
                 this.setState({index: parseInt(event.target.value, 10)})
             }}>
                 {(() => {

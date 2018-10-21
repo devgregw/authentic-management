@@ -6,14 +6,15 @@ export default class OpenURLAction extends React.Component {
         super(props)
         this.validate = this.validate.bind(this)
         this.getValue = this.getValue.bind(this)
+        this.makeId = id => id + this.props.rand
     }
     
     render() {
         return (
             <div>
-                <Label for="action_oua_0_url">URL</Label>
+                <Label for={this.makeId("action_oua_0_url")}>URL</Label>
                 <h4><Badge color="warning"><b>IMPORTANT: </b>If this URL is for a website (e.g. <em>example.com</em>), you <b>must</b> prepend <em>http://</em> or <em>https://</em> to it.</Badge></h4>
-                <Input type="url" id="action_oua_0_url" defaultValue={this.props.current
+                <Input type="url" id={this.makeId("action_oua_0_url")} defaultValue={this.props.current
                         ? this.props.current.url
                         : null}/>
             </div>
@@ -21,7 +22,7 @@ export default class OpenURLAction extends React.Component {
     }
 
     validate() {
-        if (!document.getElementById('action_oua_0_url').value)
+        if (!document.getElementById(this.makeId("action_oua_0_url")).value)
             return {invalid: true, errors: ['No URL provided']}
         return {}
     }
@@ -30,7 +31,7 @@ export default class OpenURLAction extends React.Component {
         return {
             type: 'OpenURLAction',
             group: 0,
-            url: document.getElementById('action_oua_0_url').value
+            url: document.getElementById(this.makeId("action_oua_0_url")).value
         }
     }
 

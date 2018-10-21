@@ -10,7 +10,7 @@ export default class OpenTabAction extends React.Component {
         this.getValue = this
             .getValue
             .bind(this)
-        this.getSelect = () => this.__select || document.getElementById('action_ota_0_id')
+        this.makeId = id => id + this.props.rand
     }
 
     render() {
@@ -27,12 +27,12 @@ export default class OpenTabAction extends React.Component {
             ) => a.index - b.index)
         return (
             <div>
-                <Label for="action_ota_0_id">Tab</Label>
-                <Input type="select" id="action_ota_0_id" innerRef={i => this.__select = i} defaultValue={this.props.current
-                        ? this.props.current.tabId
-                        : null}>
-                    {tabs.map(t => <option value={t.id}>{t.title}</option>)}
-                </Input>
+                <Label for={this.makeId('action_ota_0_id')}>Tab</Label>
+                <Input type="select" id={this.makeId('action_ota_0_id')} innerRef={i => this.__select = i} defaultValue={this.props.current
+                ? this.props.current.tabId
+                : null}>
+            {tabs.map(t => <option value={t.id}>{t.title}</option>)}
+        </Input>
             </div>
         )
     }
@@ -54,16 +54,17 @@ export default class OpenTabAction extends React.Component {
     }
 
     validate() {
-        if (!this.getSelect()) 
+        let select = document.getElementById(this.makeId('action_ota_0_id'))
+        if (!select) 
             return {}
-        if (!this.getSelect().value) 
+        if (!select.value) 
             return {invalid: true, errors: ['No tab selected']}
         else 
             return {}
         }
 
     getValue() {
-        var s = this.getSelect()
+        var s = document.getElementById(this.makeId('action_ota_0_id'))
         return {
             type: 'OpenTabAction',
             group: 0,

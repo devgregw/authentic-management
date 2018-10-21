@@ -6,6 +6,8 @@ import EmailAction from '../ui/components/actionFields/EmailAction'
 import OpenEventAction from '../ui/components/actionFields/OpenEventAction'
 import ShowMapAction from '../ui/components/actionFields/ShowMapAction'
 import AddToCalendarAction from '../ui/components/actionFields/AddToCalendarAction'
+import OpenYouTubeAction from '../ui/components/actionFields/OpenYouTubeAction'
+import OpenSpotifyAction from '../ui/components/actionFields/OpenSpotifyAction'
 
 import React from 'react'
 
@@ -82,7 +84,9 @@ export default class Utils {
         EmailAction: EmailAction,
         OpenEventAction: OpenEventAction,
         ShowMapAction: ShowMapAction,
-        AddToCalendarAction: AddToCalendarAction
+        AddToCalendarAction: AddToCalendarAction,
+        OpenYouTubeAction: OpenYouTubeAction,
+        OpenSpotifyAction: OpenSpotifyAction
     }
 
     static get actionClassesIndexed() {
