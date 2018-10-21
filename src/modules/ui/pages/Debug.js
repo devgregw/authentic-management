@@ -68,6 +68,7 @@ export default class Debug extends React.Component {
                                     }
                             let tab = snapshot.val()
                             tab.elements.forEach((element, i) => {
+                                // eslint-disable-next-line
                                 if (element.type == 'video')
                                 additional.push(proc(element.provider, element.videoId).then(info => firebase.database().ref('/tabs/3LNAQMJYKF/elements/' +
                                 i).set({

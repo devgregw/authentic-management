@@ -12,24 +12,14 @@ import ActionCodeViewer from './modules/ui/pages/ActionCodeViewer'
 
 import Debug from './modules/ui/pages/Debug'
 
-
-import VideoInfoField from './modules/ui/components/VideoInfoField'
-
 class Demo extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            value: null,
-            id: Math
-            .random()
-            .toString(36)
-            .substr(2, 10)
-            .toUpperCase()
-        }
     }
+    
 
     render() {
-        return <VideoInfoField value={{provider: "YouTube", videoId: "aaa", title: "bbbb", thumbnail: "aaa"}}/>
+        return null
     }
 }
 

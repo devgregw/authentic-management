@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@tinymce/tinymce-react": "^2.2.5",
     "bootstrap": "^4.0.0-beta.2",
     "firebase": "^4.6.2",
     "moment": "^2.20.1",
@@ -11,7 +12,7 @@
     "react-datetime": "^2.14.0",
     "react-dom": "^16.1.1",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "^1.1.4",
+    "react-scripts": "^1.1.5",
     "reactstrap": "^5.0.0-alpha.4"
   },
   "scripts": {
