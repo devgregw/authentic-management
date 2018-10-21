@@ -19,6 +19,7 @@ export default class Reorder extends React.Component {
             ProgressModal: false,
             cancelModal: false
         }
+        this.options = queryString.parse(window.location.search)
     }
 
     move(e, d) {
@@ -70,7 +71,7 @@ export default class Reorder extends React.Component {
                     <CardTitle className="Cap-first">{e.type}</CardTitle>
                     <CardSubtitle>{Utils.getElementSummary(e)}</CardSubtitle>
                     <br/>
-                    <CardSubtitle>{`/tabs/${e.parent}/elements/${t.elements.indexOf(e)}`}</CardSubtitle>
+                    <CardSubtitle>{`/${this.options.type}/${e.parent}/elements/${t.elements.indexOf(e)}`}</CardSubtitle>
                     <br/>
                     <ButtonGroup>
                         <Button color="link" disabled={this.state.newList.indexOf(e) === 0} onClick={this.moveTo.bind(this, e, 'up')}>Top</Button>
@@ -86,7 +87,7 @@ export default class Reorder extends React.Component {
         setTimeout(() => {
             var newTab = this.state.tab
             newTab.elements = this.state.newList.filter(o => Boolean(o))
-            firebase.database().ref(`/tabs/${newTab.id}`).update(newTab).then(() => this.closeEditor(true), err => {
+            firebase.database().ref(`/${this.options.type}/${newTab.id}`).update(newTab).then(() => this.closeEditor(true), err => {
                 alert(err)
                 this.closeEditor(false)
             })
@@ -119,10 +120,9 @@ export default class Reorder extends React.Component {
 
     render() {
         if (!this.state.didLoad || !this.state.tab) {
-            var options = queryString.parse(window.location.search)
-            if (!options.tabId)
+            if (!this.options.id)
                 return <BasicModal isOpen={true} onPrimary={this.closeEditor.bind(this, false)} primary="Close" header="Invalid Request" body="ERROR: The request is invalid."/>
-            return <ContentLoader path={new Path(['tabs', options.tabId])} transformer={this.transform.bind(this)}/>
+            return <ContentLoader path={new Path([this.options.type, this.options.id])} transformer={this.transform.bind(this)}/>
         }
         return this.transform.bind(this)(this.state.tab)
     }

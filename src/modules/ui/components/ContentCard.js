@@ -57,7 +57,7 @@ export default class ContentCard extends React.Component {
         var count = 0
         for (var id in events) {
             let event = events[id]
-            if (moment(event.dateTime.end, moment.ISO_8601).isBefore(moment()) && !event.recurrence)
+            if (event.index === undefined && moment(event.dateTime.end, moment.ISO_8601).isBefore(moment()) && !event.recurrence)
                 count++
         }
         return count
@@ -132,7 +132,7 @@ export default class ContentCard extends React.Component {
                             <BasicModal isOpen={this.state.deleteModal} toggle={this
                                     .toggleDeleteModal
                                     .bind(this)} header="Delete Confirmation" body={<p>Are you sure you want to delete this tab?<br/><br/>
-                                        {this.props.data.title}<br/>/tabs/{this.props.data.id} / </p>}
+                                        {this.props.data.title}<br/>/tabs/{this.props.data.id}/</p>}
                                 primary="Delete" primaryColor="danger" secondary="Cancel" onPrimary={() => {
                                     this.setState({ProgressModal: true})
                                     Delete.tab(this.props.data).then(() => {
@@ -148,6 +148,41 @@ export default class ContentCard extends React.Component {
                     </CardBody>
                 </Card>
                 case 'event':
+                if (this.props.data.index !== undefined) {
+                    var elements = this.props.data.elements || []
+                    var count = elements.length
+                    var w = count === 1 ? 'Element' : 'Elements'
+                    badge = count === 0 && !this.props.data.action ? <Badge color="warning">No Content</Badge> : this.props.data.action ? <Badge color="primary">Action Enabled</Badge> : <Badge color="secondary">{count} {w}</Badge>
+                    return <Card className="Content-card">
+                        <CardBody>
+                            <CardTitle>{this.props.data.title} {badge}</CardTitle>
+                            <CardSubtitle>/events/{this.props.data.id}/</CardSubtitle>
+                            <ButtonToolbar className="Content-card-toolbar">
+                            {this.props.data.action ? null : <Button style={{marginRight: '0.625rem'}} onClick={() => this.props.push(this.props.data.id)} outline color="primary">Manage</Button>}
+                            <ButtonGroup>
+                                <Button outline color="dark" onClick={() => Utils.openEditor({category: 'events_c', path: `/events/${this.props.data.id}/`})}>Edit</Button>
+                                <Button outline color="danger" onClick={this
+                                        .toggleDeleteModal
+                                        .bind(this)}>Delete</Button>
+                                <BasicModal isOpen={this.state.deleteModal} toggle={this
+                                        .toggleDeleteModal
+                                        .bind(this)} header="Delete Confirmation" body={<p>Are you sure you want to delete this event?<br/><br/>
+                                            {this.props.data.title}<br/>/events/{this.props.data.id}/</p>}
+                                    primary="Delete" primaryColor="danger" secondary="Cancel" onPrimary={() => {
+                                        this.setState({ProgressModal: true})
+                                        Delete.event(this.props.data).then(() => {
+                                                this.setState({deleteModal: false, ProgressModal: false})
+                                                this
+                                                    .props
+                                                    .refresh()
+                                            })                                        
+                                    }}/>
+                                <ProgressModal isOpen={this.state.ProgressModal} progressColor="danger" progressText="Deleting..."/>
+                            </ButtonGroup>
+                            </ButtonToolbar>
+                        </CardBody>
+                    </Card>
+                }
                 badge = moment(this.props.data.dateTime.end, moment.ISO_8601).isBefore(moment()) && !this.props.data.recurrence ? <Badge color="warning">Outdated</Badge> : null
                 return <Card className="Content-card">
                     <CardBody>
@@ -162,7 +197,7 @@ export default class ContentCard extends React.Component {
                             <BasicModal isOpen={this.state.deleteModal} toggle={this
                                     .toggleDeleteModal
                                     .bind(this)} header="Delete Confirmation" body={<p>Are you sure you want to delete this event?<br/><br/>
-                                        {this.props.data.title}<br/>/events/{this.props.data.id} / </p>}
+                                        {this.props.data.title}<br/>/events/{this.props.data.id}/</p>}
                                 primary="Delete" primaryColor="danger" secondary="Cancel" onPrimary={() => {
                                     this.setState({ProgressModal: true})
                                     Delete.event(this.props.data).then(() => {
@@ -178,16 +213,17 @@ export default class ContentCard extends React.Component {
                     </CardBody>
                 </Card>
                 case 'element':
-                var path = `/tabs/${this.props.extras.tab.id}/elements/${this.props.index}`
+                var id = (this.props.extras.tab || this.props.extras.event).id
+                var path = `/${this.props.parentCategory}/${id}/elements/${this.props.index}`
                 return <Card className="Content-card">
                 <CardBody>
-                    <CardTitle className="Cap-first">{this.props.data.type.replace('thumbnailButton', 'thumbnail button')}</CardTitle>
+                    <CardTitle className="Cap-first">{Utils.getElementTitle(this.props.data)}</CardTitle>
                     <CardSubtitle>{Utils.getElementSummary(this.props.data)}</CardSubtitle>
                     <br/>
                     <CardSubtitle>{path}</CardSubtitle>
                     <ButtonToolbar className="Content-card-toolbar">
                     <ButtonGroup>
-                        <Button outline color="dark" onClick={() => Utils.openEditor({category: 'elements_' + this.props.data.type, path: path, parent: this.props.extras.tab.id})}>Edit</Button>
+                        <Button outline color="dark" onClick={() => Utils.openEditor({category: 'elements_' + this.props.data.type, path: path, parent: id, parentCategory: this.props.parentCategory})}>Edit</Button>
                         <Button outline color="danger" onClick={this
                                 .toggleDeleteModal
                                 .bind(this)}>Delete</Button>
@@ -196,7 +232,7 @@ export default class ContentCard extends React.Component {
                                 .bind(this)} header="Delete Confirmation" body={<p>Are you sure you want to delete this element?<br/><br/>{path}</p>}
                             primary="Delete" primaryColor="danger" secondary="Cancel" onPrimary={() => {
                                 this.setState({ProgressModal: true})
-                                Delete.element(this.props.data, this.props.index, this.props.extras.tab).then(() => {
+                                Delete.element(this.props.data, this.props.index, this.props.extras.tab || this.props.extras.event, this.props.parentCategory).then(() => {
                                         this.setState({deleteModal: false, ProgressModal: false})
                                         this
                                             .props

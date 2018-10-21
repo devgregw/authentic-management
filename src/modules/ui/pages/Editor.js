@@ -28,12 +28,12 @@ export default class Editor extends React.Component {
             return null
         switch (action) {
             case 'new':
-                return {action: action, category: category, parent: query.parent}
+                return {action: action, category: category, parent: query.parent, parentCategory: query.parent_category}
             case 'edit':
                 var path = query.path
                 if (!path) 
                     return null
-                return {action: action, category: category, path: path, parent: query.parent}
+                return {action: action, category: category, path: path, parent: query.parent, parentCategory: query.parent_category}
             default:
                 return null
         }
@@ -48,7 +48,6 @@ export default class Editor extends React.Component {
             this.setState({savingModal: true})
             this.form.collect().then(x => {
                 var info = this.getEditorInfo()
-            
                 // eslint-disable-next-line
                 if (info.category.indexOf('appearance') >= 0)
                     setTimeout(() => {
@@ -61,11 +60,33 @@ export default class Editor extends React.Component {
                     }, 50)
                 else if (info.category.indexOf('elements') === -1)
                     setTimeout(() => {
-                        firebase.database().ref(`/${info.category}/${x.id}/`)[info.path ? 'update' : 'set'](x, null).then(() => {
+                        firebase.database().ref(`/${info.category === 'events_c' ? 'events' : info.category}/${x.id}/`)[info.path ? 'update' : 'set'](x, null).then(() => {
                             this.closeEditor(true)
                         }, e => {
                             alert(e)
                         this.closeEditor(false)
+                        })
+                    }, 50)
+                else if (info.parentCategory === 'events')
+                    setTimeout(() => {
+                        firebase.database().ref(`/events/${info.parent}/`).once('value').then(snap => {
+                            setTimeout(() => {
+                                var event = snap.val()
+                                if (!event.elements)
+                                    event.elements = []
+                                var i;
+                                // eslint-disable-next-line
+                                if ((i = event.elements.map(v => v.id).indexOf(x.id)) === -1)
+                                    event.elements.push(x)
+                                else
+                                    event.elements[i] = x
+                                firebase.database().ref(`/events/${info.parent}/`).update(event).then(() => {
+                                    this.closeEditor(true)
+                                }, e => {
+                                    alert(e)
+                                    this.closeEditor(false)
+                                })
+                            }, 50)
                         })
                     }, 50)
                 else

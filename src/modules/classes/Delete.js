@@ -34,14 +34,14 @@ export default class Delete {
         return Promise.all(promises)
     }
 
-    static element(data, index, parent) {
+    static element(data, index, parent, parentCategory) {
         var updated = parent
         updated.elements[index] = null
         updated.elements = updated.elements.filter(o => Boolean(o))
         var promises = [
             firebase
                 .database()
-                .ref(`/tabs/${updated.id}/`)
+                .ref(`/${parentCategory}/${updated.id}/`)
                 .update(updated)
         ]
         if (data.type === 'image') 

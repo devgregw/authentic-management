@@ -10,8 +10,30 @@ import DateRangeField from './DateRangeField'
 import RecurrenceField from './RecurrenceField'
 import RegistrationConfigurationField from './RegistrationConfigurationField'
 import OptionalActionInput from './OptionalActionInput'
+import ActionInput from './ActionInput'
 import VideoInfoField from './VideoInfoField'
 import Checkbox from './Checkbox'
+
+class HTMLEditor extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            code: props.defaultValue || ''
+        }
+    }
+
+    getValue() {
+        return document.getElementById('html').value
+    }
+
+    render() {
+        return <div>
+            <Input id="html" type="textarea" value={this.state.code} onChange={e => this.setState({code: e.target.value})}/>
+            <br/>
+            <div dangerouslySetInnerHTML={{__html: this.state.code}}></div>
+        </div>
+    }
+}
 
 export default class EditorForm extends React.Component {
     constructor(props) {
@@ -244,6 +266,144 @@ export default class EditorForm extends React.Component {
                     validate: () => this.videoInfoField.validate()
                 }
             ],
+            elements_tile: [
+                ...this.fieldPresets.getElementBaseFields('tile'),
+                {
+                    title: 'Title',
+                    optional: true,
+                    property: 'title',
+                    description: 'Specify the tile\'s title.  Leave this blank to hide it.',
+                    render: value => <Input id="title" defaultValue={value}/>,
+                    get: () => document.getElementById('title').value,
+                    validate: () => false
+                },
+                {
+                    title: 'Header Image',
+                    property: 'header',
+                    description: 'Specify the tile\'s header image.',
+                    render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
+                    get: () => this.imageUploader.saveImage(`tile_${document
+                        .getElementById('id')
+                        .value}`),
+                    validate: () => this
+                        .imageUploader
+                        .hasValue()
+                            ? false
+                            : 'A header image must be specified.'
+                },
+                {
+                    title: 'Height',
+                    property: 'height',
+                    optional: true,
+                    description: 'Specify the tile\'s height.  Leave this blank or set to 200 for the default value.',
+                    render: value => <Input id="height" type="number" min="0" step="1" defaultValue={value || 200}/>,
+                    get: () => parseInt(document.getElementById('height').value) || 200,
+                    validate: () => {
+                        let val = parseInt(document.getElementById('height').value)
+                        if (isNaN(val))
+                            return false
+                        if (val < 1)
+                            return 'The height must be greater than or equal to 1.'
+                    }
+                },
+                {
+                    title: 'Action',
+                    property: 'action',
+                    description: 'Specify an action to run when the tile is tapped.',
+                    render: value => <ActionInput ref={i => this.actionInput = i} value={value}/>,
+                    get: () => this.actionInput.getValue(),
+                    validate: () => {
+                        var v = this.actionInput.validate()
+                        if (v.invalid)
+                            return v.errors
+                        return false
+                    }
+                }
+            ],
+            elements_html: [
+                ...this.fieldPresets.getElementBaseFields('html'),
+                {
+                    title: 'HTML',
+                    description: 'Specify the HTML code to insert.',
+                    property: 'html',
+                    render: value => <HTMLEditor ref={r => this.htmlEditor = r} defaultValue={value}/>,
+                    get: () => this.htmlEditor.getValue(),
+                    validate: () => Boolean(this.htmlEditor.getValue()) ? false : 'An HTML document must be specified.'
+                }
+            ],
+            elements_fullExpController: [
+                ...this.fieldPresets.getElementBaseFields('fullExpController'),
+                {
+                    title: 'Image',
+                    property: 'image',
+                    description: 'Specify the toolbar\'s background image.',
+                    render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
+                    get: () => this.imageUploader.saveImage(`toolbar_${document
+                        .getElementById('id')
+                        .value}`),
+                    validate: () => this
+                        .imageUploader
+                        .hasValue()
+                            ? false
+                            : 'An image must be specified.'
+                },
+                {
+                    title: 'Action',
+                    property: 'action',
+                    description: 'Specify an action to run when the image is tapped.',
+                    render: value => <ActionInput ref={i => this.actionInput1 = i} value={value}/>,
+                    get: () => this.actionInput1.getValue(),
+                    validate: () => {
+                        var v = this.actionInput1.validate()
+                        if (v.invalid)
+                            return v.errors
+                        return false
+                    }
+                }
+            ],
+            elements_toolbar: [
+                ...this.fieldPresets.getElementBaseFields('toolbar'),
+                {
+                    title: 'Image',
+                    property: 'image',
+                    description: 'Specify the toolbar\'s background image.',
+                    render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
+                    get: () => this.imageUploader.saveImage(`toolbar_${document
+                        .getElementById('id')
+                        .value}`),
+                    validate: () => this
+                        .imageUploader
+                        .hasValue()
+                            ? false
+                            : 'An image must be specified.'
+                },
+                {
+                    title: 'Left Action',
+                    property: 'leftAction',
+                    description: 'Specify an action to run when the left half of the toolbar is tapped.',
+                    render: value => <ActionInput ref={i => this.actionInput1 = i} value={value}/>,
+                    get: () => this.actionInput1.getValue(),
+                    validate: () => {
+                        var v = this.actionInput1.validate()
+                        if (v.invalid)
+                            return v.errors
+                        return false
+                    }
+                },
+                {
+                    title: 'Right Action',
+                    property: 'rightAction',
+                    description: 'Specify an action to run when the right half of the toolbar is tapped.',
+                    render: value => <ActionInput ref={i => this.actionInput2 = i} value={value}/>,
+                    get: () => this.actionInput2.getValue(),
+                    validate: () => {
+                        var v = this.actionInput2.validate()
+                        if (v.invalid)
+                            return v.errors
+                        return false
+                    }
+                }
+            ],
             tabs: [
                 this.fieldPresets.idField, {
                     title: 'Index',
@@ -306,6 +466,14 @@ export default class EditorForm extends React.Component {
             events: [
                 this.fieldPresets.idField,
                 this.fieldPresets.titleField,
+                {
+                    title: 'Hide Title',
+                    property: 'hideTitle',
+                    description: 'Choose whether to hide the event\'s title on the tile.',
+                    render: value => <Checkbox id="hideTitle" defaultChecked={Boolean(value)} title="Hide title"/>,
+                    get: () => document.getElementById("hideTitle").checked,
+                    validate: () => false
+                },
                 {
                     title: 'Description',
                     property: 'description',
@@ -370,6 +538,51 @@ export default class EditorForm extends React.Component {
                     render: value => <RegistrationConfigurationField ref={f => this.registrationConfigurationField = f} value={value}/>,
                     get: () => this.registrationConfigurationField.getValue(),
                     validate: () => this.registrationConfigurationField.validate()
+                }
+            ],
+            events_c: [
+                this.fieldPresets.idField,
+                {
+                    title: 'Index',
+                    property: 'index',
+                    description: 'This is a number which must be greater than or equal to 0.  An even index (0, 2, 4, etc.) will cause the tab to appear in the left column and an odd index (1, 3, 5, etc.) will cause the tab to appear in the right column.  Tabs will then be sorted in ascending order by the index.',
+                    render: value => <Input type="number" id="index" defaultValue={value || "0"} min="0" step="1"/>,
+                    get: () => parseInt(document.getElementById('index').value, 10),
+                    validate: () => {
+                        if (isNaN(parseInt(document.getElementById('index').value, 10))) 
+                            return 'The index must be an integer'
+                        if (parseInt(document.getElementById('index').value, 10) < 0) 
+                            return 'The index must be greater than or equal to 0'
+                        return false
+                    }
+                },
+                this.fieldPresets.titleField,
+                {
+                    title: 'Hide Title',
+                    property: 'hideTitle',
+                    description: 'Choose whether to hide the event\'s title on the tile.',
+                    render: value => <Checkbox id="hideTitle" defaultChecked={Boolean(value)} title="Hide title"/>,
+                    get: () => document.getElementById("hideTitle").checked,
+                    validate: () => false
+                },
+                this.fieldPresets.headerImageField,
+                {
+                    title: 'Action',
+                    property: 'action',
+                    optional: true,
+                    description: 'Optionally, specify an action to run when a user taps the tile.  If you specify an action here, you will not be able to configure content elements.',
+                    render: value => <OptionalActionInput ref={f => this.oai = f} value={value}/>,
+                    get: () => this
+                        .oai
+                        .getValue(),
+                    validate: () => {
+                        let r = this
+                        .oai
+                        .validate()
+                        if (r.invalid)
+                            return r.errors
+                        return false
+                    }
                 }
             ],
             appearance_events: [
@@ -450,7 +663,11 @@ export default class EditorForm extends React.Component {
             else
                 result[f.property] = value
         })
-        return Promise.all(promises).then(() => result)
+        return Promise.all(promises).then(() => {
+            //alert(JSON.stringify(result));
+            console.log(result)
+            return result
+        })
     }
 
     getEditorInfo() {
@@ -461,12 +678,12 @@ export default class EditorForm extends React.Component {
             return null
         switch (action) {
             case 'new':
-                return {action: action, category: category, parent: query.parent}
+                return {action: action, category: category, parent: query.parent, parentCategory: query.parent_category}
             case 'edit':
                 var path = query.path
                 if (!path) 
                     return null
-                return {action: action, category: category, path: path, parent: query.parent}
+                return {action: action, category: category, path: path, parent: query.parent, parentCategory: query.parent_category}
             default:
                 return null
         }

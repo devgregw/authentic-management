@@ -13,7 +13,7 @@ import React from 'react'
 
 export default class Utils {
     static get version() {
-        return '1.0.6 (July 2018)'
+        return '1.1.6 (October 2018)'
     }
 
     static openPopup(url, w, h) {
@@ -56,15 +56,15 @@ export default class Utils {
     }
 
     static openNewEditor(info) {
-        Utils.openPopup(`${Utils.getBaseUrl()}/editor?action=new&category=${info.category}${info.parent ? `&parent=${info.parent}` : ''}`, 1000, 600)
+        Utils.openPopup(`${Utils.getBaseUrl()}/editor?action=new&category=${info.category}${info.parent ? `&parent=${info.parent}` : ''}${info.parentCategory ? `&parent_category=${info.parentCategory}` : ''}`, 1000, 600)
     }
 
     static openEditor(info) {
-        Utils.openPopup(`${Utils.getBaseUrl()}/editor?action=edit&category=${info.category}&path=${info.path}${info.parent ? `&parent=${info.parent}` : ''}`, 1000, 600)
+        Utils.openPopup(`${Utils.getBaseUrl()}/editor?action=edit&category=${info.category}&path=${info.path}${info.parent ? `&parent=${info.parent}` : ''}${info.parentCategory ? `&parent_category=${info.parentCategory}` : ''}`, 1000, 600)
     }
 
-    static openReorder(tabId) {
-        Utils.openPopup(`${Utils.getBaseUrl()}/editor/reorder?tabId=${tabId}`, 1000, 600)
+    static openReorder(type, id) {
+        Utils.openPopup(`${Utils.getBaseUrl()}/editor/reorder?type=${type}&id=${id}`, 1000, 600)
     }
 
     static isLocalhost() {
@@ -100,6 +100,27 @@ export default class Utils {
         return Utils.actionClasses[a.type].getSummary(a)
     }
 
+    static getElementTitle(e) {
+        switch (e.type) {
+            case 'image':
+            case 'title':
+            case 'text':
+            case 'button':
+            case 'tile':
+            case 'html':
+            case 'toolbar':
+            case 'separator':
+            case 'video':
+                return e.type
+            case 'thumbnailButton':
+                return 'thumbnail button'
+            case 'fullExpController':
+                return 'Full Experience Controller'
+            default:
+                return `unknown (${e.type})`
+        }
+    }
+
     static getElementSummary(e) {
         switch (e.type) {
             case 'image':
@@ -112,8 +133,16 @@ export default class Utils {
                 return <p>{`Label: ${e._buttonInfo.label}`}<br/>{`Action: ${Utils.getActionSummary(e._buttonInfo.action)}`}</p>
             case 'thumbnailButton':
                 return <p>{`Label: ${e._buttonInfo.label}`}<br/>{`Action: ${Utils.getActionSummary(e._buttonInfo.action)}`}</p>
+            case 'tile':
+                return <p>{`Title: ${e.title || 'none'}`}<br/>{`Action: ${Utils.getActionSummary(e.action)}`}</p>
+            case 'html':
+                return 'HTML Document'
+            case 'toolbar':
+                return <p>{`Left Action: ${Utils.getActionSummary(e.leftAction)}`}<br/>{`Right Action: ${Utils.getActionSummary(e.rightAction)}`}</p>
             case 'separator':
                 return `Visible: ${e.visible ? 'Yes' : 'No'}`
+            case 'fullExpController':
+                return `Action: ${Utils.getActionSummary(e.action)}`
             case 'video':
                 return `"${e.videoInfo.title}" (${e.videoInfo.provider}/${e.videoInfo.id})`
             default:
