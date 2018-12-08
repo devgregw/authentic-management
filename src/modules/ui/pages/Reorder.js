@@ -87,7 +87,7 @@ export default class Reorder extends React.Component {
         setTimeout(() => {
             var newTab = this.state.tab
             newTab.elements = this.state.newList.filter(o => Boolean(o))
-            firebase.database().ref(`/${this.options.type}/${newTab.id}`).update(newTab).then(() => this.closeEditor(true), err => {
+            firebase.database().ref(`${window.localStorage.getItem('db') === 'dev' ? '/dev' : ''}/${this.options.type}/${newTab.id}`).update(newTab).then(() => this.closeEditor(true), err => {
                 alert(err)
                 this.closeEditor(false)
             })

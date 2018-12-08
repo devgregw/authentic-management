@@ -8,12 +8,13 @@ import ShowMapAction from '../ui/components/actionFields/ShowMapAction'
 import AddToCalendarAction from '../ui/components/actionFields/AddToCalendarAction'
 import OpenYouTubeAction from '../ui/components/actionFields/OpenYouTubeAction'
 import OpenSpotifyAction from '../ui/components/actionFields/OpenSpotifyAction'
+import OpenEventsPageAction from '../ui/components/actionFields/OpenEventsPageAction'
 
 import React from 'react'
 
 export default class Utils {
     static get version() {
-        return '1.1.7 (December 2018)'
+        return '1.2.0 (November 2018)'
     }
 
     static openPopup(url, w, h) {
@@ -86,7 +87,8 @@ export default class Utils {
         ShowMapAction: ShowMapAction,
         AddToCalendarAction: AddToCalendarAction,
         OpenYouTubeAction: OpenYouTubeAction,
-        OpenSpotifyAction: OpenSpotifyAction
+        OpenSpotifyAction: OpenSpotifyAction,
+        OpenEventsPageAction: OpenEventsPageAction
     }
 
     static get actionClassesIndexed() {

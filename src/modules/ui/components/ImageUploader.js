@@ -35,7 +35,7 @@ export default class ImageUploader extends React.Component {
         switch (this.state.location) {
             case 'storage':
             img.src = 'https://placeholdit.imgix.net/~text?txtsize=40&txt=Loading&w=200&h=200&txtfont=sans-serif'
-                firebase.storage().ref(this.state.data.name).getDownloadURL().then(url => this.setState({location: 'storage:loaded', url: url}), err => {this.setState({location: 'none', data: null}); console.log(err)})
+                firebase.storage().ref((window.localStorage.getItem('db') === 'dev' ? '/dev/' : '') + this.state.data.name).getDownloadURL().then(url => this.setState({location: 'storage:loaded', url: url})).catch(err => {this.setState({data: {name: 'unknown.png', width: this.state.data.width, height: this.state.data.height}}); console.log(err)})
                 break
             case 'storage:loaded':
                 img.src = this.state.url
@@ -80,7 +80,7 @@ export default class ImageUploader extends React.Component {
                     let image = new Image()
                     image.onload = () => {
                         size = {width: image.width, height: image.height}
-                        firebase.storage().ref(name).putString(result, 'data_url', {cacheControl: 'no-cache'}).on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => this.setState({preparing: false, bytesTransferred: snapshot.bytesTransferred, totalBytes: snapshot.totalBytes}), reject, resolve)
+                        firebase.storage().ref((window.localStorage.getItem('db') === 'dev' ? '/dev/' : '') + name).putString(result, 'data_url', {cacheControl: 'no-cache'}).on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => this.setState({preparing: false, bytesTransferred: snapshot.bytesTransferred, totalBytes: snapshot.totalBytes}), reject, resolve)
                     }
                     image.src = result
                 }
@@ -88,7 +88,7 @@ export default class ImageUploader extends React.Component {
             }))
         }
         if (this.props.value && this.state.location === 'local')
-            promises.push(firebase.storage().ref(this.props.value.name).delete())
+            promises.push(firebase.storage().ref((window.localStorage.getItem('db') === 'dev' ? '/dev/' : '') + this.props.value.name).delete())
         return Promise.all(promises).then(() => {return {name: name, ...size}})
         
     }
@@ -141,7 +141,7 @@ export default class ImageUploader extends React.Component {
             </ButtonGroup>
             <ProgressModal isOpen={this.state.totalBytes > 0} progressColor="primary" value={(this.state.bytesTransferred / (this.state.totalBytes || 1)) * 100} progressText={Math.round((this.state.bytesTransferred / (this.state.totalBytes || 1)) * 100) + '%'}/>
             <ProgressModal isOpen={this.state.preparing} progressColor="primary" value={100} progressText="Preparing media..."/>
-            <p>Download URL: {this.state.location.startsWith('storage') ? <a href={`https://accams.devgregw.com/meta/storage/${this.state.data.name}`} target="_blank">{`https://accams.devgregw.com/meta/storage/${this.state.data.name}`}</a> : 'none'}</p>
+            <p>Download URL: {this.state.location.startsWith('storage') ? <a href={`https://accams.devgregw.com/meta/storage/${window.localStorage.getItem('db') === 'dev' ? 'dev/' : ''}${this.state.data.name}`} target="_blank">{`https://accams.devgregw.com/meta/storage/${window.localStorage.getItem('db') === 'dev' ? 'dev/' : ''}${this.state.data.name}`}</a> : 'none'}</p>
             <img alt="Preview" ref={i => this.getData(i || document.getElementById(`imagePreview${this.random}`))} id={`imagePreview${this.random}`} style={{width: '200px', height: 'auto', border: '1px solid black'}}/>
             </div>
     }

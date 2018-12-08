@@ -120,7 +120,7 @@ export default class ContentCard extends React.Component {
                 var badge = count === 0 && !this.props.data.action ? <Badge color="warning">No Content</Badge> : this.props.data.action ? <Badge color="primary">Action Enabled</Badge> : <Badge color="secondary">{count} {w}</Badge>
                 return <Card className="Content-card">
                     <CardBody>
-                        <CardTitle>{this.props.data.specialType ? <i style={{color: 'var(--dark)'}} class="material-icons">extension</i> : null} {this.props.data.title} {badge}</CardTitle>
+                        <CardTitle>{this.props.data.specialType ? <i style={{color: 'var(--dark)'}} className="material-icons">extension</i> : null} {this.props.data.title} {badge}</CardTitle>
                         <CardSubtitle>/tabs/{this.props.data.id}/</CardSubtitle>
                         <ButtonToolbar className="Content-card-toolbar">
                         {Boolean(this.props.data.action) ? null : <Button style={{marginRight: '0.625rem'}} onClick={() => this.props.push(this.props.data.id)} outline color="primary">Manage</Button>}
