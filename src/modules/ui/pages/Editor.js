@@ -99,7 +99,7 @@ export default class Editor extends React.Component {
                                 var i;
                                 // eslint-disable-next-line
                                 if ((i = tab.elements.map(v => v.id).indexOf(x.id)) === -1)
-                                    tab.elements.push(x)
+                                    tab.elements.splice(0, 0, x)
                                 else
                                     tab.elements[i] = x
                                 firebase.database().ref(`/tabs/${info.parent}/`).update(tab).then(() => {
