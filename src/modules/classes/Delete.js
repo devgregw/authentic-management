@@ -5,11 +5,11 @@ export default class Delete {
         var promises = [
             firebase
                 .database()
-                .ref(`/tabs/${data.id}/`)
+                .ref(`${window.localStorage.getItem('db') === 'dev' ? '/dev' : ''}/tabs/${data.id}/`)
                 .remove(),
             firebase
                 .storage()
-                .ref(data.header.name)
+                .ref((window.localStorage.getItem('db') === 'dev' ? '/dev/' : '') + data.header.name)
                 .delete()
         ]
         if (data.elements) 
@@ -24,11 +24,11 @@ export default class Delete {
         var promises = [
             firebase
                 .database()
-                .ref(`/events/${data.id}/`)
+                .ref(`${window.localStorage.getItem('db') === 'dev' ? '/dev' : ''}/events/${data.id}/`)
                 .remove(),
             firebase
                 .storage()
-                .ref(data.header.name)
+                .ref((window.localStorage.getItem('db') === 'dev' ? '/dev/' : '') + data.header.name)
                 .delete()
         ]
         return Promise.all(promises)
@@ -41,7 +41,7 @@ export default class Delete {
         var promises = [
             firebase
                 .database()
-                .ref(`/${parentCategory}/${updated.id}/`)
+                .ref(`${window.localStorage.getItem('db') === 'dev' ? '/dev' : ''}/${parentCategory}/${updated.id}/`)
                 .update(updated)
         ]
         if (data.type === 'image') 

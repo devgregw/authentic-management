@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Button, ButtonGroup, Navbar, Nav, NavItem} from 'reactstrap'
+import {Button, ButtonGroup, Navbar, Nav, NavItem, Badge} from 'reactstrap'
 
 export default class MainToolbar extends React.Component {
     static propTypes = {
@@ -46,6 +46,7 @@ export default class MainToolbar extends React.Component {
                                     )}>Cancel</Button>
                         </ButtonGroup>
                     </NavItem>
+                    {window.localStorage.getItem('db') === 'dev' ? <NavItem active><Badge style={{marginLeft: '1rem', fontSize: '1rem', top: '50%', transform: 'translateY(-50%)', position: 'relative'}} color="danger">Development Database</Badge></NavItem> : null}
                 </Nav>
             </Navbar>
         )

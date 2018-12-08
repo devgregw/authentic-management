@@ -18,6 +18,37 @@ import {
 import * as firebase from 'firebase'
 import Utils from '../../classes/Utils'
 
+class DatabaseSelector extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            color: null,
+            db: window.localStorage.getItem("db") || "prod",
+            prompt: ''
+        }
+    }
+
+    render() {
+        if (this.state.color === null)
+            setInterval(() => this.setState({color: !this.state.color}), 750)
+        let button
+        if (this.state.db === 'prod')
+            button = <Button color="success" style={{margin: '1.5px'}} onClick={() => {
+                this.setState({prompt: 'dev'})
+            }}>Production Database</Button>
+        else {
+            button = <Button color={this.state.color ? 'danger' : 'light'} style={{margin: '1.5px'}} onClick={() => {
+                this.setState({prompt: 'prod'})
+            }}>Development Database</Button>
+        }
+        return <div>
+            <BasicModal isOpen={this.state.prompt === 'prod'} toggle={() => {}} header="Switch to Production Database" body="Note: All changes to the app's content will be saved to the production database and therefore visible to ALL USERS.  Are you sure you want to continue?" primary="Yes" primaryColor="danger" secondary="Cancel" onPrimary={() => {window.localStorage.setItem('db', this.state.prompt);window.location.replace('/')}} onSecondary={() => this.setState({prompt: ''})}/>
+            <BasicModal isOpen={this.state.prompt === 'dev'} toggle={() => {}} header="Switch to Development Database" body="Note: All changes to the app's content will be saved to the development database and only be visible while running a development or beta build of the app (which is also using the development database).  Are you sure you want to continue?" primary="Yes" primaryColor="danger" secondary="Cancel" onPrimary={() => {window.localStorage.setItem('db', this.state.prompt);window.location.replace('/')}} onSecondary={() => this.setState({prompt: ''})}/>
+            {button}
+        </div>
+    }
+}
+
 export default class MainToolbar extends React.Component {
     static propTypes = {
         items: PropTypes.arrayOf(PropTypes.object),
@@ -88,6 +119,9 @@ export default class MainToolbar extends React.Component {
                                         margin: '1.5px'
                                     }} onClick={() => window.location.replace('/debug')}>Debug</Button>
                             </NavItem> : null}
+                            <NavItem active>
+                                <DatabaseSelector/>
+                            </NavItem>
                             <NavItem active>
                                 <Button color="light" style={{
                                         margin: '1.5px'

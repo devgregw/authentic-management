@@ -29,7 +29,7 @@ export default class ContentLoader extends React.Component {
     render() {
         firebase
             .database()
-            .ref(this.props.path.toString())
+            .ref((window.localStorage.getItem('db') === 'dev' && !this.props.path.toString().startsWith('/dev') ? '/dev' : '') + (this.props.path.toString()[0] === '/' ? '' : '/') + this.props.path.toString())
             .once('value')
             .then(snapshot => {
                 var c = null
