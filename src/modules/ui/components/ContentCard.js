@@ -149,9 +149,9 @@ export default class ContentCard extends React.Component {
                 </Card>
                 case 'event':
                 if (this.props.data.index !== undefined) {
-                    var elements = this.props.data.elements || []
-                    var count = elements.length
-                    var w = count === 1 ? 'Element' : 'Elements'
+                    elements = this.props.data.elements || []
+                    count = elements.length
+                    w = count === 1 ? 'Element' : 'Elements'
                     badge = count === 0 && !this.props.data.action ? <Badge color="warning">No Content</Badge> : this.props.data.action ? <Badge color="primary">Action Enabled</Badge> : <Badge color="secondary">{count} {w}</Badge>
                     return <Card className="Content-card">
                         <CardBody>

@@ -141,7 +141,7 @@ export default class ImageUploader extends React.Component {
             </ButtonGroup>
             <ProgressModal isOpen={this.state.totalBytes > 0} progressColor="primary" value={(this.state.bytesTransferred / (this.state.totalBytes || 1)) * 100} progressText={Math.round((this.state.bytesTransferred / (this.state.totalBytes || 1)) * 100) + '%'}/>
             <ProgressModal isOpen={this.state.preparing} progressColor="primary" value={100} progressText="Preparing media..."/>
-            <p>Download URL: {this.state.location.startsWith('storage') ? <a href={`https://accams.devgregw.com/meta/storage/${window.localStorage.getItem('db') === 'dev' ? 'dev/' : ''}${this.state.data.name}`} target="_blank">{`https://accams.devgregw.com/meta/storage/${window.localStorage.getItem('db') === 'dev' ? 'dev/' : ''}${this.state.data.name}`}</a> : 'none'}</p>
+            <p>Download URL: {this.state.location.startsWith('storage') ? <a rel="noopener noreferrer" href={`https://accams.devgregw.com/meta/storage/${window.localStorage.getItem('db') === 'dev' ? 'dev/' : ''}${this.state.data.name}`} target="_blank">{`https://accams.devgregw.com/meta/storage/${window.localStorage.getItem('db') === 'dev' ? 'dev/' : ''}${this.state.data.name}`}</a> : 'none'}</p>
             <img alt="Preview" ref={i => this.getData(i || document.getElementById(`imagePreview${this.random}`))} id={`imagePreview${this.random}`} style={{width: '200px', height: 'auto', border: '1px solid black'}}/>
             </div>
     }
