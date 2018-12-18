@@ -13,6 +13,8 @@ import OptionalActionInput from './OptionalActionInput'
 import ActionInput from './ActionInput'
 import VideoInfoField from './VideoInfoField'
 import Checkbox from './Checkbox'
+import DateTime from './DateTime'
+import * as moment from 'moment'
 
 class HTMLEditor extends React.Component {
     constructor(props) {
@@ -418,22 +420,9 @@ export default class EditorForm extends React.Component {
                             return 'The index must be greater than or equal to 0'
                         return false
                     }
-                }, this.fieldPresets.titleField,
+                },
+                this.fieldPresets.titleField,
                 this.fieldPresets.headerImageField, {
-                    title: 'Header Visibility',
-                    property: 'hideHeader',
-                    description: 'Check this box to hide the header image on this tab\'s content page.',
-                    render: value => <FormGroup check>
-                        <Label check>
-                            <Input id="hideHeader" type="checkbox" defaultChecked={value || false}/>{' '}
-                            Hide header
-                        </Label>
-                    </FormGroup>,
-                    get: () => document
-                        .getElementById('hideHeader')
-                        .checked,
-                    validate: () => false
-                }, {
                     title: 'Tab Action',
                     optional: true,
                     property: 'action',
@@ -545,7 +534,7 @@ export default class EditorForm extends React.Component {
                 {
                     title: 'Index',
                     property: 'index',
-                    description: 'This is a number which must be greater than or equal to 0.  An even index (0, 2, 4, etc.) will cause the tab to appear in the left column and an odd index (1, 3, 5, etc.) will cause the tab to appear in the right column.  Tabs will then be sorted in ascending order by the index.',
+                    description: 'This is a number which must be greater than or equal to 0.  Events will then be sorted in ascending order by the index.',
                     render: value => <Input type="number" id="index" defaultValue={value || "0"} min="0" step="1"/>,
                     get: () => parseInt(document.getElementById('index').value, 10),
                     validate: () => {
@@ -583,6 +572,15 @@ export default class EditorForm extends React.Component {
                             return r.errors
                         return false
                     }
+                }, {
+                    title: 'Event Visibility',
+                    property: 'visibility',
+                    optional: true,
+                    description: 'Specify a date/time (typically the event\'s end date) after which the tile will automatically be hidden.  An empty or invalid value will cause the tile to stay visible until it is deleted.',
+                    render: value => <DateTime ref={f => this.dateTime = f} moment={value ? moment(value, moment.ISO_8601) :  moment('-')}/>,
+                    get: () => this
+                        .dateTime.isValid() ? this.dateTime.getSelectedValue().toISOString() : null,
+                    validate: () => false
                 }
             ],
             appearance_events: [
