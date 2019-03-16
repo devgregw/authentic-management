@@ -186,6 +186,10 @@ export default class Home extends React.Component {
     categories = ['tabs', 'events', 'notifications', 'meta']
 
     transform(val) {
+        if (window.localStorage.getItem("newdomain") !== 'ACK' && Date.now() <= 1562648400000) {
+            alert("IMPORTANT NOTICE:\n\nIf you accessed the Authentic City Church App Management System (ACCAMS) from \"https://accams.devgregw.com\", please begin accessing it through \"https://authentic.gregwhatley.dev\".  The devgregw.com domain will be deactivated on July 9, 2019 in favor of gregwhatley.dev.  Until then, you will be automatically redirected from the old domain to the new one.  If you have bookmarked the old domain, please switch it to prevent interrution.")
+            window.localStorage.setItem("newdomain", "ACK")
+        }
         var content
         switch (this.state.path.last()) {
             case '':

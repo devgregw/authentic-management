@@ -78,7 +78,7 @@ export default class RegistrationConfigurationField extends React.Component {
                 </div> :
                 <p>No forms have been created.</p>
         } else if (!this.state.forms && !this.state.brerr) {
-            window.fetch('https://extras.devgregw.com/authentic/breeze.php', {method: 'POST', body: `uid=${firebase.auth().currentUser.uid.toString()}`, headers: {'content-type': 'application/x-www-form-urlencoded'}}).then(r => {   
+            window.fetch('https://extras.gregwhatley.dev/authentic/breeze.php', {method: 'POST', body: `uid=${firebase.auth().currentUser.uid.toString()}`, headers: {'content-type': 'application/x-www-form-urlencoded'}}).then(r => {   
                 if (r.ok)
                     r.json().then(val => this.setState({forms: val, breeze: true, brerr: false}))
                 else

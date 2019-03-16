@@ -3,4 +3,4 @@ authentic-management is a web app that provides a GUI for manipulating the Authe
 
 ## Licenses
 
-This project is licensed under the MIT License (see `LICENSE`).  For third-party license information and other documentation, visit [http://docs.accams.devgregw.com](http://docs.accams.devgregw.com)
+This project is licensed under the MIT License (see `LICENSE`).  For third-party license information and other documentation, visit [https://authenticdocs.gregwhatley.dev](https://authenticdocs.gregwhatley.dev)

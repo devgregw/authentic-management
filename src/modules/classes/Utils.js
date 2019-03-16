@@ -14,7 +14,7 @@ import React from 'react'
 
 export default class Utils {
     static get version() {
-        return '1.2.3 (December 2018)'
+        return '1.2.6 (March 2019)'
     }
 
     static openPopup(url, w, h) {
@@ -75,7 +75,7 @@ export default class Utils {
     }
 
     static getBaseUrl() {
-        return Utils.isLocalhost() ? 'http://localhost' : 'https://accams.devgregw.com'
+        return Utils.isLocalhost() ? 'http://localhost' : 'https://authentic.gregwhatley.dev'
     }
 
     static actionClasses = {
