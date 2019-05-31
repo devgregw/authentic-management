@@ -297,9 +297,9 @@ export default class EditorForm extends React.Component {
                     title: 'Height',
                     property: 'height',
                     optional: true,
-                    description: 'Specify the tile\'s height.  Leave this blank or set to 200 for the default value.',
-                    render: value => <Input id="height" type="number" min="0" step="1" defaultValue={value || 200}/>,
-                    get: () => parseInt(document.getElementById('height').value) || 200,
+                    description: 'Specify the tile\'s height.  Leave this blank to let the app decide automaticlly (this is usually the best option), or set to 200 for a standard size.',
+                    render: value => <Input id="height" type="number" min="0" step="1" defaultValue={value}/>,
+                    get: () => parseInt(document.getElementById('height').value) || null,
                     validate: () => {
                         let val = parseInt(document.getElementById('height').value)
                         if (isNaN(val))
