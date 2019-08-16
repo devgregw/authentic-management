@@ -603,19 +603,11 @@ export default class EditorForm extends React.Component {
             ],
             appearance_tabs: [
                 {
-                    title: 'Fill Left Column',
-                    property: 'fillLeft',
-                    description: 'Specify whether tabs in the left column should be resized to fill all available space.  This setting is ignored when the left column contains more than 4 tabs.',
-                    render: value => <Checkbox id="fillLeft" defaultChecked={Boolean(value)} title="Fill left column"/>,
-                    get: () => document.getElementById('fillLeft').checked,
-                    validate: () => false
-                },
-                {
-                    title: 'Fill Right Column',
-                    property: 'fillRight',
-                    description: 'Specify whether tabs in the right column should be resized to fill all available space.  This setting is ignored when the right column contains more than 4 tabs (including the Upcoming Events tab).',
-                    render: value => <Checkbox id="fillRight" defaultChecked={Boolean(value)} title="Fill right column"/>,
-                    get: () => document.getElementById('fillRight').checked,
+                    title: 'Fill Columns',
+                    property: 'fill',
+                    description: 'Normally, tiles are sized based on their image size.  When this setting is on, tiles are equally sized to fill available space on screen.  This setting is ignored when the one or both columns contains more than 4 tiles.',
+                    render: value => <Checkbox id="fill" defaultChecked={Boolean(value)} title="Fill"/>,
+                    get: () => document.getElementById('fill').checked,
                     validate: () => false
                 }
             ]

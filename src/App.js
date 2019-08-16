@@ -31,17 +31,19 @@ export default class App extends Component {
                     <Switch>
                         <Route exact path="/demo" render={({match}) => <Demo/>}/>
                         <Route exact path="/debug" render={({match}) =>  <RequireAuth path={match.path} render={() => <Debug/>}/>}/>
-                        <Route exact path="/" render={({match}) => <RequireAuth path={match.path} render={() => <Home/>}/>}/>
                         <Route exact path="/editor" render={({match}) => <RequireAuth path={match.path} render={() => <Editor/>}/>}/>
                         <Route path="/editor/reorder" component={Reorder}/>
                         <Route path="/account/auth/:action" component={Authentication}/>
                         <Route path="/account/meta/changename" render={({match}) => <RequireAuth path={match.path} render={() => <ChangeDisplayName/>}/>}/>
                         <Route exact path="/meta/storage/:name" render={({match}) => <StorageViewer fileName={match.params.name}/>}/>
                         <Route exact path="/meta/action" component={ActionCodeViewer}/>
+                        
                         <Redirect from="/meta" to="/"/>
                         <Redirect from="/account/meta" to="/"/>
                         <Redirect from="/account/auth" to="/"/>
                         <Redirect from="/account" to="/"/>
+
+                        <Route exact path="/" render={({match}) => <RequireAuth path={match.path} render={() => <Home/>}/>}/>
                     </Switch>
                 </div>
             </BrowserRouter>

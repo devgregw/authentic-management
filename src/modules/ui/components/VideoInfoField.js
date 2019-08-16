@@ -19,7 +19,7 @@ export default class VideoInfoField extends React.Component {
                 case 'processing': return <Alert style={{margin: '1rem'}} color="primary">Please wait while the video is being verified.</Alert>
                 case 'invalid': return <Alert style={{margin: '1rem'}} color="danger">The provided video is not valid.  Did you copy the ID correctly?</Alert>
                 case 'ok': return <Alert style={{margin: '1rem'}} color="success">The video was verified successfully!<br/><br/>
-                    Provider: {this.state.provider}<br/>
+                    Provider: {this.state.provider.split(' ')[0]}<br/>
                     ID: {this.state.id}<br/>
                     Thumbnail: {this.state.thumbnail}<br/>
                     Title: {this.state.title}<br/>
@@ -41,6 +41,12 @@ export default class VideoInfoField extends React.Component {
                             id: json.items[0].id.videoId
                         }
                 })
+            else if (p === 'YouTube - Manual entry')
+                return new Promise((res, rej) => res({
+                    title: document.getElementById("manTitle").value,
+                    thumbnail: `https://img.youtube.com/vi/${i}/maxresdefault.jpg`,
+                    id: i
+                }))
             else
                 return window.fetch(`https://api.vimeo.com/videos/${i}?access_token=e2b6fedeebaa9768c909e81e2565e8a1`).then(r => r.json()).then(json => {
                     if (!json || json.error)
@@ -58,7 +64,7 @@ export default class VideoInfoField extends React.Component {
     }
 
     getValue() {
-        return !this.validate() ? {provider: this.state.provider, id: this.state.id, title: this.state.title, thumbnail: this.state.thumbnail} : null
+        return !this.validate() ? {provider: this.state.provider.split(" ")[0], id: this.state.id, title: this.state.title, thumbnail: this.state.thumbnail} : null
     }
 
     validate() {
@@ -68,8 +74,9 @@ export default class VideoInfoField extends React.Component {
     render() {
         return <div>
             <label style={{fontSize: '1.2rem'}} for="provider">Video Provider</label>
-            <Input type="select" id="provider" disabled={this.state.status === 'processing'} defaultValue={this.state.provider}>
+            <Input type="select" id="provider" disabled={this.state.status === 'processing'} onChange={() => this.setState({provider: document.getElementById("provider").value})} defaultValue={this.state.provider}>
                         <option>YouTube</option>
+                        <option>YouTube - Manual entry</option>
                         <option>Vimeo</option>
             </Input>
             <label style={{fontSize: '1.2rem'}} for="videoId">Video ID</label>
@@ -85,6 +92,10 @@ export default class VideoInfoField extends React.Component {
                 Copy that value into the box below, excluding the slash.
             </p>
             <Input id="videoId" disabled={this.state.status === 'processing'} defaultValue={this.state.id}/>
+            {this.state.provider === 'YouTube - Manual entry' ? <div>
+                <label style={{fontSize: '1.2rem'}} for="manTitle">Title</label>
+                <Input id="manTitle" disabled={this.state.status === 'processing'} defaultValue={this.state.title}/>
+            </div> : null}
             {this.getAlert()}
             <Button size="lg" color="primary" onClick={() => {
                 let p = document.getElementById('provider').value
