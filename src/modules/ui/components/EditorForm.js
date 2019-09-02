@@ -213,7 +213,34 @@ export default class EditorForm extends React.Component {
                 }
             ],
             elements_thumbnailButton: [
-                ...this.fieldPresets.getElementBaseFields('thumbnailButton'), {
+                ...this.fieldPresets.getElementBaseFields('thumbnailButton'),
+                {
+                    title: 'Large Style',
+                    property: 'large',
+                    description: 'Specify whether to use a larger design for the button tile.',
+                    render: value => <FormGroup check>
+                        <Label check>
+                            <Input id="large" defaultChecked={value || false} type="checkbox"/>{' '}
+                            Use large style
+                        </Label>
+                    </FormGroup>,
+                    get: () => document.getElementById("large").checked,
+                    validate: () => false
+                },
+                {
+                    title: 'Hide Title',
+                    property: 'hideTitle',
+                    description: 'Specify whether to hide the button\'s title from the tile.  This is useful when the button\'s thumbnail already contains the title.  Note that this option only takes effect when Large Style is enabled.',
+                    render: value => <FormGroup check>
+                        <Label check>
+                            <Input id="hideTitle" defaultChecked={value || false} type="checkbox"/>{' '}
+                            Hide title
+                        </Label>
+                    </FormGroup>,
+                    get: () => document.getElementById("hideTitle").checked,
+                    validate: () => false
+                },
+                {
                     title: "Button",
                     property: "_buttonInfo",
                     description: "",
@@ -259,6 +286,32 @@ export default class EditorForm extends React.Component {
             ],
             elements_video: [
                 ...this.fieldPresets.getElementBaseFields('video'),
+                {
+                    title: 'Large Style',
+                    property: 'large',
+                    description: 'Specify whether to use a larger design for the video tile.',
+                    render: value => <FormGroup check>
+                        <Label check>
+                            <Input id="large" defaultChecked={value || false} type="checkbox"/>{' '}
+                            Use large style
+                        </Label>
+                    </FormGroup>,
+                    get: () => document.getElementById("large").checked,
+                    validate: () => false
+                },
+                {
+                    title: 'Hide Title',
+                    property: 'hideTitle',
+                    description: 'Specify whether to hide the video\'s title from the tile.  This is useful when the video\'s thumbnail already contains the title.  Note that this option only takes effect when Large Style is enabled.',
+                    render: value => <FormGroup check>
+                        <Label check>
+                            <Input id="hideTitle" defaultChecked={value || false} type="checkbox"/>{' '}
+                            Hide title
+                        </Label>
+                    </FormGroup>,
+                    get: () => document.getElementById("hideTitle").checked,
+                    validate: () => false
+                },
                 {
                     title: 'Video Info',
                     property: 'videoInfo',
@@ -646,13 +699,16 @@ export default class EditorForm extends React.Component {
     collect() {
         var promises = []
         var result = {}
-        this.fields[this.getEditorInfo().category].forEach(f => {
+        var editorInfo = this.getEditorInfo()
+        this.fields[editorInfo.category].forEach(f => {
             let value = f.get()
             if (value != null && typeof value.then === "function")
                 promises.push(value.then(r => result[f.property] = r))
             else
                 result[f.property] = value
         })
+        if (editorInfo.category === 'tabs' && editorInfo.specialType)
+            result['specialType'] = editorInfo.specialType
         return Promise.all(promises).then(() => {
             //alert(JSON.stringify(result));
             console.log(result)
@@ -668,12 +724,12 @@ export default class EditorForm extends React.Component {
             return null
         switch (action) {
             case 'new':
-                return {action: action, category: category, parent: query.parent, parentCategory: query.parent_category}
+                return {action: action, category: category, specialType: query.specialType, parent: query.parent, parentCategory: query.parent_category}
             case 'edit':
                 var path = query.path
                 if (!path) 
                     return null
-                return {action: action, category: category, path: path, parent: query.parent, parentCategory: query.parent_category}
+                return {action: action, category: category, specialType: query.specialType, path: path, parent: query.parent, parentCategory: query.parent_category}
             default:
                 return null
         }
