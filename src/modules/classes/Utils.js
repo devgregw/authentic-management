@@ -14,7 +14,7 @@ import React from 'react'
 
 export default class Utils {
     static get version() {
-        return '1.2.8 (August 2019)'
+        return '1.2.10 (August 2019)'
     }
 
     static openPopup(url, w, h) {
@@ -57,7 +57,7 @@ export default class Utils {
     }
 
     static openNewEditor(info) {
-        Utils.openPopup(`${Utils.getBaseUrl()}/editor?action=new&category=${info.category}${info.parent ? `&parent=${info.parent}` : ''}${info.parentCategory ? `&parent_category=${info.parentCategory}` : ''}`, 1000, 600)
+        Utils.openPopup(`${Utils.getBaseUrl()}/editor?action=new&category=${info.category}${info.specialType ? `&specialType=${info.specialType}` : ''}${info.parent ? `&parent=${info.parent}` : ''}${info.parentCategory ? `&parent_category=${info.parentCategory}` : ''}`, 1000, 600)
     }
 
     static openEditor(info) {

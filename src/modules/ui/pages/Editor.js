@@ -28,12 +28,12 @@ export default class Editor extends React.Component {
             return null
         switch (action) {
             case 'new':
-                return {action: action, category: category, parent: query.parent, parentCategory: query.parent_category}
+                return {action: action, category: category, specialType: query.specialType, parent: query.parent, parentCategory: query.parent_category}
             case 'edit':
                 var path = query.path
                 if (!path) 
                     return null
-                return {action: action, category: category, path: path, parent: query.parent, parentCategory: query.parent_category}
+                return {action: action, category: category, specialType: query.specialType, path: path, parent: query.parent, parentCategory: query.parent_category}
             default:
                 return null
         }

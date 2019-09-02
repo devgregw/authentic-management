@@ -102,6 +102,8 @@ export default class Home extends React.Component {
                 return items.filter(item => item.category === 'elements_image')
             case 'fullexp':
                 return items.filter(item => item.category === 'elements_fullExpController')
+            case 'watchPlaylist':
+                return items.filter(item => item.category === 'elements_video')
             default: return items.filter(item => item.category !== 'elements_fullExpController')
         }
     }
@@ -117,17 +119,22 @@ export default class Home extends React.Component {
                     {
                         category: 'tabs',
                         name: 'Tab'
+                    },
+                    {
+                        category: 'tabs',
+                        name: 'Video Playlist Tab',
+                        specialType: 'watchPlaylist'
                     }
                 ]
             case 'events':
                 return [
-                    {
+                    /*{
                         category: 'events',
                         name: 'Event'
-                    },
+                    },*/
                     {
                         category: 'events_c',
-                        name: 'Custom Event'
+                        name: 'Event'
                     }
                 ]
             default:
@@ -150,6 +157,23 @@ export default class Home extends React.Component {
         }
     }*/
 
+    getSpecialTypeName(specialType) {
+        switch (specialType) {
+            case 'wallpapers': return 'Wallpaper Gallery'
+            case 'fullexp': return 'The Full Experience'
+            case 'watchPlaylist': return 'Video Playlist'
+            default: return null
+        }
+    }
+
+    getSpecialTypeDescription(specialType) {
+        switch (specialType) {
+            case 'wallpapers': return 'Organizes images in a dual-column layout offering image previewing and saving capabilities.'
+            case 'fullexp': return 'Presents a full-screen image linking to the latest live stream.'
+            case 'watchPlaylist': return 'Organizes videos front and center, promoting the most recently added video.'
+        }
+    }
+
     transformSecondary(val) {
         var type = this.state.path.get(this.state.path.count() - 2)
         this._parentCategory = type
@@ -160,8 +184,8 @@ export default class Home extends React.Component {
                 if (val.elements)
                     cards = val.elements.map(e => <ContentCard key={e.id} type="element" parentCategory="tabs" index={val.elements.indexOf(e)} data={e} extras={{tab: val}} refresh={() => this.forceUpdate()}/>)
                 return <div>
-                    <h2>{this.specialType ? <i style={{color: 'var(--dark)'}} class="material-icons">extension</i> : null} {val.title} <Badge color="secondary">Elements</Badge> <Button onClick={() => Utils.openReorder('tabs', val.id)} color="primary" disabled={!val.elements || (val.elements || []).length <= 1}>Reorder</Button></h2>
-                    {this.specialType ? <h5>This tab is configured to have special behaviors, so access to certain content elements may be limited.</h5> : null}
+                    <h2>{this.specialType ? <i style={{color: 'var(--dark)'}} class="material-icons">extension</i> : null} {val.title} <Button onClick={() => Utils.openReorder('tabs', val.id)} color="primary" disabled={!val.elements || (val.elements || []).length <= 1}>Rearrange Elements</Button></h2>
+                    {this.specialType ? <h5><Badge color="primary">{this.getSpecialTypeName(this.specialType)}</Badge> {this.getSpecialTypeDescription(this.specialType)}</h5> : null}
                     {cards}
                     </div>
             case 'events':
@@ -186,10 +210,6 @@ export default class Home extends React.Component {
     categories = ['tabs', 'events', 'notifications', 'meta']
 
     transform(val) {
-        if (window.localStorage.getItem("newdomain") !== 'ACK' && Date.now() <= 1562648400000) {
-            alert("IMPORTANT NOTICE:\n\nIf you accessed the Authentic City Church App Management System (ACCAMS) from \"https://accams.devgregw.com\", please begin accessing it through \"https://authentic.gregwhatley.dev\".  The devgregw.com domain will be deactivated on July 9, 2019 in favor of gregwhatley.dev.  Until then, you will be automatically redirected from the old domain to the new one.  If you have bookmarked the old domain, please switch it to prevent interrution.")
-            window.localStorage.setItem("newdomain", "ACK")
-        }
         var content
         switch (this.state.path.last()) {
             case '':
