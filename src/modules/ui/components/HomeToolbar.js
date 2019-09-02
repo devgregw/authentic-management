@@ -117,7 +117,7 @@ export default class MainToolbar extends React.Component {
                             {Utils.isLocalhost() ? <NavItem active>
                                 <Button color="warning" style={{
                                         margin: '1.5px'
-                                    }} onClick={() => window.location.replace('/debug')}>Debug</Button>
+                                    }} onClick={() => window.location.replace('/debug')}>Run Script</Button>
                             </NavItem> : null}
                             <NavItem active>
                                 <DatabaseSelector/>
