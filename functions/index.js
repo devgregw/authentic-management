@@ -13,7 +13,7 @@ global.DOMParser = new JSDOM().window.DOMParser;
 
 exports.videos = functions.https.onRequest((req, res) => {
 
-    const url = 'https://www.youtube.com/channel/UCxrYck_z50n5It7ifj1LCjA/videos';
+    const url = `https://www.youtube.com/channel/${req.query.channelId || 'UCxrYck_z50n5It7ifj1LCjA'}/videos`;
 
     request(url, { method: 'GET' }, (error, response, body) => {
         if (!error && response.statusCode === 200) {
@@ -25,7 +25,12 @@ exports.videos = functions.https.onRequest((req, res) => {
                     obj[a.href.substr(9)] = a.title
                 }
             });
+            Object.getOwnPropertyNames(obj).forEach(n => {
+                if (obj[n].toLowerCase().indexOf("stream") >= 0)
+                    obj["livestream"] = n
+            })
             res.send(obj);
-        }
+        } else
+            res.send({});
     });
 });
