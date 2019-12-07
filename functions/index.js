@@ -1,6 +1,7 @@
 const functions = require('firebase-functions');
 const request = require('request');
 const jsdom = require('jsdom');
+const uuidv4 = require('uuid/v4')
 const { JSDOM } = jsdom;
 global.DOMParser = new JSDOM().window.DOMParser;
 
@@ -10,6 +11,17 @@ global.DOMParser = new JSDOM().window.DOMParser;
 // exports.helloWorld = functions.https.onRequest((request, response) => {
 //  response.send("Hello from Firebase!");
 // });
+
+exports.storage = functions.https.onRequest((req, res) => {
+    if (!req.query.path)
+        res.sendStatus(400);
+    else {
+        const bucket = 'authentic-city-church.appspot.com';
+        const url = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(req.query.path)}?alt=media&token=${uuidv4()}`;
+        res.set('Content-Disposition', `attachment; filename=${req.query.path}`);
+        request(url).pipe(res);
+    }
+});
 
 exports.videos = functions.https.onRequest((req, res) => {
 
