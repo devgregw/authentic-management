@@ -1,27 +1,28 @@
 {
   "name": "authentic-management",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@tinymce/tinymce-react": "^2.2.5",
-    "bootstrap": "^4.0.0-beta.2",
-    "create-react-app": "^2.1.1",
-    "firebase": "^4.6.2",
-    "firebase-tools": "^7.3.0",
-    "moment": "^2.20.1",
-    "query-string": "^5.0.1",
-    "react": "^16.1.1",
-    "react-datetime": "^2.14.0",
-    "react-dom": "^16.1.1",
-    "react-router-dom": "^4.2.2",
-    "react-scripts": "^3.1.1",
-    "reactstrap": "^5.0.0-alpha.4"
+    "bootstrap": "^4.4.1",
+    "create-react-app": "^3.3.0",
+    "firebase": "^7.5.2",
+    "firebase-tools": "^7.9.0",
+    "moment": "^2.24.0",
+    "query-string": "^6.9.0",
+    "react": "^16.12.0",
+    "react-datetime": "^2.16.3",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "^3.3.0",
+    "reactstrap": "^8.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "deployAll": "sudo npm run build;firebase deploy",
+    "deployFunctions": "firebase deploy --only functions",
+    "deployHosting": "sudo npm run build;firebase deploy --only hosting",
+    "update": "ncu --upgrade;npm install"
   },
   "browserslist": [
     ">0.2%",

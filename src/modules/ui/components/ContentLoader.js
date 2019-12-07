@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import * as firebase from 'firebase'
-import {Progress} from 'reactstrap'
+import {Progress, Spinner} from 'reactstrap'
 
 export default class ContentLoader extends React.Component {
     static propTypes = {
@@ -44,8 +44,6 @@ export default class ContentLoader extends React.Component {
                     content: c
                 })
             })
-        return this.state.content || <Progress style={{
-                        margin: '0 1rem'
-                    }} animated color="primary" value={100}>Loading...</Progress>
+        return this.state.content || <Spinner style={{position: 'relative', width: '2rem', height: '2rem', left: 'calc(50% - 1rem)'}}/>
     }
 }

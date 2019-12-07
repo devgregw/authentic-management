@@ -82,7 +82,7 @@ export default class ContentCard extends React.Component {
                             <ButtonGroup>
                             <Button onClick={() => window.open('https://console.firebase.google.com/project/authentic-city-church/notification/compose', '_blank')} size="lg" outline color="primary">Send Notification</Button>
                             <Button onClick={() => Utils.openPopup(`${Utils.getBaseUrl()}/meta/action`, 1000, 600)} outline color="dark">Create Action</Button>
-                            <Button onClick={() => Utils.openPopup(`${Utils.getBaseUrl()}/meta/storage/firebase.pdf`, 1000, 600)} outline color="dark">Instructions</Button>
+                            <Button onClick={() => Utils.openPopup(`${Utils.getBaseUrl()}https://us-central1-authentic-city-church.cloudfunctions.net/storage?path=firebase.pdf`, 1000, 600)} outline color="dark">Instructions</Button>
                             </ButtonGroup>
                         </BasicCard>
                     case 'blog':

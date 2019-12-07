@@ -35,7 +35,6 @@ export default class App extends Component {
                         <Route path="/editor/reorder" component={Reorder}/>
                         <Route path="/account/auth/:action" component={Authentication}/>
                         <Route path="/account/meta/changename" render={({match}) => <RequireAuth path={match.path} render={() => <ChangeDisplayName/>}/>}/>
-                        <Route exact path="/meta/storage/:name" render={({match}) => <StorageViewer fileName={match.params.name}/>}/>
                         <Route exact path="/meta/action" component={ActionCodeViewer}/>
                         
                         <Redirect from="/meta" to="/"/>

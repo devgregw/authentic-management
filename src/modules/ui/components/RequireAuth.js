@@ -1,7 +1,7 @@
 import React from 'react'
 import * as firebase from 'firebase'
 import PropTypes from 'prop-types'
-import {Progress} from 'reactstrap'
+import {Progress, Spinner} from 'reactstrap'
 import {Redirect} from 'react-router-dom'
 
 export default class RequireAuth extends React.Component {
@@ -27,7 +27,7 @@ export default class RequireAuth extends React.Component {
         if (!this.state.user && !this.state.updated) {
             return (
                 <div className="Center-progress">
-                    <Progress animated color="primary" value={100}>Signing in...</Progress>
+                    <Spinner style={{ width: '3rem', height: '3rem' }} />
                 </div>
             )
         } else if (this.state.updated) {

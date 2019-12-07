@@ -11,6 +11,7 @@ import {
     CardTitle,
     CardSubtitle,
     Progress,
+    Spinner,
     Alert
 } from 'reactstrap'
 import * as firebase from 'firebase'
@@ -106,10 +107,10 @@ export default class Authentication extends React.Component {
                         position: 'absolute'
                     }}>
                     <Card className="Auth-card">
-                        <CardImg top="top" width="100%" src="https://authentic-city-church.firebaseapp.com/full.png" alt="Authentic City Church app management system"/>
+                        <CardImg top="top" width="100%" src="/full2.png" alt="Authentic Header"/>
                         <CardBody>
                             <CardTitle>Sign In</CardTitle>
-                            <CardSubtitle>Authentic City Church App Management System</CardSubtitle>
+                            <CardSubtitle>Please sign in to access the Authentic App CMS</CardSubtitle>
                             <Form style={{
                                     marginTop: '5px'
                                 }}>
@@ -146,7 +147,7 @@ export default class Authentication extends React.Component {
                 .then(() => window.location.replace('/account/auth/signin?post=1&to=/'))
             return (
                 <div className="Center-progress">
-                    <Progress animated color="danger" value={100}>Signing out...</Progress>
+                    <Spinner color="danger" style={{ width: '3rem', height: '3rem' }} />
                 </div>
             )
         } else {

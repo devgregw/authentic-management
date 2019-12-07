@@ -34,7 +34,7 @@ export default class ImageUploader extends React.Component {
         }
         switch (this.state.location) {
             case 'storage':
-            img.src = 'https://placeholdit.imgix.net/~text?txtsize=40&txt=Loading&w=200&h=200&txtfont=sans-serif'
+            img.src = 'https://us-central1-authentic-city-church.cloudfunctions.net/storage?path=unknown.png'
                 firebase.storage().ref((window.localStorage.getItem('db') === 'dev' ? '/dev/' : '') + this.state.data.name).getDownloadURL().then(url => this.setState({location: 'storage:loaded', url: url})).catch(err => {this.setState({data: {name: 'unknown.png', width: this.state.data.width, height: this.state.data.height}}); console.log(err)})
                 break
             case 'storage:loaded':
@@ -44,7 +44,7 @@ export default class ImageUploader extends React.Component {
                 if (this.state.data)
                     img.src = this.state.data.name
                 else {
-                    img.src = 'https://placeholdit.imgix.net/~text?txtsize=40&txt=Loading&w=200&h=200&txtfont=sans-serif'
+                    img.src = 'https://us-central1-authentic-city-church.cloudfunctions.net/storage?path=unknown.png'
                     var reader = new FileReader()
                     reader.onload = event => this.setState({location: 'local', data: {name: event.target.result, width: 0, height: 0}})
                     reader.readAsDataURL(this.state.file)
@@ -141,7 +141,7 @@ export default class ImageUploader extends React.Component {
             </ButtonGroup>
             <ProgressModal isOpen={this.state.totalBytes > 0} progressColor="primary" value={(this.state.bytesTransferred / (this.state.totalBytes || 1)) * 100} progressText={Math.round((this.state.bytesTransferred / (this.state.totalBytes || 1)) * 100) + '%'}/>
             <ProgressModal isOpen={this.state.preparing} progressColor="primary" value={100} progressText="Preparing media..."/>
-            <p>Download URL: {this.state.location.startsWith('storage') ? <a rel="noopener noreferrer" href={`https://authentic.gregwhatley.dev/meta/storage/${window.localStorage.getItem('db') === 'dev' ? 'dev/' : ''}${this.state.data.name}`} target="_blank">{`https://authentic.gregwhatley.dev/meta/storage/${window.localStorage.getItem('db') === 'dev' ? 'dev/' : ''}${this.state.data.name}`}</a> : 'none'}</p>
+            <p>Download URL: {this.state.location.startsWith('storage') ? <a rel="noopener noreferrer" href={`https://us-central1-authentic-city-church.cloudfunctions.net/storage?path=${window.localStorage.getItem('db') === 'dev' ? 'dev/' : ''}${this.state.data.name}`} target="_blank">{`https://us-central1-authentic-city-church.cloudfunctions.net/storage?path=${window.localStorage.getItem('db') === 'dev' ? 'dev/' : ''}${this.state.data.name}`}</a> : 'none'}</p>
             <img alt="Preview" ref={i => this.getData(i || document.getElementById(`imagePreview${this.random}`))} id={`imagePreview${this.random}`} style={{width: '200px', height: 'auto', border: '1px solid black'}}/>
             </div>
     }

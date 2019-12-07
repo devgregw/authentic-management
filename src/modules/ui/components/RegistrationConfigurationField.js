@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, FormGroup, Label, Button, Progress, InputGroup, InputGroupAddon } from 'reactstrap'
+import { Input, FormGroup, Label, Button, Progress, Spinner, InputGroup, InputGroupAddon } from 'reactstrap'
 import * as firebase from 'firebase'
 import Utils from '../../classes/Utils'
 
@@ -85,7 +85,9 @@ export default class RegistrationConfigurationField extends React.Component {
                     this.setState({forms: null, brerr: true, breeze: false})
             });
             internal = <div>
-                <Progress animated color="primary" value={100}>Contacting Breeze ChMS...</Progress>
+                Contacting Breeze ChMS...
+                <Spinner size="sm"/>
+                
             </div>
         }
         return <div>
