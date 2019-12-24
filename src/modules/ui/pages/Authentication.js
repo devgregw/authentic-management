@@ -107,7 +107,7 @@ export default class Authentication extends React.Component {
                         position: 'absolute'
                     }}>
                     <Card className="Auth-card">
-                        <CardImg top="top" width="100%" src="/full2.png" alt="Authentic Header"/>
+                        <CardImg top="top" width="100%" src="/splash.png" alt="Authentic Header"/>
                         <CardBody>
                             <CardTitle>Sign In</CardTitle>
                             <CardSubtitle>Please sign in to access the Authentic App CMS</CardSubtitle>
