@@ -69,13 +69,15 @@ export default class ContentCard extends React.Component {
                 switch (this.props.data.type) {
                     case 'tabs':
                         let tabErrors = this.validateTabs(this.props.data.tabs)
-                        return <BasicCard title="Tabs">
-                            <ButtonGroup>
+                        return <BasicCard title="All Pages">
                             <Button onClick={() => this.props.push('tabs')} size="lg" outline color="primary">Manage</Button>
-                            <Button onClick={() => Utils.openEditor({category: 'appearance_tabs', parent: 'tabs', path: '/appearance/tabs/'})} outline color="dark">Edit Appearance</Button>
-                            </ButtonGroup>
                             <Badge style={{fontSize: 'x-large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(this.props.data.tabs || {}).length}</Badge>
                             { tabErrors ? <Badge style={{fontSize: 'large', verticalAlign: 'middle', margin: '3px'}} color="warning">{tabErrors} need{tabErrors !== 1 ? '' : 's'} attention</Badge> : null }
+                        </BasicCard>
+                    case 'watchPlaylists':
+                        return <BasicCard title="Video Playlist Pages">
+                            <Button onClick={() => this.props.push('tabs', 'watchPlaylist')} size="lg" outline color="primary">Manage</Button>
+                            <Badge style={{fontSize: 'x-large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(Object.getOwnPropertyNames(this.props.data.tabs).map(n => this.props.data.tabs[n]).filter(x => x.specialType == "watchPlaylist") || {}).length}</Badge>
                         </BasicCard>
                     case 'notifications':
                         return <BasicCard title="Notifications">
@@ -89,11 +91,8 @@ export default class ContentCard extends React.Component {
                         return <BasicCard title="Blog"><h2><Badge color="warning" pill>Under Construction</Badge></h2></BasicCard>
                     case 'events':
                         let eventErrors = this.validateEvents(this.props.data.events)
-                        return <BasicCard title="Upcoming Events">
-                            <ButtonGroup>
+                        return <BasicCard title="Upcoming Event Pages">
                             <Button onClick={() => this.props.push('events')} size="lg" outline color="primary">Manage</Button>
-                            <Button onClick={() => Utils.openEditor({category: 'appearance_events', parent: 'events', path: '/appearance/events/'})} outline color="dark">Edit Appearance</Button>
-                            </ButtonGroup>
                             <Badge style={{fontSize: 'x-large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(this.props.data.events || {}).length}</Badge>
                             { eventErrors ? <Badge style={{fontSize: 'large', verticalAlign: 'middle', margin: '3px'}} color="warning">{eventErrors} need{eventErrors !== 1 ? '' : 's'} attention</Badge> : null }
                             </BasicCard>
@@ -111,7 +110,7 @@ export default class ContentCard extends React.Component {
                             <p>{`Android: ${this.props.data.versions.android}`}<br/>{`iOS: ${this.props.data.versions.ios}`}</p>
                         </BasicCard>
                     default:
-                        throw new Error('Unexpected data type')
+                        throw new Error('Unexpected data type: ' + this.props.data.type)
                 }
             case 'tab':
                 var elements = this.props.data.elements || []

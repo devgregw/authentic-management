@@ -111,6 +111,15 @@ export default class Home extends React.Component {
     getItems(parentCategory) {
         var last = this.state.path.last()
         var type = this.state.path.get(this.state.path.count() - 2)
+        if (last == "tabs" && queryString.parse(window.location.search).specialType == 'watchPlaylist') {
+            return [
+                {
+                    category: 'tabs',
+                    name: 'Video Playlist Tab',
+                    specialType: 'watchPlaylist'
+                }
+            ]
+        }
         switch (last) {
             case '':
             return []
@@ -207,7 +216,7 @@ export default class Home extends React.Component {
         }
     }
 
-    categories = ['tabs', 'events', 'notifications', 'meta']
+    categories = ['tabs', 'watchPlaylists', 'events', 'notifications', 'meta']
 
     transform(val) {
         var content
@@ -224,6 +233,9 @@ export default class Home extends React.Component {
                 for (var id in val)
                     items.push(val[id])
                 items.sort((a, b) => a.index - b.index)
+                let specialTypeFilter
+                if (specialTypeFilter = queryString.parse(window.location.search).specialType)
+                    items = items.filter(x => x.specialType == specialTypeFilter)
                 items.forEach(i => cards.push(<ContentCard key={i.id} push={this.push} type="tab" data={i} refresh={() => this.forceUpdate()}/>))
                 content = items.length > 0 ? cards : <p>No tabs have been created.  Click New to add a tab.</p>
                 break
@@ -260,9 +272,9 @@ export default class Home extends React.Component {
         this.setState({path: new Path()})
     }
 
-    push(p) {
+    push(p, s) {
         var newPath = this.state.path.append(p)
-        window.history['pushState']({}, '', `/?path=${newPath.toString()}`)
+        window.history['pushState']({}, '', `/?path=${newPath.toString()}${s ? `&specialType=${s}` : ''}`)
         window.location.reload()
         //this.setState({path: newPath})
     }
