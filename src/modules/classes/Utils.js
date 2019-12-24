@@ -75,7 +75,8 @@ export default class Utils {
     }
 
     static getBaseUrl() {
-        return Utils.isLocalhost() ? 'http://localhost' : 'https://authentic.gregwhatley.dev'
+        return `${window.location.protocol}//${window.location.host}`
+        //return Utils.isLocalhost() ? 'http://localhost' : 'https://authentic.gregwhatley.dev'
     }
 
     static actionClasses = {
