@@ -111,7 +111,7 @@ export default class Home extends React.Component {
     getItems(parentCategory) {
         var last = this.state.path.last()
         var type = this.state.path.get(this.state.path.count() - 2)
-        if (last == "tabs" && queryString.parse(window.location.search).specialType == 'watchPlaylist') {
+        if (last === "tabs" && queryString.parse(window.location.search).specialType === 'watchPlaylist') {
             return [
                 {
                     category: 'tabs',
@@ -180,6 +180,7 @@ export default class Home extends React.Component {
             case 'wallpapers': return 'Organizes images in a dual-column layout offering image previewing and saving capabilities.'
             case 'fullexp': return 'Presents a full-screen image linking to the latest live stream.'
             case 'watchPlaylist': return 'Organizes videos front and center, promoting the most recently added video.'
+            default: return 'Unknown special type specification'
         }
     }
 
@@ -233,9 +234,9 @@ export default class Home extends React.Component {
                 for (var id in val)
                     items.push(val[id])
                 items.sort((a, b) => a.index - b.index)
-                let specialTypeFilter
-                if (specialTypeFilter = queryString.parse(window.location.search).specialType)
-                    items = items.filter(x => x.specialType == specialTypeFilter)
+                let specialTypeFilter = queryString.parse(window.location.search).specialType
+                if (specialTypeFilter)
+                    items = items.filter(x => x.specialType === specialTypeFilter)
                 items.forEach(i => cards.push(<ContentCard key={i.id} push={this.push} type="tab" data={i} refresh={() => this.forceUpdate()}/>))
                 content = items.length > 0 ? cards : <p>No tabs have been created.  Click New to add a tab.</p>
                 break

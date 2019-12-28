@@ -77,7 +77,7 @@ export default class ContentCard extends React.Component {
                     case 'watchPlaylists':
                         return <BasicCard title="Video Playlist Pages">
                             <Button onClick={() => this.props.push('tabs', 'watchPlaylist')} size="lg" outline color="primary">Manage</Button>
-                            <Badge style={{fontSize: 'x-large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(Object.getOwnPropertyNames(this.props.data.tabs).map(n => this.props.data.tabs[n]).filter(x => x.specialType == "watchPlaylist") || {}).length}</Badge>
+                            <Badge style={{fontSize: 'x-large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(Object.getOwnPropertyNames(this.props.data.tabs).map(n => this.props.data.tabs[n]).filter(x => x.specialType === "watchPlaylist") || {}).length}</Badge>
                         </BasicCard>
                     case 'notifications':
                         return <BasicCard title="Notifications">
