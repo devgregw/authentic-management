@@ -10,7 +10,6 @@ import {
     CardImg,
     CardTitle,
     CardSubtitle,
-    Progress,
     Spinner,
     Alert
 } from 'reactstrap'

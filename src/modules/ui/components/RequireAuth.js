@@ -1,7 +1,7 @@
 import React from 'react'
 import * as firebase from 'firebase'
 import PropTypes from 'prop-types'
-import {Progress, Spinner} from 'reactstrap'
+import {Spinner} from 'reactstrap'
 import {Redirect} from 'react-router-dom'
 
 export default class RequireAuth extends React.Component {

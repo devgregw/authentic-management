@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import * as firebase from 'firebase'
-import {Progress, Spinner} from 'reactstrap'
+import {Spinner} from 'reactstrap'
 
 export default class ContentLoader extends React.Component {
     static propTypes = {
