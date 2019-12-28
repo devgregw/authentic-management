@@ -637,7 +637,6 @@ export default class EditorForm extends React.Component {
                 }
             ],
             appearance_events: [
-                this.fieldPresets.titleField,
                 {
                     title: 'Index',
                     property: 'index',
