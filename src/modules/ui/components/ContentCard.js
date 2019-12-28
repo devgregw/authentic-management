@@ -92,7 +92,10 @@ export default class ContentCard extends React.Component {
                     case 'events':
                         let eventErrors = this.validateEvents(this.props.data.events)
                         return <BasicCard title="Upcoming Event Pages">
+                            <ButtonGroup>
                             <Button onClick={() => this.props.push('events')} size="lg" outline color="primary">Manage</Button>
+                            <Button onClick={() => Utils.openEditor({category: 'appearance_events', parent: 'events', path: '/appearance/events/'})} outline color="dark">Edit Appearance</Button>
+                            </ButtonGroup>
                             <Badge style={{fontSize: 'x-large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(this.props.data.events || {}).length}</Badge>
                             { eventErrors ? <Badge style={{fontSize: 'large', verticalAlign: 'middle', margin: '3px'}} color="warning">{eventErrors} need{eventErrors !== 1 ? '' : 's'} attention</Badge> : null }
                             </BasicCard>

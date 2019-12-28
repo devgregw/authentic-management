@@ -463,7 +463,7 @@ export default class EditorForm extends React.Component {
                 this.fieldPresets.idField, {
                     title: 'Index',
                     property: 'index',
-                    description: 'This is a number which must be greater than or equal to 0.  An even index (0, 2, 4, etc.) will cause the tab to appear in the left column and an odd index (1, 3, 5, etc.) will cause the tab to appear in the right column.  Tabs will then be sorted in ascending order by the index.',
+                    description: 'This is a number which must be greater than or equal to 0.  This will be used in addition to the index set on the Events tab to determine the order of the tabs on the main screen.  A smaller number will cause the tab item to appear on the left or on the right for a larger number.',
                     render: value => <Input type="number" id="index" defaultValue={value || "0"} min="0" step="1"/>,
                     get: () => parseInt(document.getElementById('index').value, 10),
                     validate: () => {
@@ -639,19 +639,18 @@ export default class EditorForm extends React.Component {
             appearance_events: [
                 this.fieldPresets.titleField,
                 {
-                    title: "Header Image",
-                    property: "header",
-                    description: "Specify a header image.  Click Clear to remove the image or click Reset to restore the original value.",
-                    render: value => <ImageUploader ref={u => this.imageUploader = u} value={value}/>,
-                    get: () => this.imageUploader.saveImage('header_appearance_events'),
-                    validate: () => this
-                        .imageUploader
-                        .hasValue()
-                            ? false
-                            : 'A header image must be specified.',
-                    //finalize: () => this
-                        //.imageUploader
-                        //.saveImage(this.imageUploader.getName('header_appearance_events'))
+                    title: 'Index',
+                    property: 'index',
+                    description: 'This is a number which must be greater than or equal to 0.  This will be used in addition to indices set on tabs to determine the order of the tabs on the main screen.  A smaller number will cause the tab item to appear on the left or on the right for a larger number.',
+                    render: value => <Input type="number" id="index" defaultValue={value || "0"} min="0" step="1"/>,
+                    get: () => parseInt(document.getElementById('index').value, 10),
+                    validate: () => {
+                        if (isNaN(parseInt(document.getElementById('index').value, 10))) 
+                            return 'The index must be an integer'
+                        if (parseInt(document.getElementById('index').value, 10) < 0) 
+                            return 'The index must be greater than or equal to 0'
+                        return false
+                    }
                 }
             ],
             appearance_tabs: [
