@@ -7,7 +7,6 @@ import {Switch, BrowserRouter, Route, Redirect} from 'react-router-dom'
 import RequireAuth from './modules/ui/components/RequireAuth.js'
 import Editor from './modules/ui/pages/Editor.js'
 import Reorder from './modules/ui/pages/Reorder.js'
-import StorageViewer from './modules/ui/pages/StorageViewer'
 import ActionCodeViewer from './modules/ui/pages/ActionCodeViewer'
 
 import Debug from './modules/ui/pages/Debug'
