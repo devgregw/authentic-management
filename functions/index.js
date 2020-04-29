@@ -38,7 +38,7 @@ exports.videos = functions.https.onRequest((req, res) => {
                 }
             });
             Object.getOwnPropertyNames(obj).forEach(n => {
-                if (obj[n].toLowerCase().indexOf("stream") >= 0)
+                if (!obj["livestream"] && (obj[n].toLowerCase().indexOf("stream") >= 0 || obj[n].toLowerCase().indexOf("experience") >= 0) && obj[n].toLowerCase().indexOf("postponed") === -1)
                     obj["livestream"] = n
             })
             res.send(obj);
