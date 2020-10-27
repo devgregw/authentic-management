@@ -3,18 +3,20 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^4.5.0",
-    "create-react-app": "^3.4.1",
-    "firebase": "^7.14.3",
-    "firebase-tools": "^7.16.2",
-    "moment": "^2.25.3",
-    "query-string": "^6.12.1",
-    "react": "^16.13.1",
+    "bootstrap": "^4.5.3",
+    "firebase": "^7.24.0",
+    "moment": "^2.29.1",
+    "query-string": "^6.13.6",
+    "react": "^16.14.0",
     "react-datetime": "^2.16.3",
-    "react-dom": "^16.13.1",
+    "react-dom": "^16.14.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.1",
-    "reactstrap": "^8.4.1"
+    "reactstrap": "^8.6.0"
+  },
+  "devDependencies": {
+    "create-react-app": "^3.4.1",
+    "firebase-tools": "^8.14.0",
+    "react-scripts": "^3.4.4"
   },
   "scripts": {
     "start": "react-scripts start",
