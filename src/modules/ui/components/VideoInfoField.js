@@ -29,7 +29,16 @@ export default class VideoInfoField extends React.Component {
         }
         this.verifyVideo = (p, i) => {
             if (p === 'YouTube')
-                return window.fetch(`https://www.googleapis.com/youtube/v3/search?q=${i}&maxResults=1&part=snippet&type=video&key=AIzaSyB4w3GIY9AUi6cApXAkB76vlG6K6J4d8XE`).then(r => r.json()).then(json => {
+                return window.fetch("https://us-central1-authentic-city-church.cloudfunctions.net/videos", {mode: 'no-cors'}).then(r => r.json()).then(json => {
+                    if (!json || Object.getOwnPropertyNames(json || {}).length === 0)
+                        return null
+                    return {
+                        title: json[i].toString(),
+                        id: i,
+                        thumbnail: `https://img.youtube.com/vi/${i}/maxresdefault.jpg`
+                    }
+                }, () => null)
+                /*return window.fetch(`https://www.googleapis.com/youtube/v3/search?q=${i}&maxResults=1&part=snippet&type=video&key=AIzaSyB4w3GIY9AUi6cApXAkB76vlG6K6J4d8XE`).then(r => r.json()).then(json => {
                     if (!json || json.pageInfo.totalResults === 0)
                         return null
                     else if (json.items[0].id.videoId !== i)
@@ -40,13 +49,13 @@ export default class VideoInfoField extends React.Component {
                             thumbnail: `https://img.youtube.com/vi/${i}/maxresdefault.jpg`,
                             id: json.items[0].id.videoId
                         }
-                })
+                })*/
             else if (p === 'YouTube - Manual entry')
-                return new Promise((res, rej) => res({
+                return Promise.resolve({
                     title: document.getElementById("manTitle").value,
                     thumbnail: `https://img.youtube.com/vi/${i}/maxresdefault.jpg`,
                     id: i
-                }))
+                })
             else
                 return window.fetch(`https://api.vimeo.com/videos/${i}?access_token=e2b6fedeebaa9768c909e81e2565e8a1`).then(r => r.json()).then(json => {
                     if (!json || json.error)

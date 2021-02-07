@@ -22,3 +22,4 @@ yarn-error.log*
 src/firebase.init.js
 deploy.bat
 src/modules/ui/pages/Debug.js
+*.cache

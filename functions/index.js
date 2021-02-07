@@ -1,7 +1,7 @@
 const functions = require('firebase-functions');
 const request = require('request');
 const jsdom = require('jsdom');
-const uuidv4 = require('uuid/v4')
+const uuidv4 = require('uuid').v4;
 const { JSDOM } = jsdom;
 global.DOMParser = new JSDOM().window.DOMParser;
 
