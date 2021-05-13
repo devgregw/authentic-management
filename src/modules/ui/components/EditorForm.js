@@ -14,7 +14,9 @@ import ActionInput from './ActionInput'
 import VideoInfoField from './VideoInfoField'
 import Checkbox from './Checkbox'
 import DateTime from './DateTime'
-import * as moment from 'moment'
+import moment from 'moment'
+import PasswordField from './PasswordField'
+import sha256 from 'sha256'
 
 class HTMLEditor extends React.Component {
     constructor(props) {
@@ -492,7 +494,22 @@ export default class EditorForm extends React.Component {
                             return r.errors
                         return false
                     }
-                }, {
+                },
+                {
+                    title: 'Password',
+                    property: 'password',
+                    description: 'Secure this tab by adding a password.',
+                    render: value => <PasswordField value={value}/>,
+                    get: () => document.getElementById('tab_password_enabled').checked ? (document.getElementById('tab_password_change').checked ? sha256(document.getElementById('tab_password').value) : document.getElementById('tab_password_current').value) : null,
+                    validate: () => {
+                        if (document.getElementById('tab_password_enabled').checked) {
+                            if (document.getElementById('tab_password_change').checked)
+                                return document.getElementById('tab_password').value === document.getElementById('tab_password_confirm').value ? false : 'Passwords do not match.'
+                            else return false
+                        } else return false
+                    }
+                },
+                {
                     title: 'Tab Visibility',
                     property: 'visibility',
                     description: 'Configure the visibility rules for this tab.',
@@ -740,6 +757,8 @@ export default class EditorForm extends React.Component {
             .fields[info.category]
             .forEach(f => {
                 var r;
+                if (f.property === 'password')
+                    console.log(f.get())
                 // eslint-disable-next-line
                 if (r = f.validate()) {
                     if (Array.isArray(r)) 
