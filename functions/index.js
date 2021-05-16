@@ -5,14 +5,8 @@ const uuidv4 = require('uuid').v4;
 const { JSDOM } = jsdom;
 global.DOMParser = new JSDOM().window.DOMParser;
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
-
 exports.storage = functions.https.onRequest((req, res) => {
+    res.set('Access-Control-Allow-Origin', '*')
     if (!req.query.path)
         res.sendStatus(400);
     else {
@@ -24,7 +18,7 @@ exports.storage = functions.https.onRequest((req, res) => {
 });
 
 exports.videos = functions.https.onRequest((req, res) => {
-
+    res.set('Access-Control-Allow-Origin', '*')
     const url = `https://www.youtube.com/channel/${req.query.channelId || 'UCxrYck_z50n5It7ifj1LCjA'}/videos`;
 
     request(url, { method: 'GET' }, (error, response, body) => {
@@ -45,7 +39,7 @@ exports.videos = functions.https.onRequest((req, res) => {
                 json = JSON.parse(json.substring(0, json.length - 1))
                 let arr = json.contents.twoColumnBrowseResultsRenderer.tabs[1].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].gridRenderer.items.map(i => i.gridVideoRenderer).filter(i => Boolean(i)).map(i => ({ id: i.videoId, title: i.title.runs[0].text }))
                 functions.logger.debug(arr.length + ' videos')
-                arr.forEach(v => obj[v.title] = v.id)
+                arr.forEach(v => obj[v.id] = v.title)
             } catch (e) {
                 functions.logger.error("Error parsing videos (step 1): " + e, json || "<no json>")
                 return {}
