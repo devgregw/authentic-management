@@ -14,7 +14,7 @@ import React from 'react'
 
 export default class Utils {
     static get version() {
-        return '1.2.15 (June 20, 2020)'
+        return '1.2.16 (May 15, 2021)'
     }
 
     static openPopup(url, w, h) {
