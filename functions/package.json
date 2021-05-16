@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "firebase-admin": "^9.3.0",
-    "firebase-functions": "^3.11.0",
+    "firebase-functions": "^3.14.0",
     "jsdom": "^16.4.0",
     "request": "^2.88.2",
     "uuid": "^8.3.1"
