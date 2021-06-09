@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Button, Alert, Badge } from 'reactstrap'
+import { Input, Button, Alert, Badge, Container, Col, Row, Card, CardImg, CardTitle, CardBody, CardFooter, Collapse } from 'reactstrap'
 
 export default class VideoInfoField extends React.Component {
     constructor(props) {
@@ -10,7 +10,8 @@ export default class VideoInfoField extends React.Component {
             thumbnail: v.thumbnail || null,
             title: v.title || null,
             provider: v.provider || 'YouTube',
-            status: 'none'
+            status: 'none',
+            knownVideos: {}
         }
         this.isVerified = () => this.state.id && this.state.thumbnail && this.state.title && this.state.provider && this.state.status === 'ok'
         this.getAlert = () => {
@@ -31,7 +32,7 @@ export default class VideoInfoField extends React.Component {
             console.log(p, i)
             if (p === 'YouTube')
                 return window.fetch("https://us-central1-authentic-city-church.cloudfunctions.net/videos").then(r => r.json()).then(json => {
-                    if (!json || Object.getOwnPropertyNames(json || {}).length === 0)
+                    if (!json || Object.getOwnPropertyNames(json || {}).length === 0 || !json[i])
                         return null
                     return {
                         title: json[i].toString(),
@@ -61,6 +62,16 @@ export default class VideoInfoField extends React.Component {
         this.validate = this.validate.bind(this)
     }
 
+    componentDidMount() {
+        window.fetch('https://us-central1-authentic-city-church.cloudfunctions.net/videos').then(r => r.json(), e => {
+            this.setState({ knownVideos: {} })
+            console.error(e)
+        }).then(json => this.setState({knownVideos: json}), e => {
+            this.setState({knownVideos: {}})
+            console.error(e)
+        })
+    }
+
     getValue() {
         return !this.validate() ? { provider: this.state.provider.split(" ")[0], id: this.state.id, title: this.state.title, thumbnail: this.state.thumbnail } : null
     }
@@ -71,25 +82,59 @@ export default class VideoInfoField extends React.Component {
 
     render() {
         return <div>
-            <label style={{ fontSize: '1.2rem' }} for="provider">Video Provider</label>
+            <label style={{ fontSize: '1.2rem' }} htmlFor="provider">Video Provider</label>
             <Input type="select" id="provider" disabled={this.state.status === 'processing'} onChange={() => this.setState({ provider: document.getElementById("provider").value })} defaultValue={this.state.provider}>
                 <option>YouTube</option>
                 <option>YouTube - Manual entry</option>
                 <option>Vimeo</option>
             </Input>
-            <label style={{ fontSize: '1.2rem' }} for="videoId">Video ID</label>
-            <p>To find the video ID, look at the video's URL:<br />
-                <ul>
-                    <li>YouTube (1): https://youtube.com/watch?v=<Badge color="primary">Video ID here</Badge>
-                    </li>
-                    <li>YouTube (2): https://youtu.be/<Badge color="primary">Video ID here</Badge>
-                    </li>
-                    <li>Vimeo: https://vimeo.com/<Badge color="primary">Video ID here</Badge>
-                    </li>
-                </ul>
-                Copy that value into the box below, excluding the slash.
-            </p>
-            <Input id="videoId" disabled={this.state.status === 'processing'} defaultValue={this.state.id} />
+            <Collapse isOpen={this.state.provider === 'YouTube'} unmountOnExit mountOnEnter>
+                <label style={{ fontSize: '1.2rem' }}>Select a Recent Video</label>
+                <Container className="py-2">
+                    <Row xs="2" md="4">
+                        {Object.getOwnPropertyNames(this.state.knownVideos).filter((_, i) => i < 8).map(id => <Col className="pb-1" key={id}>
+                            <Card>
+                                <CardImg src={`https://img.youtube.com/vi/${id}/maxresdefault.jpg`} />
+                                <CardBody>
+                                    <CardTitle>{this.state.knownVideos[id]}</CardTitle>
+                                    <small>{id}</small>
+                                </CardBody>
+                                <CardFooter className="p-1">
+                                    <Button size="sm" color="primary" className="m-0" onClick={() => this.setState({ id: id, status: 'processing' }, () => {
+                                        this.verifyVideo("YouTube", id).then(data => {
+                                            if (!data)
+                                                this.setState({
+                                                    provider: "YouTube",
+                                                    id: id,
+                                                    title: null,
+                                                    thumbnail: null,
+                                                    status: 'invalid'
+                                                })
+                                            else
+                                                this.setState({
+                                                    provider: "YouTube",
+                                                    status: 'ok',
+                                                    ...data
+                                                })
+                                        })
+                                    })}>Select</Button>
+                                </CardFooter>
+                            </Card>
+                        </Col>)}
+                    </Row>
+                </Container>
+            </Collapse>
+            <label style={{ fontSize: '1.2rem' }} htmlFor="videoId">Video ID</label>
+            <p>Manually enter the desired video's ID.  To find the video ID, look at the video's URL and paste the value (not the entire URL).</p>
+            <ul>
+                <li>YouTube (1): https://youtube.com/watch?v=<Badge color="primary">Video ID here</Badge>
+                </li>
+                <li>YouTube (2): https://youtu.be/<Badge color="primary">Video ID here</Badge>
+                </li>
+                <li>Vimeo: https://vimeo.com/<Badge color="primary">Video ID here</Badge>
+                </li>
+            </ul>
+            <Input id="videoId" disabled={this.state.status === 'processing'} onChange={e => this.setState({status: 'none', id: e.currentTarget.value})} value={this.state.id || ""} />
             {this.state.provider === 'YouTube - Manual entry' ? <div>
                 <label style={{ fontSize: '1.2rem' }} for="manTitle">Title</label>
                 <Input id="manTitle" disabled={this.state.status === 'processing'} defaultValue={this.state.title} />
