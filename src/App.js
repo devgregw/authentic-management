@@ -10,6 +10,8 @@ import Reorder from './modules/ui/pages/Reorder.js'
 import ActionCodeViewer from './modules/ui/pages/ActionCodeViewer'
 
 import Debug from './modules/ui/pages/Debug'
+import NewCollectionEditor from './modules/ui/pages/NewCollectionEditor'
+import AddVideoToCollection from './modules/ui/pages/AddVideoToCollection'
 
 class Demo extends Component {
     constructor(props) {
@@ -35,7 +37,9 @@ export default class App extends Component {
                         <Route path="/account/auth/:action" component={Authentication}/>
                         <Route path="/account/meta/changename" render={({match}) => <RequireAuth path={match.path} render={() => <ChangeDisplayName/>}/>}/>
                         <Route exact path="/meta/action" component={ActionCodeViewer}/>
-                        
+                        <Route exact path="/collections/new" component={NewCollectionEditor}/>
+                        <Route exact path="/collections/videos/add" component={AddVideoToCollection}/>
+
                         <Redirect from="/meta" to="/"/>
                         <Redirect from="/account/meta" to="/"/>
                         <Redirect from="/account/auth" to="/"/>

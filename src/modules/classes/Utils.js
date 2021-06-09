@@ -64,6 +64,14 @@ export default class Utils {
         Utils.openPopup(`${Utils.getBaseUrl()}/editor?action=edit&category=${info.category}&path=${info.path}${info.parent ? `&parent=${info.parent}` : ''}${info.parentCategory ? `&parent_category=${info.parentCategory}` : ''}`, 1000, 600)
     }
 
+    static openNewCollection() {
+        Utils.openPopup(`${Utils.getBaseUrl()}/collections/new`, 1000, 600)
+    }
+
+    static openAddVideoToCollection() {
+        Utils.openPopup(`${Utils.getBaseUrl()}/collections/videos/add`, 1000, 600)
+    }
+
     static openReorder(type, id) {
         Utils.openPopup(`${Utils.getBaseUrl()}/editor/reorder?type=${type}&id=${id}`, 1000, 600)
     }
