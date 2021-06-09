@@ -757,8 +757,6 @@ export default class EditorForm extends React.Component {
             .fields[info.category]
             .forEach(f => {
                 var r;
-                if (f.property === 'password')
-                    console.log(f.get())
                 // eslint-disable-next-line
                 if (r = f.validate()) {
                     if (Array.isArray(r)) 
