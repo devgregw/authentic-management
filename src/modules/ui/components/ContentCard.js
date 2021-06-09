@@ -74,17 +74,22 @@ export default class ContentCard extends React.Component {
                             <Badge style={{fontSize: 'x-large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(this.props.data.tabs || {}).length}</Badge>
                             { tabErrors ? <Badge style={{fontSize: 'large', verticalAlign: 'middle', margin: '3px'}} color="warning">{tabErrors} need{tabErrors !== 1 ? '' : 's'} attention</Badge> : null }
                         </BasicCard>
-                    case 'watchPlaylists':
-                        return <BasicCard title="Video Playlist Pages">
-                            <Button onClick={() => this.props.push('tabs', 'watchPlaylist')} size="lg" outline color="primary">Manage</Button>
-                            <Badge style={{fontSize: 'x-large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(Object.getOwnPropertyNames(this.props.data.tabs).map(n => this.props.data.tabs[n]).filter(x => x.specialType === "watchPlaylist") || {}).length}</Badge>
+                    case 'videos':
+                        return <BasicCard title="Collections">
+                            <ButtonGroup>
+                                <Button color="primary" outline onClick={() => Utils.openNewCollection()}>New Collection</Button>
+                                <Button color="primary" outline onClick={() => Utils.openAddVideoToCollection()}>Add Video to Collection</Button>
+                            </ButtonGroup>
+                            <br/>
+                            <Button onClick={() => this.props.push('tabs', 'watchPlaylist')} size="sm" outline>Manage Collections</Button>
+                            <Badge style={{fontSize: 'large', verticalAlign: 'middle', margin: '3px'}} color="dark">{Object.getOwnPropertyNames(Object.getOwnPropertyNames(this.props.data.tabs).map(n => this.props.data.tabs[n]).filter(x => x.specialType === "watchPlaylist") || {}).length}</Badge>
                         </BasicCard>
                     case 'notifications':
                         return <BasicCard title="Notifications">
                             <ButtonGroup>
                             <Button onClick={() => window.open('https://console.firebase.google.com/project/authentic-city-church/notification/compose', '_blank')} size="lg" outline color="primary">Send Notification</Button>
                             <Button onClick={() => Utils.openPopup(`${Utils.getBaseUrl()}/meta/action`, 1000, 600)} outline color="dark">Create Action</Button>
-                            <Button onClick={() => Utils.openPopup(`${Utils.getBaseUrl()}https://us-central1-authentic-city-church.cloudfunctions.net/storage?path=firebase.pdf`, 1000, 600)} outline color="dark">Instructions</Button>
+                            <Button onClick={() => Utils.openPopup(`https://us-central1-authentic-city-church.cloudfunctions.net/storage?path=firebase.pdf`, 1000, 600)} outline color="dark">Instructions</Button>
                             </ButtonGroup>
                         </BasicCard>
                     case 'blog':
@@ -101,15 +106,13 @@ export default class ContentCard extends React.Component {
                             </BasicCard>
                     case 'meta':
                         return <BasicCard title="Resources">
-                            <p>Because the App Management System is under construction, some features may be broken or unavailable.<br/>
-                            To track development progress, check out the Trello Roadmap.<br/>To report an issue or make a suggestion, click Contact.</p>
-                            <Button color="link" size="lg" onClick={() => window.open('https://trello.com/b/QUgekVh6/app-roadmap', '_blank')}>Trello Roadmap →</Button><br/>
-                            <Button color="link" size="lg" onClick={() => window.location.assign('mailto:devgregw@outlook.com')}>Contact →</Button>
+                            <Button color="link" onClick={() => window.open('https://trello.com/b/QUgekVh6/app-roadmap', '_blank')}>Trello Roadmap →</Button><br/>
+                            <Button color="link" onClick={() => window.location.assign('mailto:devgregw@outlook.com')}>Contact →</Button>
                             <hr/>
-                            <h5>Download Links</h5>
+                            <CardTitle>Download Links <small>(right-click to copy)</small></CardTitle>
                             <p><a href="https://play.google.com/store/apps/details?id=church.authenticcity.android" rel="noopener noreferrer" target="_blank">Android</a><br/><a href="https://itunes.apple.com/us/app/authentic-city-church/id1402645724?ls=1&mt=8" rel="noopener noreferrer" target="_blank">iOS</a></p>
                             <hr/>
-                            <h5>Version Codes</h5>
+                            <CardTitle>Version Codes</CardTitle>
                             <p>{`Android: ${this.props.data.versions.android}`}<br/>{`iOS: ${this.props.data.versions.ios}`}</p>
                         </BasicCard>
                     default:
