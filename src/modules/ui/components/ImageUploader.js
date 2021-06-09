@@ -1,6 +1,7 @@
 import React from 'react'
 import {Input,Button,ButtonGroup,Badge} from 'reactstrap'
-import * as firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/storage'
 import ProgressModal from './ProgressModal'
 
 export default class ImageUploader extends React.Component {

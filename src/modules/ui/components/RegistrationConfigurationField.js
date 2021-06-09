@@ -1,7 +1,5 @@
 import React from 'react'
 import { Input, FormGroup, Label, Button, Spinner, InputGroup, InputGroupAddon } from 'reactstrap'
-import * as firebase from 'firebase'
-import Utils from '../../classes/Utils'
 
 export default class RegistrationConfigurationField extends React.Component {
     constructor(props) {

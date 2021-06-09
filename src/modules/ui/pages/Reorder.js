@@ -7,7 +7,8 @@ import * as queryString from 'query-string'
 import BasicModal from '../components/BasicModal'
 import EditorToolbar from '../components/EditorToolbar'
 import ProgressModal from '../components/ProgressModal'
-import * as firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/database'
 
 export default class Reorder extends React.Component {
     constructor(props) {

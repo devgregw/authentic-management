@@ -1,6 +1,7 @@
 import React from 'react'
 import ProgressModal from '../components/ProgressModal'
-import * as firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/database'
 import Utils from '../../classes/Utils'
 
 export default class Debug extends React.Component {

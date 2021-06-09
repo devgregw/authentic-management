@@ -1,6 +1,7 @@
 import React from 'react'
 import BasicModal from '../components/BasicModal.js'
-import * as firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/database'
 import * as queryString from 'query-string'
 import ProgressModal from '../components/ProgressModal.js'
 import EditorToolbar from '../components/EditorToolbar.js'

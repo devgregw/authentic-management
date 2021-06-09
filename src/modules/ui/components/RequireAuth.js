@@ -1,5 +1,6 @@
 import React from 'react'
-import * as firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 import PropTypes from 'prop-types'
 import {Spinner} from 'reactstrap'
 import {Redirect} from 'react-router-dom'

@@ -15,7 +15,8 @@ import {
     NavItem,
     Collapse
 } from 'reactstrap'
-import * as firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 import Utils from '../../classes/Utils'
 
 class DatabaseSelector extends React.Component {

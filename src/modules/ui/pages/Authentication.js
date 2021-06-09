@@ -13,7 +13,8 @@ import {
     Spinner,
     Alert
 } from 'reactstrap'
-import * as firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 import * as queryString from 'query-string'
 
 export default class Authentication extends React.Component {

@@ -1,4 +1,6 @@
-import * as firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/database'
+import 'firebase/storage'
 
 export default class Delete {
     static tab(data) {
