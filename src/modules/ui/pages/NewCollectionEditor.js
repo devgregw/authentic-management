@@ -106,7 +106,9 @@ export default class NewCollectionEditor extends React.Component {
                     }
                 }
                 setTimeout(() => {
-                    let root = firebase.database().ref(window.localStorage.getItem('db') === 'dev' ? '/dev' : '')
+                    let root = firebase.database().ref()
+                    if (window.localStorage.getItem('db') === 'dev')
+                        root = root.child('dev')
                     Promise.all([
                         root.child('tabs').child(this.parentId).set(playlistPageProperties),
                         root.child('tabs').child('OPQ26R4SRP').once('value').then(snapshot => {

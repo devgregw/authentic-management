@@ -39,9 +39,10 @@ export default class AddVideoToCollection extends React.Component {
     }
 
     componentDidMount() {
-        firebase.database()
-            .ref(window.localStorage.getItem('db') === 'dev' ? '/dev' : '')
-            .child('tabs').child('OPQ26R4SRP').child('elements').once('value').then(snapshot => {
+        let root = firebase.database().ref()
+        if (window.localStorage.getItem('db') === 'dev')
+            root = root.child('dev')
+        root.child('tabs').child('OPQ26R4SRP').child('elements').once('value').then(snapshot => {
                 let arr = snapshot.val().map(e => ({ id: e._buttonInfo.action.tabId, title: e._buttonInfo.label})).filter(x => !!x)
                 this.setState({collections: arr, collectionId: arr.length > 0 ? arr[0].id : null})
             })
