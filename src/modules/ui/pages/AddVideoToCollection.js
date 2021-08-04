@@ -84,7 +84,9 @@ export default class AddVideoToCollection extends React.Component {
                 videoInfo: this.videoInfoField.getValue()
             }
             setTimeout(() => {
-                let root = firebase.database().ref(window.localStorage.getItem('db') === 'dev' ? '/dev' : '')
+                let root = firebase.database().ref()
+                if (window.localStorage.getItem('db') === 'dev')
+                    root = root.child('dev')
                 root.child('tabs').child(this.state.collectionId).once('value').then(snapshot => {
                     var tab = snapshot.val()
                     if (!tab.elements)
