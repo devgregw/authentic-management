@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.5.3",
-    "firebase": "^8.6.1",
+    "firebase": "^9.1.0",
     "moment": "^2.29.1",
     "query-string": "^7.0.0",
     "react": "^16.14.0",
@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "create-react-app": "^4.0.3",
-    "firebase-tools": "^9.11.0",
+    "firebase-tools": "^9.18.0",
     "react-scripts": "^4.0.3"
   },
   "scripts": {
